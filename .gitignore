@@ -1,0 +1,57 @@
+# created by virtualenv automatically
+
+# =========================
+# Sistema operativo
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# IDEs / editores
+# =========================
+.vs/
+.vscode/
+.idea/
+
+# =========================
+# Logs y temporales
+# =========================
+*.log
+*.tmp
+*.bak
+*.swp
+
+# =========================
+# Python
+# (entornos virtuales INCLUIDOS)
+# =========================
+__pycache__/
+*.py[cod]
+pip-wheel-metadata/
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Compilados / binarios (EXCLUIR)
+# =========================
+bin/
+obj/
+dist/
+build/
+*.exe
+*.dll
+*.so
+*.pdb
+
+# =========================
+# Credenciales / secretos
+# =========================
+.env
+.env.*
+*.key
+*.pem
+*.secret
