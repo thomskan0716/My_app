@@ -421,6 +421,38 @@ class LoadingOverlay(QWidget):
         self.movie.stop()
         self.hide()
 
+class CsvToExcelExportWorker(QObject):
+    """Worker ligero para ejecutar la conversión CSV→Excel en background (sin bloquear la UI)."""
+    finished = Signal()
+    error = Signal(str)
+
+    def __init__(self, fn):
+        super().__init__()
+        self._fn = fn
+
+    def run(self):
+        try:
+            self._fn()
+            self.finished.emit()
+        except Exception as e:
+            self.error.emit(str(e))
+
+class CallableResultWorker(QObject):
+    """Ejecuta un callable en background y devuelve su resultado por señal (sin bloquear la UI)."""
+    finished = Signal(object)
+    error = Signal(str)
+
+    def __init__(self, fn):
+        super().__init__()
+        self._fn = fn
+
+    def run(self):
+        try:
+            result = self._fn()
+            self.finished.emit(result)
+        except Exception as e:
+            self.error.emit(str(e))
+
 class ReusableProgressDialog(QDialog):
     """Cuadro de progreso reutilizable con imagen personalizable"""
     
@@ -3875,8 +3907,14 @@ class MainWindow(QMainWindow):
             except Exception:
                 pass
 
-            main_df = pd.read_excel(main_file)
-            temp_df = pd.read_excel(temp_file)
+            def _read_table(path: str) -> pd.DataFrame:
+                ext = os.path.splitext(str(path))[1].lower()
+                if ext == ".csv":
+                    return pd.read_csv(path, encoding="utf-8-sig")
+                return pd.read_excel(path)
+
+            main_df = _read_table(main_file)
+            temp_df = _read_table(temp_file)
 
             def _pick_dir_col(df: pd.DataFrame):
                 for c in dir_variants:
@@ -3922,7 +3960,8 @@ class MainWindow(QMainWindow):
             done_full = done_full.drop_duplicates(subset=[c for c in dedup_cols if c in done_full.columns])
 
             os.makedirs(os.path.dirname(done_file), exist_ok=True)
-            done_full.to_excel(done_file, index=False)
+            # Especificar engine para evitar problemas de autodetección en algunos entornos
+            done_full.to_excel(done_file, index=False, engine="openpyxl")
 
             print(f"✅ done_experiments generado: {done_file} | filas={len(done_full)}")
             return done_file
@@ -5067,7 +5106,7 @@ class MainWindow(QMainWindow):
 
             # ✅ NUEVO: Si el archivo de muestreo es CSV, generar también Excel(s) en 99_未実験データ
             if src_ext == ".csv":
-                self._export_unexperimented_excel_folder_from_csv(excel_dest_main, self.proyecto_folder, project_name)
+                self._start_csv_export_async(excel_dest_main, self.proyecto_folder, project_name)
             
             # Usar el archivo de 99_Temp para la optimización
             input_file = excel_dest_temp
@@ -5099,30 +5138,34 @@ class MainWindow(QMainWindow):
         main_file = getattr(self, "sample_file_path", None)
 
         done_file = os.path.join(self.proyecto_folder, "99_Temp", "done_experiments.xlsx")
-        existing_file = self._build_done_experiments_excel(main_file, input_file, done_file) if main_file else None
-        
-        # Lanzar optimización D-óptima en hilo
-        self.d_optimizer_thread = QThread()
-        self.d_optimizer_worker = IntegratedOptimizerWorker(
-            sample_file=main_file if main_file else input_file,
-            existing_file=existing_file,
-            output_folder=output_folder,
-            num_points=self.get_sample_size(),
-            sample_size=None,  # O el valor que corresponda
-            enable_hyperparameter_tuning=True,
-            force_reoptimization=False,
-            optimization_type="d_optimal"  # Especificar optimización D
-        )
-        self.d_optimizer_worker.moveToThread(self.d_optimizer_thread)
 
-        self.d_optimizer_thread.started.connect(self.d_optimizer_worker.run)
-        self.d_optimizer_worker.finished.connect(self.on_d_optimizer_finished)
-        self.d_optimizer_worker.error.connect(self.on_dsaitekika_error)
-        self.d_optimizer_worker.finished.connect(self.d_optimizer_thread.quit)
-        self.d_optimizer_worker.finished.connect(self.d_optimizer_worker.deleteLater)
-        self.d_optimizer_thread.finished.connect(self.d_optimizer_thread.deleteLater)
+        # ⚡ Generar done_experiments en background para que el GIF no se congele al inicio
+        def _start_d_with_existing(existing_file):
+            # Lanzar optimización D-óptima en hilo
+            self.d_optimizer_thread = QThread()
+            self.d_optimizer_worker = IntegratedOptimizerWorker(
+                sample_file=main_file if main_file else input_file,
+                existing_file=existing_file,
+                output_folder=output_folder,
+                num_points=self.get_sample_size(),
+                sample_size=None,  # O el valor que corresponda
+                enable_hyperparameter_tuning=True,
+                force_reoptimization=False,
+                optimization_type="d_optimal"  # Especificar optimización D
+            )
+            self.d_optimizer_worker.moveToThread(self.d_optimizer_thread)
 
-        self.d_optimizer_thread.start()
+            self.d_optimizer_thread.started.connect(self.d_optimizer_worker.run)
+            self.d_optimizer_worker.finished.connect(self.on_d_optimizer_finished)
+            self.d_optimizer_worker.error.connect(self.on_dsaitekika_error)
+            self.d_optimizer_worker.finished.connect(self.d_optimizer_thread.quit)
+            self.d_optimizer_worker.finished.connect(self.d_optimizer_worker.deleteLater)
+            self.d_optimizer_thread.finished.connect(self.d_optimizer_thread.deleteLater)
+
+            self.d_optimizer_thread.start()
+
+        self._build_done_experiments_async(main_file, input_file, done_file, _start_d_with_existing)
+        return
 
     def on_i_optimizer_clicked(self):
         """Ejecuta solo la optimización I-óptima"""
@@ -5296,7 +5339,7 @@ class MainWindow(QMainWindow):
 
             # ✅ NUEVO: Si el archivo de muestreo es CSV, generar también Excel(s) en 99_未実験データ
             if src_ext == ".csv":
-                self._export_unexperimented_excel_folder_from_csv(excel_dest_main, self.proyecto_folder, project_name)
+                self._start_csv_export_async(excel_dest_main, self.proyecto_folder, project_name)
             
             # Usar el archivo de 99_Temp para la optimización
             input_file = excel_dest_temp
@@ -5327,30 +5370,34 @@ class MainWindow(QMainWindow):
         main_file = getattr(self, "sample_file_path", None)
 
         done_file = os.path.join(self.proyecto_folder, "99_Temp", "done_experiments.xlsx")
-        existing_file = self._build_done_experiments_excel(main_file, input_file, done_file) if main_file else None
-        
-        # Lanzar optimización I-óptima en hilo
-        self.i_optimizer_thread = QThread()
-        self.i_optimizer_worker = IntegratedOptimizerWorker(
-            sample_file=main_file if main_file else input_file,
-            existing_file=existing_file,
-            output_folder=output_folder,
-            num_points=self.get_sample_size(),
-            sample_size=None,  # O el valor que corresponda
-            enable_hyperparameter_tuning=True,
-            force_reoptimization=False,
-            optimization_type="i_optimal"  # Especificar optimización I
-        )
-        self.i_optimizer_worker.moveToThread(self.i_optimizer_thread)
 
-        self.i_optimizer_thread.started.connect(self.i_optimizer_worker.run)
-        self.i_optimizer_worker.finished.connect(self.on_i_optimizer_finished)
-        self.i_optimizer_worker.error.connect(self.on_dsaitekika_error)
-        self.i_optimizer_worker.finished.connect(self.i_optimizer_thread.quit)
-        self.i_optimizer_worker.finished.connect(self.i_optimizer_worker.deleteLater)
-        self.i_optimizer_thread.finished.connect(self.i_optimizer_thread.deleteLater)
+        # ⚡ Generar done_experiments en background para que el GIF no se congele al inicio
+        def _start_i_with_existing(existing_file):
+            # Lanzar optimización I-óptima en hilo
+            self.i_optimizer_thread = QThread()
+            self.i_optimizer_worker = IntegratedOptimizerWorker(
+                sample_file=main_file if main_file else input_file,
+                existing_file=existing_file,
+                output_folder=output_folder,
+                num_points=self.get_sample_size(),
+                sample_size=None,  # O el valor que corresponda
+                enable_hyperparameter_tuning=True,
+                force_reoptimization=False,
+                optimization_type="i_optimal"  # Especificar optimización I
+            )
+            self.i_optimizer_worker.moveToThread(self.i_optimizer_thread)
 
-        self.i_optimizer_thread.start()
+            self.i_optimizer_thread.started.connect(self.i_optimizer_worker.run)
+            self.i_optimizer_worker.finished.connect(self.on_i_optimizer_finished)
+            self.i_optimizer_worker.error.connect(self.on_dsaitekika_error)
+            self.i_optimizer_worker.finished.connect(self.i_optimizer_thread.quit)
+            self.i_optimizer_worker.finished.connect(self.i_optimizer_worker.deleteLater)
+            self.i_optimizer_thread.finished.connect(self.i_optimizer_thread.deleteLater)
+
+            self.i_optimizer_thread.start()
+
+        self._build_done_experiments_async(main_file, input_file, done_file, _start_i_with_existing)
+        return
 
     def on_dsaitekika_clicked(self):
         print("D最適化実行中...")
@@ -5468,7 +5515,7 @@ class MainWindow(QMainWindow):
 
         # ✅ NUEVO: Si el archivo de muestreo es CSV, generar también Excel(s) en 99_未実験データ
         if src_ext == ".csv":
-            self._export_unexperimented_excel_folder_from_csv(excel_dest_main, self.proyecto_folder, project_name)
+            self._start_csv_export_async(excel_dest_main, self.proyecto_folder, project_name)
 
         # Crear carpeta temporal de resultados dentro del proyecto
         temp_base = os.path.join(self.proyecto_folder, "99_Temp")
@@ -5508,6 +5555,72 @@ class MainWindow(QMainWindow):
         self.dsaitekika_thread.finished.connect(self.dsaitekika_thread.deleteLater)
 
         self.dsaitekika_thread.start()
+
+    def _start_csv_export_async(self, csv_path: str, project_folder: str, project_name: str):
+        """
+        Ejecuta la exportación CSV→Excel en un QThread para no bloquear la UI.
+        No afecta a la optimización (solo genera archivos auxiliares en 99_未実験データ).
+        """
+        try:
+            # Evitar lanzar múltiples conversiones en paralelo
+            if hasattr(self, "csv_export_thread") and self.csv_export_thread is not None:
+                try:
+                    if self.csv_export_thread.isRunning():
+                        print("ℹ️ CSV→Excel export ya en ejecución, se omite nueva solicitud")
+                        return
+                except RuntimeError:
+                    self.csv_export_thread = None
+        except Exception:
+            pass
+
+        self.csv_export_thread = QThread()
+        self.csv_export_worker = CsvToExcelExportWorker(
+            lambda: self._export_unexperimented_excel_folder_from_csv(csv_path, project_folder, project_name)
+        )
+        self.csv_export_worker.moveToThread(self.csv_export_thread)
+        self.csv_export_thread.started.connect(self.csv_export_worker.run)
+        self.csv_export_worker.finished.connect(self.csv_export_thread.quit)
+        self.csv_export_worker.finished.connect(self.csv_export_worker.deleteLater)
+        self.csv_export_thread.finished.connect(self.csv_export_thread.deleteLater)
+
+        def _on_err(msg: str):
+            print(f"⚠️ CSV→Excel export (async) error: {msg}", flush=True)
+        self.csv_export_worker.error.connect(_on_err)
+
+        self.csv_export_thread.start()
+
+    def _build_done_experiments_async(self, main_file: str, temp_file: str, done_file: str, on_ready):
+        """Genera done_experiments.xlsx en background y llama on_ready(existing_file) en el hilo UI."""
+        try:
+            if hasattr(self, "done_exp_thread") and self.done_exp_thread is not None:
+                try:
+                    if self.done_exp_thread.isRunning():
+                        print("ℹ️ done_experiments ya en ejecución, se reutiliza el que salga", flush=True)
+                except RuntimeError:
+                    self.done_exp_thread = None
+        except Exception:
+            pass
+
+        self.done_exp_thread = QThread()
+        self.done_exp_worker = CallableResultWorker(
+            lambda: self._build_done_experiments_excel(main_file, temp_file, done_file) if main_file else None
+        )
+        self.done_exp_worker.moveToThread(self.done_exp_thread)
+        self.done_exp_thread.started.connect(self.done_exp_worker.run)
+        self.done_exp_worker.finished.connect(on_ready)
+        self.done_exp_worker.finished.connect(self.done_exp_thread.quit)
+        self.done_exp_worker.finished.connect(self.done_exp_worker.deleteLater)
+        self.done_exp_thread.finished.connect(self.done_exp_thread.deleteLater)
+
+        def _on_err(msg: str):
+            print(f"⚠️ done_experiments (async) error: {msg}", flush=True)
+            try:
+                on_ready(None)
+            except Exception:
+                pass
+        self.done_exp_worker.error.connect(_on_err)
+
+        self.done_exp_thread.start()
 
     def on_isaitekika_clicked(self):
         """Acción al pulsar iSaitekika"""

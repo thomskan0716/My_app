@@ -45,7 +45,11 @@ def load_and_validate_existing_data(existing_file, design_df, verbose=True):
             print(f"ℹ️ 既存列: {list(existing_df.columns)}")
 
         # Obtener nombres de variables explicativas
-        variable_names = design_df.columns.tolist()
+        # `design_df` puede venir en formato "tabla de diseño" con columna '説明変数名'
+        if isinstance(design_df, pd.DataFrame) and "説明変数名" in design_df.columns:
+            variable_names = design_df["説明変数名"].astype(str).tolist()
+        else:
+            variable_names = design_df.columns.tolist() if isinstance(design_df, pd.DataFrame) else list(design_df)
         if verbose:
             print(f"🎯 目的変数: {variable_names}")
 
@@ -244,12 +248,36 @@ def hierarchical_candidate_reduction(candidate_points, max_candidates=5000, exis
             random_state=42, 
             batch_size=min(1000, len(available_points)//10),
             n_init=3,
-            max_iter=100,
-            n_jobs=1  # ✅ NUEVO: Forzar uso de un solo worker para evitar errores de subprocess
+            max_iter=100
         )
 
         start_time = time.time()
-        clusters = kmeans.fit_predict(available_points)
+        # ⚠️ scikit-learn reciente ya no soporta `n_jobs` en MiniBatchKMeans.
+        # Para replicar "n_jobs=1" (control de paralelismo) limitamos threads SOLO durante el fit.
+        # Además, en algunos entornos Windows recientes `joblib/loky` intenta usar `wmic` para contar cores
+        # y puede fallar. Para evitarlo, forzamos backend "threading" SOLO en este fit.
+        try:
+            from threadpoolctl import threadpool_limits
+            # Silenciar/evitar detección de cores físicos vía `wmic` en loky (Windows).
+            # Mantiene el algoritmo igual; solo evita subprocess y limita a 1 core durante este bloque.
+            _prev_loky_max_cpu = os.environ.get("LOKY_MAX_CPU_COUNT")
+            os.environ["LOKY_MAX_CPU_COUNT"] = "1"
+            try:
+                import joblib
+                with joblib.parallel_backend("threading", n_jobs=1):
+                    with threadpool_limits(limits=1):
+                        clusters = kmeans.fit_predict(available_points)
+            except Exception:
+                with threadpool_limits(limits=1):
+                    clusters = kmeans.fit_predict(available_points)
+            finally:
+                if _prev_loky_max_cpu is None:
+                    os.environ.pop("LOKY_MAX_CPU_COUNT", None)
+                else:
+                    os.environ["LOKY_MAX_CPU_COUNT"] = _prev_loky_max_cpu
+        except Exception:
+            # Si threadpoolctl no está disponible u ocurre cualquier problema, continuar sin limitar threads
+            clusters = kmeans.fit_predict(available_points)
         clustering_time = time.time() - start_time
         print(f"⏱️ クラスタリング時間: {clustering_time:.2f} 秒")
 
