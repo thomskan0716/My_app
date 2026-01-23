@@ -8,11 +8,10 @@ class ShowResultsWorker(QObject):
     finished = Signal(dict)
     error = Signal(str)
 
-    def __init__(self, project_folder, results_file_path, selected_brush, diameter, material, backup_function, process_function, experiment_info=None):
+    def __init__(self, project_folder, results_file_path, diameter, material, backup_function, process_function, experiment_info=None):
         super().__init__()
         self.project_folder = project_folder
         self.results_file_path = results_file_path
-        self.selected_brush = selected_brush
         self.diameter = diameter
         self.material = material
         self.backup_function = backup_function
@@ -150,7 +149,7 @@ class ShowResultsWorker(QObject):
             # Pass the connection created in this thread
             db_upsert_result = self.process_function(
                 self.results_file_path, 
-                self.selected_brush, 
+                None,  # brush SIEMPRE desde el archivo (A13/A11/A21/A32)
                 self.diameter, 
                 self.material,
                 self.conn  # Pass the connection created in this thread

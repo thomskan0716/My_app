@@ -430,8 +430,19 @@ class ResultProcessor:
     def _read_any_table(self, file_path: str) -> pd.DataFrame:
         ext = os.path.splitext(str(file_path))[1].lower()
         if ext == ".csv":
-            return pd.read_csv(file_path, encoding="utf-8-sig")
-        return pd.read_excel(file_path, header=0)
+            df = pd.read_csv(file_path, encoding="utf-8-sig")
+        else:
+            df = pd.read_excel(file_path, header=0)
+
+        # Normalizar nombres de columnas (evita fallos por espacios invisibles)
+        try:
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = [" ".join([str(x).strip() for x in tup if str(x).strip() != ""]).strip() for tup in df.columns]
+            else:
+                df.columns = [str(c).strip() for c in df.columns]
+        except Exception:
+            pass
+        return df
 
     def process_results_file(self, file_path, selected_brush, senzai_length):
         df = self._read_any_table(file_path)
@@ -455,18 +466,32 @@ class ResultProcessor:
         # Calcular バリ除去 basado en 上面ダレ量
         df_filtered['バリ除去'] = df_filtered['上面ダレ量'].apply(lambda x: 1 if x > 0 else 0)
 
-        # Brush: priorizar columnas one-hot del archivo; fallback a UI si faltan
+        # Brush: SIEMPRE desde el archivo (one-hot A13/A11/A21/A32). No usar UI.
         brush_cols = ["A13", "A11", "A21", "A32"]
-        if all(c in df.columns for c in brush_cols):
-            for c in brush_cols:
-                df_filtered[c] = pd.to_numeric(df[c], errors="coerce").fillna(0).astype(int)
-        else:
-            if selected_brush is None:
-                raise ValueError("❌ Falta brush one-hot (A13/A11/A21/A32) en el archivo y no se proporcionó brush desde UI.")
-            df_filtered['A13'] = 1 if selected_brush == 'A13' else 0
-            df_filtered['A11'] = 1 if selected_brush == 'A11' else 0
-            df_filtered['A21'] = 1 if selected_brush == 'A21' else 0
-            df_filtered['A32'] = 1 if selected_brush == 'A32' else 0
+        missing_brush = [c for c in brush_cols if c not in df.columns]
+        if missing_brush:
+            raise ValueError(
+                "❌ El archivo de resultados debe incluir columnas de cepillo one-hot: "
+                f"{', '.join(brush_cols)} (faltan: {', '.join(missing_brush)})"
+            )
+
+        for c in brush_cols:
+            df_filtered[c] = pd.to_numeric(df[c], errors="coerce").fillna(0).astype(int)
+
+        # Validación básica: exactamente 1 cepillo activo por fila
+        try:
+            s = df_filtered[brush_cols].sum(axis=1)
+            bad = df_filtered[(s != 1)]
+            if not bad.empty:
+                raise ValueError(
+                    "❌ Formato de cepillo inválido: cada fila debe tener exactamente un 1 "
+                    f"en {brush_cols}. Filas inválidas: {bad.index.tolist()[:10]}"
+                )
+        except ValueError:
+            raise
+        except Exception:
+            # Si falla la validación por algún motivo, no bloquear el import
+            pass
         
         # Calcular 加工時間 usando la fórmula: 100/送り速度*60
         df_filtered['加工時間'] = (100 / df_filtered['送り速度']) * 60
@@ -524,18 +549,32 @@ class ResultProcessor:
         # Calcular バリ除去 basado en 上面ダレ量
         df_filtered['バリ除去'] = df_filtered['上面ダレ量'].apply(lambda x: 1 if x > 0 else 0)
         
-        # Brush: priorizar columnas one-hot del archivo; fallback a UI
+        # Brush: SIEMPRE desde el archivo (one-hot A13/A11/A21/A32). No usar UI.
         brush_cols = ["A13", "A11", "A21", "A32"]
-        if all(c in df.columns for c in brush_cols):
-            for c in brush_cols:
-                df_filtered[c] = pd.to_numeric(df[c], errors="coerce").fillna(0).astype(int)
-        else:
-            if selected_brush is None:
-                raise ValueError("❌ Falta brush one-hot (A13/A11/A21/A32) en el archivo y no se proporcionó brush desde UI.")
-            df_filtered['A13'] = 1 if selected_brush == 'A13' else 0
-            df_filtered['A11'] = 1 if selected_brush == 'A11' else 0
-            df_filtered['A21'] = 1 if selected_brush == 'A21' else 0
-            df_filtered['A32'] = 1 if selected_brush == 'A32' else 0
+        missing_brush = [c for c in brush_cols if c not in df.columns]
+        if missing_brush:
+            raise ValueError(
+                "❌ El archivo de resultados debe incluir columnas de cepillo one-hot: "
+                f"{', '.join(brush_cols)} (faltan: {', '.join(missing_brush)})"
+            )
+
+        for c in brush_cols:
+            df_filtered[c] = pd.to_numeric(df[c], errors="coerce").fillna(0).astype(int)
+
+        # Validación básica: exactamente 1 cepillo activo por fila
+        try:
+            s = df_filtered[brush_cols].sum(axis=1)
+            bad = df_filtered[(s != 1)]
+            if not bad.empty:
+                raise ValueError(
+                    "❌ Formato de cepillo inválido: cada fila debe tener exactamente un 1 "
+                    f"en {brush_cols}. Filas inválidas: {bad.index.tolist()[:10]}"
+                )
+        except ValueError:
+            raise
+        except Exception:
+            # Si falla la validación por algún motivo, no bloquear el import
+            pass
         
         # 直径/材料: usar archivo si existe, si no UI
         df_filtered['直径'] = df['直径'] if '直径' in df.columns else diameter

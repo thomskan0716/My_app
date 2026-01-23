@@ -3241,7 +3241,7 @@ class MainWindow(QMainWindow):
         self.left_layout.addWidget(self.material_label)
         self.left_layout.addWidget(self.material_selector)
         
-        self.create_brush_selector()
+        self.create_diameter_selector()
         self.create_show_results_button()
 
         self.create_export_button()
@@ -3255,8 +3255,6 @@ class MainWindow(QMainWindow):
         self.widgets_below_sample_selector.append(self.diameter_selector)
         self.widgets_below_sample_selector.append(self.material_label)
         self.widgets_below_sample_selector.append(self.material_selector)
-        self.widgets_below_sample_selector.append(self.brush_label)
-        self.widgets_below_sample_selector.append(self.brush_selector)
         # NOTA: sample_size_label y sample_size_input NO están en esta lista porque deben estar siempre habilitados
         # ...añade más si hay más widgets debajo
 
@@ -4093,29 +4091,17 @@ class MainWindow(QMainWindow):
         except Exception as e:
             print(f"⚠️ 99_未実験データ: CSV→Excel 変換エラー: {e}", flush=True)
 
-    def create_brush_selector(self):
-        """Crear selector de cepillos (A11, A21, A32, A13)"""
-        # Label para el selector de brush (sin QGroupBox)
-        self.brush_label = QLabel("使用するブラシ")
-        self.left_layout.addWidget(self.brush_label)
-
-        # Selector de cepillo
-        self.brush_selector = QComboBox()
-        self.brush_selector.addItems(["A11", "A21", "A32", "A13"])
-        self.brush_selector.setCurrentText("A11")
-        self.left_layout.addWidget(self.brush_selector)
-
-        # Selector de diámetro encima de 線材長
+    def create_diameter_selector(self):
+        """Crear selector de diámetro (el cepillo se toma del archivo de resultados, no de la UI)"""
+        # Selector de diámetro
         self.diameter_label = QLabel("直径 選択")
         self.diameter_selector = QComboBox()
         self.diameter_selector.addItems(["6", "15", "25", "40", "60", "100"])
         self.diameter_selector.setCurrentText("15")
         self.left_layout.addWidget(self.diameter_label)
         self.left_layout.addWidget(self.diameter_selector)
-
-        # Conectar lógica para restringir diámetro si se selecciona A13
-        self.brush_selector.currentTextChanged.connect(self.update_diameter_options)
-        self.update_diameter_options(self.brush_selector.currentText())
+        # Por defecto: sin restricción (solo se restringe si el archivo detecta A13)
+        self.update_diameter_options("")
 
     def update_diameter_options(self, brush_name):
         """Restringe el selector de diámetro si el cepillo es A13"""
@@ -4126,6 +4112,57 @@ class MainWindow(QMainWindow):
         # Si el valor actual no está permitido, selecciona el primero permitido
         if self.diameter_selector.currentText() not in allowed:
             self.diameter_selector.setCurrentText(allowed[0])
+
+    def _detect_brush_type_from_results_file(self, file_path):
+        """
+        Detecta el tipo de cepillo desde el archivo de resultados (one-hot A13/A11/A21/A32).
+        Devuelve "A13"/"A11"/"A21"/"A32" o None si no se puede determinar.
+        """
+        try:
+            import pandas as pd
+            ext = os.path.splitext(str(file_path))[1].lower()
+            if ext == ".csv":
+                df = pd.read_csv(file_path, encoding="utf-8-sig")
+            else:
+                df = pd.read_excel(file_path, header=0)
+
+            # Normalizar columnas (espacios invisibles)
+            try:
+                if isinstance(df.columns, pd.MultiIndex):
+                    df.columns = [" ".join([str(x).strip() for x in tup if str(x).strip() != ""]).strip() for tup in df.columns]
+                else:
+                    df.columns = [str(c).strip() for c in df.columns]
+            except Exception:
+                pass
+
+            brush_cols = ["A13", "A11", "A21", "A32"]
+            if not all(c in df.columns for c in brush_cols):
+                return None
+
+            onehot = df[brush_cols].apply(pd.to_numeric, errors="coerce").fillna(0)
+            # Si el archivo tiene muchas filas, agregamos para mayor robustez
+            sums = onehot.sum(axis=0)
+            # Selección conservadora: debe haber un único ganador con suma > 0
+            winners = [c for c in brush_cols if sums.get(c, 0) > 0]
+            if len(winners) == 1:
+                return winners[0]
+            # Si hay varios con >0, decidir por el máximo si es claramente dominante
+            best = sums.idxmax()
+            if float(sums.max()) > 0 and (sums == sums.max()).sum() == 1:
+                return str(best)
+            return None
+        except Exception:
+            return None
+
+    def _apply_results_file_brush_to_ui(self, file_path):
+        """Aplica restricciones UI (diámetro) en base al cepillo detectado del archivo."""
+        brush = self._detect_brush_type_from_results_file(file_path)
+        self._results_brush_type = brush
+        # Restringir diámetro si procede (A13)
+        try:
+            self.update_diameter_options(brush or "")
+        except Exception:
+            pass
 
 
 
@@ -6229,7 +6266,7 @@ class MainWindow(QMainWindow):
             print(f"🔍 Debug - Creando ShowResultsWorker con:")
             print(f"  - project_folder: {project_folder}")
             print(f"  - results_file_path: {self.results_file_path}")
-            print(f"  - brush: {self.get_selected_brush()}")
+            print(f"  - brush(from_file): {getattr(self, '_results_brush_type', None)}")
             print(f"  - diameter: {self.diameter_selector.currentText()}")
             print(f"  - material: {self.material_selector.currentText()}")
             
@@ -6334,7 +6371,6 @@ class MainWindow(QMainWindow):
             self.show_results_worker = ShowResultsWorker(
                 project_folder,
                 self.results_file_path,
-                self.get_selected_brush(),
                 float(self.diameter_selector.currentText()),
                 self.material_selector.currentText(),
                 self.backup_and_update_sample_file,
@@ -6919,8 +6955,11 @@ class MainWindow(QMainWindow):
             self.ng_button.setEnabled(False)
 
     def get_selected_brush(self):
-        """Obtener el brush seleccionado del ComboBox"""
-        return self.brush_selector.currentText()
+        """
+        Compatibilidad: antes devolvía el brush del selector UI.
+        Ahora el brush SIEMPRE viene del archivo de resultados (A13/A11/A21/A32).
+        """
+        return getattr(self, "_results_brush_type", None)
     
     def get_selected_brush_from_filter(self):
         """Obtener el brush seleccionado del filtro"""
@@ -8153,6 +8192,11 @@ class MainWindow(QMainWindow):
                 
                 # Set UI state for results file
                 self.set_ui_state_for_results_file()
+                # Aplicar restricciones según cepillo detectado del archivo (p.ej. A13 limita diámetros)
+                try:
+                    self._apply_results_file_brush_to_ui(file_path)
+                except Exception:
+                    pass
                 # UI enablement debajo del selector (sin depender del nombre del archivo)
                 try:
                     self._last_loaded_file_kind = "results"
@@ -8617,6 +8661,12 @@ class MainWindow(QMainWindow):
 
     def set_ui_state_for_sample_file(self):
         """Set UI state when a sample file is loaded"""
+        # No hay selector de brush en UI; resetear brush detectado de resultados
+        self._results_brush_type = None
+        try:
+            self.update_diameter_options("")
+        except Exception:
+            pass
         self.sample_size_input.setEnabled(True)
         self.sample_size_input.setStyleSheet("")
         self.d_optimize_button.setEnabled(True)
@@ -8660,14 +8710,8 @@ class MainWindow(QMainWindow):
         """)
         self.material_selector.setEnabled(False)
         self.material_selector.setStyleSheet("color: gray; background-color: #f0f0f0;")
-        self.brush_selector.setEnabled(False)
-        self.brush_selector.setStyleSheet("color: gray; background-color: #f0f0f0;")
         self.diameter_selector.setEnabled(False)
         self.diameter_selector.setStyleSheet("color: gray; background-color: #f0f0f0;")
-        self.brush_label.setEnabled(False)
-        self.brush_label.setStyleSheet("color: gray;")
-        self.brush_selector.setEnabled(False)
-        self.brush_selector.setStyleSheet("color: gray; background-color: #f0f0f0;")
         # El botón de análisis siempre está habilitado
         self.analyze_button.setEnabled(True)
 
@@ -8681,19 +8725,18 @@ class MainWindow(QMainWindow):
         self.i_optimize_button.setStyleSheet("color: gray; background-color: #f0f0f0;")
         self.material_selector.setEnabled(True)
         self.material_selector.setStyleSheet("")
-        self.brush_selector.setEnabled(True)
-        self.brush_selector.setStyleSheet("")
         self.diameter_selector.setEnabled(True)
         self.diameter_selector.setStyleSheet("")
-        self.brush_label.setEnabled(True)
-        self.brush_label.setStyleSheet("")
-        self.brush_selector.setEnabled(True)
-        self.brush_selector.setStyleSheet("")
         # Habilitar botón de análisis
         self.analyze_button.setEnabled(True)
 
     def set_ui_state_for_no_file(self):
         """Set UI state when no file is loaded"""
+        self._results_brush_type = None
+        try:
+            self.update_diameter_options("")
+        except Exception:
+            pass
         self.sample_size_input.setEnabled(False)
         self.sample_size_input.setStyleSheet("color: gray; background-color: #f0f0f0;")
         self.d_optimize_button.setEnabled(False)
@@ -8702,14 +8745,8 @@ class MainWindow(QMainWindow):
         self.i_optimize_button.setStyleSheet("color: gray; background-color: #f0f0f0;")
         self.material_selector.setEnabled(False)
         self.material_selector.setStyleSheet("color: gray; background-color: #f0f0f0;")
-        self.brush_selector.setEnabled(False)
-        self.brush_selector.setStyleSheet("color: gray; background-color: #f0f0f0;")
         self.diameter_selector.setEnabled(False)
         self.diameter_selector.setStyleSheet("color: gray; background-color: #f0f0f0;")
-        self.brush_label.setEnabled(False)
-        self.brush_label.setStyleSheet("color: gray;")
-        self.brush_selector.setEnabled(False)
-        self.brush_selector.setStyleSheet("color: gray; background-color: #f0f0f0;")
         # El botón de análisis siempre está habilitado
         self.analyze_button.setEnabled(True)
 
