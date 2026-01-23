@@ -4877,6 +4877,35 @@ class MainWindow(QMainWindow):
         else:
             QMessageBox.warning(self, "警告", "⚠️ フィルタリングされたデータがありません。")
     
+    def _cleanup_optimization_threads(self, aggressive: bool = False, wait_ms: int = 1500):
+        """
+        Limpia QThreads de optimización para evitar estados colgados.
+        - aggressive=False: si el thread ya terminó, limpia referencia.
+        - aggressive=True: si el thread sigue corriendo, intenta quit()+wait() y limpia referencia.
+        """
+        for t_attr in ("d_optimizer_thread", "i_optimizer_thread", "dsaitekika_thread"):
+            t = getattr(self, t_attr, None)
+            if t is None:
+                continue
+            try:
+                running = bool(t.isRunning())
+            except RuntimeError:
+                setattr(self, t_attr, None)
+                continue
+
+            if not running:
+                setattr(self, t_attr, None)
+                continue
+
+            if aggressive:
+                try:
+                    t.quit()
+                    t.wait(wait_ms)
+                except Exception:
+                    pass
+                # Evitar que un thread "zombie" bloquee nuevas ejecuciones
+                setattr(self, t_attr, None)
+
     def analyze_filtered_data(self):
         if hasattr(self, "filtered_df"):
             print("⚙️ Analizando datos filtrados...")
@@ -4916,6 +4945,9 @@ class MainWindow(QMainWindow):
 
     def load_file(self, label_to_update: QLabel, title: str):
         """Carga un archivo y actualiza el label"""
+        # Limpiar referencias stale a threads de optimización al cambiar de archivo
+        self._cleanup_optimization_threads(aggressive=False)
+
         # ✅ NUEVO: Pausar timers automáticos para evitar interferencia con el diálogo
         self.pause_auto_timers()
         
@@ -4938,6 +4970,9 @@ class MainWindow(QMainWindow):
 
     def on_d_optimizer_clicked(self):
         """Ejecuta solo la optimización D-óptima"""
+        # Limpiar threads stale antes de chequear "ya está corriendo"
+        self._cleanup_optimization_threads(aggressive=False)
+
         # ✅ NUEVO: No mezclar ejecuciones pesadas en paralelo
         if hasattr(self, 'linear_worker') and self.linear_worker is not None:
             try:
@@ -5104,9 +5139,7 @@ class MainWindow(QMainWindow):
             print(f"✅ ARCHIVO DE ENTRADA ACTUALIZADO: {excel_dest_main}")
             print(f"✅ ETIQUETA ACTUALIZADA: {self.load_file_label.text()}")
 
-            # ✅ NUEVO: Si el archivo de muestreo es CSV, generar también Excel(s) en 99_未実験データ
-            if src_ext == ".csv":
-                self._start_csv_export_async(excel_dest_main, self.proyecto_folder, project_name)
+            # CSV→Excel (99_未実験データ) deshabilitado: proceso pesado y no necesario para la optimización
             
             # Usar el archivo de 99_Temp para la optimización
             input_file = excel_dest_temp
@@ -5158,9 +5191,13 @@ class MainWindow(QMainWindow):
             self.d_optimizer_thread.started.connect(self.d_optimizer_worker.run)
             self.d_optimizer_worker.finished.connect(self.on_d_optimizer_finished)
             self.d_optimizer_worker.error.connect(self.on_dsaitekika_error)
+            # ✅ FIX: si hay error, cerrar el thread también (si no, queda "isRunning()" para siempre)
+            self.d_optimizer_worker.error.connect(self.d_optimizer_thread.quit)
             self.d_optimizer_worker.finished.connect(self.d_optimizer_thread.quit)
             self.d_optimizer_worker.finished.connect(self.d_optimizer_worker.deleteLater)
             self.d_optimizer_thread.finished.connect(self.d_optimizer_thread.deleteLater)
+            # Limpiar referencia cuando el thread termine (evita estados colgados)
+            self.d_optimizer_thread.finished.connect(lambda: setattr(self, "d_optimizer_thread", None))
 
             self.d_optimizer_thread.start()
 
@@ -5170,6 +5207,8 @@ class MainWindow(QMainWindow):
     def on_i_optimizer_clicked(self):
         """Ejecuta solo la optimización I-óptima"""
         print("I最適化実行中...")
+        # Limpiar threads stale antes de chequear "ya está corriendo"
+        self._cleanup_optimization_threads(aggressive=False)
 
         # ✅ NUEVO: No mezclar ejecuciones pesadas en paralelo
         if hasattr(self, 'linear_worker') and self.linear_worker is not None:
@@ -5337,9 +5376,7 @@ class MainWindow(QMainWindow):
             print(f"✅ ARCHIVO DE ENTRADA ACTUALIZADO: {excel_dest_main}")
             print(f"✅ ETIQUETA ACTUALIZADA: {self.load_file_label.text()}")
 
-            # ✅ NUEVO: Si el archivo de muestreo es CSV, generar también Excel(s) en 99_未実験データ
-            if src_ext == ".csv":
-                self._start_csv_export_async(excel_dest_main, self.proyecto_folder, project_name)
+            # CSV→Excel (99_未実験データ) deshabilitado: proceso pesado y no necesario para la optimización
             
             # Usar el archivo de 99_Temp para la optimización
             input_file = excel_dest_temp
@@ -5390,9 +5427,13 @@ class MainWindow(QMainWindow):
             self.i_optimizer_thread.started.connect(self.i_optimizer_worker.run)
             self.i_optimizer_worker.finished.connect(self.on_i_optimizer_finished)
             self.i_optimizer_worker.error.connect(self.on_dsaitekika_error)
+            # ✅ FIX: si hay error, cerrar el thread también (si no, queda "isRunning()" para siempre)
+            self.i_optimizer_worker.error.connect(self.i_optimizer_thread.quit)
             self.i_optimizer_worker.finished.connect(self.i_optimizer_thread.quit)
             self.i_optimizer_worker.finished.connect(self.i_optimizer_worker.deleteLater)
             self.i_optimizer_thread.finished.connect(self.i_optimizer_thread.deleteLater)
+            # Limpiar referencia cuando el thread termine (evita estados colgados)
+            self.i_optimizer_thread.finished.connect(lambda: setattr(self, "i_optimizer_thread", None))
 
             self.i_optimizer_thread.start()
 
@@ -5402,6 +5443,8 @@ class MainWindow(QMainWindow):
     def on_dsaitekika_clicked(self):
         print("D最適化実行中...")
         print("🔍 DEBUG: Iniciando on_dsaitekika_clicked")
+        # Limpiar threads stale antes de chequear "ya está corriendo"
+        self._cleanup_optimization_threads(aggressive=False)
 
         # ✅ NUEVO: No mezclar ejecuciones pesadas en paralelo
         if hasattr(self, 'linear_worker') and self.linear_worker is not None:
@@ -5513,9 +5556,7 @@ class MainWindow(QMainWindow):
         print(f"✅ ARCHIVO DE ENTRADA ACTUALIZADO: {excel_dest_main}")
         print(f"✅ ETIQUETA ACTUALIZADA: {self.load_file_label.text()}")
 
-        # ✅ NUEVO: Si el archivo de muestreo es CSV, generar también Excel(s) en 99_未実験データ
-        if src_ext == ".csv":
-            self._start_csv_export_async(excel_dest_main, self.proyecto_folder, project_name)
+        # CSV→Excel (99_未実験データ) deshabilitado: proceso pesado y no necesario para la optimización
 
         # Crear carpeta temporal de resultados dentro del proyecto
         temp_base = os.path.join(self.proyecto_folder, "99_Temp")
@@ -5550,9 +5591,13 @@ class MainWindow(QMainWindow):
         self.dsaitekika_thread.started.connect(self.dsaitekika_worker.run)
         self.dsaitekika_worker.finished.connect(self.on_dsaitekika_finished)
         self.dsaitekika_worker.error.connect(self.on_dsaitekika_error)
+        # ✅ FIX: si hay error, cerrar el thread también (si no, queda "isRunning()" para siempre)
+        self.dsaitekika_worker.error.connect(self.dsaitekika_thread.quit)
         self.dsaitekika_worker.finished.connect(self.dsaitekika_thread.quit)
         self.dsaitekika_worker.finished.connect(self.dsaitekika_worker.deleteLater)
         self.dsaitekika_thread.finished.connect(self.dsaitekika_thread.deleteLater)
+        # Limpiar referencia cuando el thread termine (evita estados colgados)
+        self.dsaitekika_thread.finished.connect(lambda: setattr(self, "dsaitekika_thread", None))
 
         self.dsaitekika_thread.start()
 
@@ -7257,6 +7302,8 @@ class MainWindow(QMainWindow):
         
         QMessageBox.information(self, "完了",
                                 f"✅ D最適化が完了しました。\n結果を保存しました:\n{results['d_path']}")
+        # Asegurar que el QThread se cierra antes de permitir nuevas ejecuciones
+        self._cleanup_optimization_threads(aggressive=True)
         self.loader_overlay.stop()
 
     def on_i_optimizer_finished(self, results):
@@ -7315,7 +7362,8 @@ class MainWindow(QMainWindow):
         
         QMessageBox.information(self, "完了",
                                 f"✅ I最適化が完了しました。\n結果を保存しました:\n{results['i_path']}")
-        
+        # Asegurar que el QThread se cierra antes de permitir nuevas ejecuciones
+        self._cleanup_optimization_threads(aggressive=True)
         self.loader_overlay.stop()
 
     def on_dsaitekika_finished(self, results):
@@ -7403,12 +7451,37 @@ class MainWindow(QMainWindow):
 
         QMessageBox.information(self, "完了",
                                 f"✅ D最適化が完了しました。\n結果を保存しました:\n{self.dsaitekika_output_excel}")
-        
+        # Asegurar que el QThread se cierra antes de permitir nuevas ejecuciones
+        self._cleanup_optimization_threads(aggressive=True)
         self.loader_overlay.stop()
 
     def on_dsaitekika_error(self, message):
-        QMessageBox.critical(self, "エラー", f"❌ D最適化中にエラーが発生しました:\n{message}")
+        # ✅ FIX: asegurar que no queda ningún QThread de optimización "corriendo" tras un error
+        try:
+            for t_attr in ("d_optimizer_thread", "i_optimizer_thread", "dsaitekika_thread"):
+                t = getattr(self, t_attr, None)
+                if t is None:
+                    continue
+                try:
+                    if t.isRunning():
+                        t.quit()
+                except RuntimeError:
+                    # objeto Qt ya destruido
+                    setattr(self, t_attr, None)
+        except Exception:
+            pass
+
+        QMessageBox.critical(self, "エラー", f"❌ 最適化中にエラーが発生しました:\n{message}")
         self.loader_overlay.stop()
+        # Asegurar cleanup completo en error (por si quedó algo vivo)
+        self._cleanup_optimization_threads(aggressive=True)
+
+        # Re-habilitar botones por si quedaron deshabilitados
+        try:
+            self.d_optimize_button.setEnabled(True)
+            self.i_optimize_button.setEnabled(True)
+        except Exception:
+            pass
 
     def on_sample_generation_finished(self):
         self.loader_overlay.stop()
@@ -7468,8 +7541,9 @@ class MainWindow(QMainWindow):
 
             # ✅ NO depender del nombre del archivo:
             # elegir cualquier *_未実験データ.(xlsx/xls/csv) dentro de 99_Temp o 99_Temp/Temp.
-            # Preferencia: xlsx > xls > csv, y si hay varios, el más reciente.
-            exts_priority = {".xlsx": 0, ".xls": 1, ".csv": 2}
+            # Preferencia (requerimiento): si existe CSV, priorizar CSV; si no, usar Excel.
+            # Si hay varios del mismo tipo, elegir el más reciente.
+            exts_priority = {".csv": 0, ".xlsx": 1, ".xls": 2}
 
             def _collect_candidates(folder: str):
                 out = []
