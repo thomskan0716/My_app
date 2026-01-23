@@ -3371,6 +3371,51 @@ class MainWindow(QMainWindow):
         self.graph_area_layout.addWidget(self.graph_label)
 
     # ======================================
+    # Utilidades de UI (limpieza de layouts)
+    # ======================================
+    def _clear_layout_recursive(self, layout):
+        """
+        Limpia un QLayout de forma recursiva (widgets + sub-layouts).
+        Importante: QLayoutItem.widget() solo devuelve widgets en el nivel actual;
+        si hay addLayout(...), hay que limpiar también item.layout().
+        """
+        if layout is None:
+            return
+
+        while layout.count():
+            item = layout.takeAt(0)
+            if item is None:
+                continue
+
+            w = item.widget()
+            if w is not None:
+                try:
+                    w.hide()
+                except Exception:
+                    pass
+                try:
+                    w.setParent(None)
+                except Exception:
+                    pass
+                try:
+                    w.deleteLater()
+                except Exception:
+                    pass
+                continue
+
+            child_layout = item.layout()
+            if child_layout is not None:
+                # Limpiar recursivamente y soltar el layout
+                self._clear_layout_recursive(child_layout)
+                try:
+                    child_layout.setParent(None)
+                except Exception:
+                    pass
+                continue
+
+            # SpacerItem u otros items: nada que hacer
+
+    # ======================================
     # Secciones de creación visual
     # ======================================
 
@@ -4124,12 +4169,12 @@ class MainWindow(QMainWindow):
 
     def create_filter_view(self):
         """Crear la vista de filtrado a la derecha"""
-        # Limpiar el layout central
-        while self.center_layout.count():
-            item = self.center_layout.takeAt(0)
-            widget = item.widget()
-            if widget:
-                widget.deleteLater()
+        # Limpiar el layout central COMPLETAMENTE (incluye layouts anidados)
+        self._clear_layout_recursive(self.center_layout)
+        try:
+            QApplication.processEvents()
+        except Exception:
+            pass
 
         # Título mejorado
         title = QLabel("データフィルター")
@@ -4973,6 +5018,22 @@ class MainWindow(QMainWindow):
         # Limpiar threads stale antes de chequear "ya está corriendo"
         self._cleanup_optimization_threads(aggressive=False)
 
+        # ✅ FIX UI: si venimos de la pantalla de filtros, volver a la pantalla principal
+        # (si no, los botones/controles del filtro pueden quedarse visibles al mostrar gráficos)
+        try:
+            in_filter_view = False
+            for i in range(self.center_layout.count()):
+                item = self.center_layout.itemAt(i)
+                if item.widget() and isinstance(item.widget(), QLabel):
+                    if item.widget().text() == "データフィルター":
+                        in_filter_view = True
+                        break
+            if in_filter_view:
+                print("🔄 D最適化: detectada pantalla de filtros, restaurando pantalla principal...")
+                self.clear_main_screen()
+        except Exception:
+            pass
+
         # ✅ NUEVO: No mezclar ejecuciones pesadas en paralelo
         if hasattr(self, 'linear_worker') and self.linear_worker is not None:
             try:
@@ -5209,6 +5270,21 @@ class MainWindow(QMainWindow):
         print("I最適化実行中...")
         # Limpiar threads stale antes de chequear "ya está corriendo"
         self._cleanup_optimization_threads(aggressive=False)
+
+        # ✅ FIX UI: si venimos de la pantalla de filtros, volver a la pantalla principal
+        try:
+            in_filter_view = False
+            for i in range(self.center_layout.count()):
+                item = self.center_layout.itemAt(i)
+                if item.widget() and isinstance(item.widget(), QLabel):
+                    if item.widget().text() == "データフィルター":
+                        in_filter_view = True
+                        break
+            if in_filter_view:
+                print("🔄 I最適化: detectada pantalla de filtros, restaurando pantalla principal...")
+                self.clear_main_screen()
+        except Exception:
+            pass
 
         # ✅ NUEVO: No mezclar ejecuciones pesadas en paralelo
         if hasattr(self, 'linear_worker') and self.linear_worker is not None:
@@ -8683,16 +8759,16 @@ class MainWindow(QMainWindow):
                 # El objeto ya fue eliminado, simplemente limpiar la referencia
                 self.next_button = None
         
-        # Limpiar el layout central completamente
-        while self.center_layout.count():
-            item = self.center_layout.takeAt(0)
-            widget = item.widget()
-            if widget:
-                try:
-                    widget.deleteLater()
-                except RuntimeError:
-                    # El widget ya fue eliminado, continuar
-                    pass
+        # Limpiar el layout central COMPLETAMENTE (incluye layouts anidados como los botones de filtros)
+        try:
+            self._clear_layout_recursive(self.center_layout)
+        except Exception:
+            # Fallback: no bloquear si algo raro pasa en la jerarquía de widgets
+            pass
+        try:
+            QApplication.processEvents()
+        except Exception:
+            pass
         
         # Restaurar los elementos básicos del panel central
         # Título arriba del área de gráficos
