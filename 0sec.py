@@ -1010,13 +1010,91 @@ class YosokuWorker(QThread):
     finished = Signal(str)  # ruta del archivo creado
     error = Signal(str)  # mensaje de error
     
-    def __init__(self, selected_params, unexperimental_file, formulas_file, output_path):
+    def __init__(self, selected_params, unexperimental_file, output_path, prediction_folder=None):
         super().__init__()
         self.selected_params = selected_params
         self.unexperimental_file = unexperimental_file
-        self.formulas_file = formulas_file
         self.output_path = output_path
+        self.prediction_folder = prediction_folder  # 04_予測計算
         self.is_cancelled = False
+
+    @staticmethod
+    def _apply_inverse_transform(values, transformation_info):
+        """Aplicar inversa de la transformación (compatible con linear_analysis_advanced.TransformationAnalyzer)."""
+        try:
+            import numpy as np
+            if not transformation_info or not transformation_info.get("applied"):
+                return values
+            method = transformation_info.get("method", "none")
+            params = transformation_info.get("parameters", {}) or {}
+
+            if method == "log":
+                return np.exp(values)
+            if method == "log10":
+                return np.power(10, values)
+            if method == "sqrt":
+                return np.power(values, 2)
+            if method == "boxcox":
+                lam = float(params.get("lambda", 0.0))
+                if abs(lam) < 1e-6:
+                    return np.exp(values)
+                return np.power(lam * values + 1, 1 / lam)
+            if method == "yeo_johnson":
+                lam = float(params.get("lambda", 0.0))
+                if abs(lam) < 1e-6:
+                    return np.exp(values) - 1
+                return np.power(lam * values + 1, 1 / lam) - 1
+            return values
+        except Exception:
+            return values
+
+    @staticmethod
+    def _normalize_columns(df):
+        try:
+            import pandas as pd
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = [" ".join([str(x).strip() for x in tup if str(x).strip() != ""]).strip() for tup in df.columns]
+            else:
+                df.columns = [str(c).strip() for c in df.columns]
+        except Exception:
+            pass
+        return df
+
+    def _find_models_regression_dir(self):
+        """Localiza la carpeta de modelos de regresión del último run lineal."""
+        import os
+        # Derivar run_folder desde prediction_folder si se proporciona
+        run_folder = None
+        try:
+            if self.prediction_folder:
+                run_folder = os.path.abspath(os.path.join(self.prediction_folder, os.pardir))
+        except Exception:
+            run_folder = None
+
+        candidates = []
+        if run_folder:
+            candidates.extend([
+                os.path.join(run_folder, "01_学習モデル", "regression"),
+                os.path.join(run_folder, "03_モデル学習", "01_学習モデル", "regression"),
+                os.path.join(run_folder, "03_モデル学習", "regression"),
+            ])
+        for c in candidates:
+            if os.path.isdir(c):
+                return c
+
+        # Fallback: búsqueda acotada dentro de run_folder
+        if run_folder and os.path.isdir(run_folder):
+            try:
+                for root, dirs, files in os.walk(run_folder):
+                    rel = os.path.relpath(root, run_folder)
+                    if rel != "." and rel.count(os.sep) >= 4:
+                        dirs[:] = []
+                        continue
+                    if any(f.startswith("best_model_") and f.endswith(".pkl") for f in files):
+                        return root
+            except Exception:
+                pass
+        return None
     
     def run(self):
         """Ejecutar predicción Yosoku con progreso"""
@@ -1024,278 +1102,166 @@ class YosokuWorker(QThread):
             self.status_updated.emit("データを読み込み中...")
             self.progress_updated.emit(10, "データを読み込み中...")
             
-            # Cargar datos del archivo Excel
             import pandas as pd
-            data_df = pd.read_excel(self.unexperimental_file)
-            
-            self.status_updated.emit("Excelファイルを読み込み中...")
-            self.progress_updated.emit(20, "Excelファイルを読み込み中...")
-            
-            # Leer fórmulas y transformaciones del archivo XEBEC_予測計算機_逆変換対応.xlsx
-            import openpyxl
-            from openpyxl import load_workbook
-            
-            formulas_wb = load_workbook(self.formulas_file, data_only=False)
-            formulas_ws = formulas_wb.active
-            
-            # Leer fórmulas de B16-B18
-            formula_b16 = formulas_ws['B16'].value
-            formula_b17 = formulas_ws['B17'].value
-            formula_b18 = formulas_ws['B18'].value
-            
-            # Leer transformaciones de C16-C18
-            transform_c16 = formulas_ws['C16'].value
-            transform_c17 = formulas_ws['C17'].value
-            transform_c18 = formulas_ws['C18'].value
-            
-            self.status_updated.emit("ヘッダーを読み込み中...")
-            self.progress_updated.emit(30, "ヘッダーを読み込み中...")
-            
-            # Leer encabezados de A16-A18 (nombres de columnas de destino)
-            destination_headers = []
-            for row in range(16, 19):  # A16 a A18
-                cell_value = formulas_ws[f'A{row}'].value
-                if cell_value:
-                    destination_headers.append(str(cell_value).strip())
-                else:
-                    destination_headers.append(f"Columna_{row-15}")  # Fallback
-            
-            # Leer encabezados de A5-A11 (nombres de columnas de referencia)
-            reference_headers = []
-            for row in range(5, 12):  # A5 a A11
-                cell_value = formulas_ws[f'A{row}'].value
-                if cell_value:
-                    reference_headers.append(str(cell_value).strip())
-                else:
-                    reference_headers.append(f"Ref_{row-4}")  # Fallback
-            
-            self.status_updated.emit("DataFrameを作成中...")
-            self.progress_updated.emit(40, "DataFrameを作成中...")
-            
-            # Definir las columnas del DataFrame según la especificación
-            columns = [
-                'A13', 'A11', 'A21', 'A32',  # A-D: Tipos de cepillo
-                '直径', '材料', '線材長',  # E-G: Parámetros del usuario
-                '回転速度', '送り速度', 'UPカット', '切込量', '突出量', '載せ率', 'パス数',  # H-N: Parámetros operacionales
-                '加工時間'  # O: Tiempo de procesamiento
-            ]
-            
-            # Agregar las columnas de destino dinámicas (P-R)
-            columns.extend(destination_headers)
-            
-            # Optimización máxima: Usar lista de diccionarios
-            print(f"📊 Procesando {len(data_df)} filas de manera optimizada...")
-            
-            # Buscar nombres alternativos para las columnas
-            alternative_names = {
-                '回転速度': ['回転速度', 'Rotation Speed', '回転'],
-                '送り速度': ['送り速度', 'Feed Speed', '送り'],
-                'UPカット': ['UPカット', 'UP Cut', 'UP'],
-                '切込量': ['切込量', 'Depth of Cut', '切込'],
-                '突出量': ['突出量', 'Protrusion Amount', '突出'],
-                '載せ率': ['載せ率', 'Loading Rate', '載せ'],
-                'パス数': ['パス数', 'バス数', 'Number of Passes', 'パス']
+            import numpy as np
+            import joblib
+
+            ext = os.path.splitext(str(self.unexperimental_file))[1].lower()
+            if ext == ".csv":
+                data_df = pd.read_csv(self.unexperimental_file, encoding="utf-8-sig")
+            else:
+                data_df = pd.read_excel(self.unexperimental_file)
+            data_df = self._normalize_columns(data_df)
+
+            # Validación mínima de columnas requeridas del 未実験データ
+            brush_cols = ["A13", "A11", "A21", "A32"]
+            required_cols = brush_cols + ["線材長"]
+            missing = [c for c in required_cols if c not in data_df.columns]
+            if missing:
+                raise ValueError(f"未実験データに必要な列がありません: {', '.join(missing)}")
+
+            onehot = data_df[brush_cols].apply(pd.to_numeric, errors="coerce").fillna(0).astype(int)
+            s = onehot.sum(axis=1)
+            if (s != 1).any():
+                bad = onehot.index[s != 1].tolist()[:10]
+                raise ValueError(f"未実験データのブラシ列が不正です。不正行(先頭10): {bad}")
+
+            wire_series = pd.to_numeric(data_df["線材長"], errors="coerce")
+            if wire_series.isna().any():
+                bad = wire_series.index[wire_series.isna()].tolist()[:10]
+                raise ValueError(f"未実験データの 線材長 に数値以外/欠損があります。不正行(先頭10): {bad}")
+
+            self.status_updated.emit("モデルを読み込み中...")
+            self.progress_updated.emit(25, "モデルを読み込み中...")
+
+            models_dir = self._find_models_regression_dir()
+            if not models_dir:
+                raise ValueError("回帰モデルフォルダが見つかりません（best_model_*.pkl）")
+
+            model_files = [os.path.join(models_dir, f) for f in os.listdir(models_dir) if f.startswith("best_model_") and f.endswith(".pkl")]
+            if not model_files:
+                raise ValueError(f"回帰モデルが見つかりません: {models_dir}")
+
+            # Cargar modelos (solo targets relevantes si existen)
+            target_whitelist = {"上面ダレ量", "側面ダレ量", "摩耗量"}
+            models = {}
+            for p in model_files:
+                try:
+                    d = joblib.load(p)
+                    target = d.get("target_name") or os.path.splitext(os.path.basename(p))[0].replace("best_model_", "")
+                    if target in target_whitelist:
+                        models[target] = d
+                except Exception:
+                    continue
+
+            if not models:
+                # Si no encontramos por whitelist, cargar todo lo que sea regresión
+                for p in model_files:
+                    d = joblib.load(p)
+                    target = d.get("target_name") or os.path.splitext(os.path.basename(p))[0].replace("best_model_", "")
+                    models[target] = d
+
+            # Preparar features para predicción según feature_names del primer modelo
+            any_model = next(iter(models.values()))
+            feature_names = list(any_model.get("feature_names") or [])
+            scaler = any_model.get("scaler")
+            if not feature_names:
+                raise ValueError("モデルの feature_names が空です。")
+
+            # Mapear nombres alternativos
+            alt = {
+                "回転速度": ["回転速度"],
+                "送り速度": ["送り速度"],
+                "UPカット": ["UPカット", "回転方向"],
+                "切込量": ["切込量", "切込み量"],
+                "突出量": ["突出量", "突出し量"],
+                "載せ率": ["載せ率"],
+                "パス数": ["パス数", "バス数"],
             }
-            
-            # Crear mapeo de columnas para acceso rápido
-            column_mapping = {}
-            for target_col, source_cols in alternative_names.items():
-                for source_col in source_cols:
-                    if source_col in data_df.columns:
-                        column_mapping[target_col] = source_col
+            colmap = {}
+            for k, names in alt.items():
+                for n in names:
+                    if n in data_df.columns:
+                        colmap[k] = n
                         break
-                if target_col not in column_mapping:
-                    column_mapping[target_col] = None
-            
-            # Pre-calcular valores constantes
-            brush_type = self.selected_params['brush']
-            brush_values = {
-                'A13': 1 if brush_type == 'A13' else 0,
-                'A11': 1 if brush_type == 'A11' else 0,
-                'A21': 1 if brush_type == 'A21' else 0,
-                'A32': 1 if brush_type == 'A32' else 0
-            }
-            
-            user_values = {
-                '直径': self.selected_params['diameter'],
-                '材料': self.selected_params['material'],
-                '線材長': self.selected_params['wire_length']
-            }
-            
-            # Usar lista de diccionarios para máxima velocidad
-            rows_data = []
-            total_rows = len(data_df)
-            
-            # Procesar datos usando vectorización cuando sea posible
-            for idx in range(total_rows):
+
+            # Construir X base con todas las columnas requeridas por feature_names
+            X = pd.DataFrame(index=data_df.index)
+            for fn in feature_names:
+                # Si el modelo pide una de las columnas conocidas, mapearla
+                if fn in colmap:
+                    X[fn] = pd.to_numeric(data_df[colmap[fn]], errors="coerce")
+                else:
+                    # Columna directa si existe, si no 0
+                    if fn in data_df.columns:
+                        X[fn] = pd.to_numeric(data_df[fn], errors="coerce")
+                    else:
+                        X[fn] = 0.0
+
+            if X.isna().any().any():
+                # NaNs en features -> 0 (conservador)
+                X = X.fillna(0.0)
+
+            # Escalado (si existe)
+            if scaler is not None:
+                try:
+                    X_scaled = scaler.transform(X.values)
+                except Exception:
+                    X_scaled = X.values
+            else:
+                X_scaled = X.values
+
+            self.status_updated.emit("予測を計算中...")
+            self.progress_updated.emit(60, "予測を計算中...")
+
+            # Base output (condiciones + meta)
+            out = pd.DataFrame(index=data_df.index)
+            for c in brush_cols:
+                out[c] = onehot[c].astype(int)
+            out["直径"] = self.selected_params.get("diameter")
+            out["材料"] = self.selected_params.get("material")
+            out["線材長"] = wire_series.astype(float)
+
+            # Añadir condiciones (si existen)
+            for k in ["回転速度", "送り速度", "UPカット", "切込量", "突出量", "載せ率", "パス数"]:
+                src = colmap.get(k, k)
+                if src in data_df.columns:
+                    out[k] = pd.to_numeric(data_df[src], errors="coerce")
+                else:
+                    out[k] = 0
+
+            # 加工時間
+            try:
+                feed = pd.to_numeric(out["送り速度"], errors="coerce").replace(0, np.nan)
+                out["加工時間"] = (100 / feed) * 60
+                out["加工時間"] = out["加工時間"].fillna(0)
+            except Exception:
+                out["加工時間"] = 0
+
+            # Predicciones por target
+            done = 0
+            total_t = len(models)
+            for target_name, d in models.items():
                 if self.is_cancelled:
                     return
-                    
-                if idx % 10000 == 0:  # Mostrar progreso cada 10,000 filas
-                    progress = 40 + int((idx / total_rows) * 40)  # 40% a 80%
-                    self.progress_updated.emit(progress, f"データを処理中... ({idx+1}/{total_rows})")
-                
-                row = data_df.iloc[idx]
-                new_row = {}
-                
-                # Rellenar columnas A-D con tipo de cepillo seleccionado (valores pre-calculados)
-                new_row.update(brush_values)
-                
-                # Rellenar columnas E-G con parámetros del usuario (valores pre-calculados)
-                new_row.update(user_values)
-                
-                # Copiar datos operacionales (H-N) del archivo original usando mapeo optimizado
-                for target_col, source_col in column_mapping.items():
-                    if source_col is not None:
-                        new_row[target_col] = row[source_col]
-                    else:
-                        new_row[target_col] = 0
-                
-                # Calcular 加工時間 con la fórmula: 100/送り速度*60
-                if '送り速度' in new_row and new_row['送り速度'] is not None and new_row['送り速度'] != 0:
-                    new_row['加工時間'] = 100 / new_row['送り速度'] * 60
-                else:
-                    new_row['加工時間'] = 0
-                
-                # Inicializar columnas de predicción (P-R) con 0 usando nombres dinámicos
-                for header in destination_headers:
-                    new_row[header] = 0
-                
-                # Agregar a la lista en lugar de concatenar
-                rows_data.append(new_row)
-            
-            # Crear DataFrame una sola vez al final
-            self.status_updated.emit("DataFrameを作成中...")
-            self.progress_updated.emit(80, "DataFrameを作成中...")
-            result_df = pd.DataFrame(rows_data, columns=columns)
-            
-            self.status_updated.emit("Excelファイルを保存中...")
-            self.progress_updated.emit(90, "Excelファイルを保存中...")
-            
-            # Guardar DataFrame primero
-            result_df.to_excel(self.output_path, index=False)
-            
-            # Procesar fórmulas y aplicarlas al DataFrame
-            formulas_data = [
-                {'formula': formula_b16, 'transform': transform_c16, 'header': destination_headers[0] if len(destination_headers) > 0 else 'Columna_1'},
-                {'formula': formula_b17, 'transform': transform_c17, 'header': destination_headers[1] if len(destination_headers) > 1 else 'Columna_2'},
-                {'formula': formula_b18, 'transform': transform_c18, 'header': destination_headers[2] if len(destination_headers) > 2 else 'Columna_3'}
-            ]
-            
-            # Procesar cada fórmula
-            for formula_data in formulas_data:
-                formula = formula_data['formula']
-                transform = formula_data['transform']
-                header = formula_data['header']
-                
-                if formula:
-                    # Crear fórmula procesada
-                    processed_formula = str(formula)
-                    
-                    # Aplicar transformación si existe
-                    if transform:
-                        # Reemplazar la referencia de la fórmula con la transformación
-                        formula_ref = f"B{16 + formulas_data.index(formula_data)}"  # B16, B17, B18
-                        transform_formula = str(transform)
-                        
-                        # Remover el '=' de processed_formula antes de sustituir
-                        formula_without_equals = processed_formula
-                        if formula_without_equals.startswith('='):
-                            formula_without_equals = formula_without_equals[1:]
-                        
-                        # Reemplazar la referencia específica de la fórmula con paréntesis
-                        formula_with_parentheses = f'({formula_without_equals})'
-                        transform_formula = transform_formula.replace(formula_ref, formula_with_parentheses)
-                        final_formula = transform_formula
-                    else:
-                        final_formula = processed_formula
-                    
-                    # Asegurar que la fórmula tenga '=' al inicio
-                    if not final_formula.startswith('='):
-                        final_formula = f'={final_formula}'
-                    
-                    # Guardar la fórmula procesada para escribir en Excel
-                    formula_data['final_formula'] = final_formula
-                else:
-                    formula_data['final_formula'] = '=0'
-            
-            # Crear mapeo de columnas de referencia (A5-A11) a columnas del DataFrame
-            reference_mapping = {}
-            for i, ref_header in enumerate(reference_headers):
-                ref_cell = f'B{5+i}'  # B5, B6, B7, etc.
-                
-                # Buscar la columna correspondiente en el DataFrame
-                found_col = None
-                for col_name in result_df.columns:
-                    if col_name == ref_header:
-                        found_col = col_name
-                        break
-                
-                if found_col:
-                    reference_mapping[ref_cell] = found_col
-            
-            # Ahora escribir las fórmulas en el Excel usando openpyxl
-            self.status_updated.emit("数式を書き込み中...")
-            self.progress_updated.emit(95, "数式を書き込み中...")
-            
-            # Cargar el archivo Excel recién creado
-            output_wb = load_workbook(self.output_path)
-            output_ws = output_wb.active
-            
-            # Encontrar las columnas donde escribir las fórmulas
-            formula_columns = {}
-            for formula_data in formulas_data:
-                header = formula_data['header']
-                
-                # Buscar la columna en el Excel
-                for col_idx, cell in enumerate(output_ws[1], 1):  # Primera fila (encabezados)
-                    if cell.value == header:
-                        formula_columns[header] = col_idx
-                        break
-            
-            # Pre-calcular mapeo de columnas para fórmulas
-            column_letter_mapping = {}
-            for col_idx_check, cell in enumerate(output_ws[1], 1):
-                if cell.value in result_df.columns:
-                    column_letter_mapping[cell.value] = openpyxl.utils.get_column_letter(col_idx_check)
-            
-            # Escribir fórmulas de manera más eficiente
-            total_formula_rows = len(result_df)
-            
-            for row_idx in range(2, total_formula_rows + 2):  # Fila 2 en adelante (fila 1 son encabezados)
-                if self.is_cancelled:
-                    return
-                    
-                if (row_idx - 2) % 10000 == 0:  # Mostrar progreso cada 10,000 filas
-                    progress = 95 + int(((row_idx - 2) / total_formula_rows) * 5)  # 95% a 100%
-                    self.progress_updated.emit(progress, f"数式を書き込み中... ({row_idx-1}/{total_formula_rows})")
-                
-                for formula_data in formulas_data:
-                    header = formula_data['header']
-                    final_formula = formula_data['final_formula']
-                    
-                    if header in formula_columns:
-                        col_idx = formula_columns[header]
-                        
-                        # Crear fórmula específica para esta fila usando mapeo pre-calculado
-                        row_formula = final_formula
-                        
-                        # Reemplazar referencias de celdas con referencias de fila específica
-                        for ref_cell, col_name in reference_mapping.items():
-                            if col_name in column_letter_mapping:
-                                target_col_letter = column_letter_mapping[col_name]
-                                row_formula = row_formula.replace(ref_cell, f'{target_col_letter}{row_idx}')
-                        
-                        # Escribir la fórmula en la celda
-                        output_ws.cell(row=row_idx, column=col_idx, value=row_formula)
-            
-            # Guardar el archivo Excel con las fórmulas
-            output_wb.save(self.output_path)
-            
+                model = d.get("model")
+                if model is None:
+                    continue
+                y_hat = model.predict(X_scaled)
+                # Inversa de transformación si aplica
+                y_hat = self._apply_inverse_transform(np.asarray(y_hat), d.get("transformation_info") or {"applied": False})
+                out[target_name] = y_hat
+                done += 1
+                self.progress_updated.emit(60 + int((done / max(total_t, 1)) * 30), f"予測中... ({done}/{total_t})")
+
+            self.status_updated.emit("CSVファイルを保存中...")
+            self.progress_updated.emit(95, "CSVファイルを保存中...")
+
+            # Guardar CSV (sin límite de filas de Excel)
+            out.to_csv(self.output_path, index=False, encoding="utf-8-sig")
+
             self.status_updated.emit("完了！")
             self.progress_updated.emit(100, "完了！")
-            
-            # Emitir resultado exitoso
             self.finished.emit(self.output_path)
             
         except Exception as e:
@@ -1385,6 +1351,7 @@ class YosokuImportWorker(QThread):
             from openpyxl import load_workbook
             import shutil
             from datetime import datetime
+            import sys
             
             # Paso 1: Crear carpeta temporal
             self.status_updated.emit("フォルダ作成中...")
@@ -1420,103 +1387,102 @@ class YosokuImportWorker(QThread):
             # Guardar referencia para limpieza posterior
             self.backup_path = backup_path
             
-            # Paso 3: Convertir fórmulas a valores
-            self.status_updated.emit("数式を値に変換中...")
-            self.progress_updated.emit(20, "数式を値に変換中...")
-            print("🔄 Convirtiendo fórmulas a valores...")
-            
-            if self.cancelled:
-                return
-            
-            try:
-                import xlwings as xw
-                from pathlib import Path
-                
-                print("📊 Usando xlwings para convertir fórmulas...")
-                app = xw.App(visible=False, add_book=False)
-                try:
-                    wb = app.books.open(str(backup_path))
-                    wb.app.api.CalculateFull()
-                    
-                    for sh in wb.sheets:
-                        rng = sh.used_range
-                        vals = rng.value
-                        rng.value = vals
-                    
-                    wb.save(str(backup_path))
-                    print("✅ Fórmulas convertidas a valores con xlwings")
-                    
-                finally:
-                    wb.close()
-                    app.quit()
-                    
-            except ImportError:
-                print("⚠️ xlwings no encontrado, instalando...")
-                import subprocess
-                subprocess.check_call([sys.executable, "-m", "pip", "install", "xlwings"])
-                
-                import xlwings as xw
-                from pathlib import Path
-                
-                print("📊 Usando xlwings (instalado) para convertir fórmulas...")
-                app = xw.App(visible=False, add_book=False)
-                try:
-                    wb = app.books.open(str(backup_path))
-                    wb.app.api.CalculateFull()
-                    
-                    for sh in wb.sheets:
-                        rng = sh.used_range
-                        vals = rng.value
-                        rng.value = vals
-                    
-                    wb.save(str(backup_path))
-                    print("✅ Fórmulas convertidas a valores con xlwings (instalado)")
-                    
-                finally:
-                    wb.close()
-                    app.quit()
-                    
-            except Exception as e:
-                print(f"⚠️ Error con xlwings: {e}")
-                print("📊 Usando método alternativo (openpyxl)...")
-                # Método alternativo
-                workbook = load_workbook(backup_path, data_only=False)
-                worksheet = workbook.active
-                
-                values_worksheet = workbook.create_sheet("values_only")
-                
-                for row in worksheet.iter_rows(values_only=True):
-                    values_worksheet.append(row)
-                
-                workbook.remove(worksheet)
-                values_worksheet.title = "Sheet1"
-                
-                workbook.save(backup_path)
-                workbook.close()
-                print("✅ Fórmulas convertidas a valores con openpyxl")
-            
-            # Paso 4: Leer datos
+            ext_in = os.path.splitext(str(self.excel_path))[1].lower()
+
+            # Paso 3/4: Leer datos
+            # - Si es CSV: no hay fórmulas -> leer directamente
+            # - Si es Excel: convertir fórmulas a valores (legacy) y leer data_only
             self.status_updated.emit("データ読み込み中...")
-            self.progress_updated.emit(40, "データ読み込み中...")
-            
+            self.progress_updated.emit(20, "データ読み込み中...")
+
             if self.cancelled:
                 return
-            
-            workbook = load_workbook(backup_path, data_only=True)
-            worksheet = workbook.active
-            
-            data = []
-            headers = []
-            
-            for col in worksheet.iter_cols(min_row=1, max_row=1):
-                headers.append(col[0].value)
-            
-            for row in worksheet.iter_rows(min_row=2, values_only=True):
-                if any(cell is not None for cell in row):
-                    data.append(row)
-            
-            df = pd.DataFrame(data, columns=headers)
-            workbook.close()
+
+            if ext_in == ".csv":
+                df = pd.read_csv(backup_path, encoding="utf-8-sig")
+            else:
+                # Convertir fórmulas a valores
+                self.status_updated.emit("数式を値に変換中...")
+                self.progress_updated.emit(25, "数式を値に変換中...")
+                print("🔄 Convirtiendo fórmulas a valores...")
+
+                if self.cancelled:
+                    return
+
+                try:
+                    import xlwings as xw
+
+                    print("📊 Usando xlwings para convertir fórmulas...")
+                    app = xw.App(visible=False, add_book=False)
+                    try:
+                        wb = app.books.open(str(backup_path))
+                        wb.app.api.CalculateFull()
+
+                        for sh in wb.sheets:
+                            rng = sh.used_range
+                            vals = rng.value
+                            rng.value = vals
+
+                        wb.save(str(backup_path))
+                        print("✅ Fórmulas convertidas a valores con xlwings")
+                    finally:
+                        wb.close()
+                        app.quit()
+
+                except ImportError:
+                    print("⚠️ xlwings no encontrado, instalando...")
+                    import subprocess
+                    subprocess.check_call([sys.executable, "-m", "pip", "install", "xlwings"])
+
+                    import xlwings as xw
+
+                    print("📊 Usando xlwings (instalado) para convertir fórmulas...")
+                    app = xw.App(visible=False, add_book=False)
+                    try:
+                        wb = app.books.open(str(backup_path))
+                        wb.app.api.CalculateFull()
+
+                        for sh in wb.sheets:
+                            rng = sh.used_range
+                            vals = rng.value
+                            rng.value = vals
+
+                        wb.save(str(backup_path))
+                        print("✅ Fórmulas convertidas a valores con xlwings (instalado)")
+                    finally:
+                        wb.close()
+                        app.quit()
+
+                except Exception as e:
+                    print(f"⚠️ Error con xlwings: {e}")
+                    print("📊 Usando método alternativo (openpyxl)...")
+                    # Método alternativo: copia valores (NO evalúa fórmulas)
+                    workbook = load_workbook(backup_path, data_only=False)
+                    worksheet = workbook.active
+                    values_worksheet = workbook.create_sheet("values_only")
+                    for row in worksheet.iter_rows(values_only=True):
+                        values_worksheet.append(row)
+                    workbook.remove(worksheet)
+                    values_worksheet.title = "Sheet1"
+                    workbook.save(backup_path)
+                    workbook.close()
+                    print("✅ Fórmulas convertidas a valores con openpyxl (best-effort)")
+
+                # Leer data_only
+                self.status_updated.emit("データ読み込み中...")
+                self.progress_updated.emit(40, "データ読み込み中...")
+
+                workbook = load_workbook(backup_path, data_only=True)
+                worksheet = workbook.active
+                data = []
+                headers = []
+                for col in worksheet.iter_cols(min_row=1, max_row=1):
+                    headers.append(col[0].value)
+                for row in worksheet.iter_rows(min_row=2, values_only=True):
+                    if any(cell is not None for cell in row):
+                        data.append(row)
+                df = pd.DataFrame(data, columns=headers)
+                workbook.close()
             
             # Paso 5: Conectar a base de datos
             self.status_updated.emit("データベース接続中...")
@@ -14420,15 +14386,6 @@ class MainWindow(QMainWindow):
             # Formulario de selección
             form_layout = QFormLayout()
             
-            # Tipo de cepillo
-            brush_combo = QComboBox()
-            brush_combo.addItem("A13", "A13")
-            brush_combo.addItem("A11", "A11")
-            brush_combo.addItem("A21", "A21")
-            brush_combo.addItem("A32", "A32")
-            brush_combo.setCurrentText("A11")  # Valor por defecto
-            form_layout.addRow("ブラシタイプ:", brush_combo)
-            
             # Diámetro
             diameter_combo = QComboBox()
             diameter_combo.addItem("6", 6)
@@ -14446,13 +14403,6 @@ class MainWindow(QMainWindow):
             material_combo.addItem("Alum", "Alum")
             material_combo.setCurrentText("Steel")  # Valor por defecto
             form_layout.addRow("材料:", material_combo)
-            
-            # 線材長 (de 30 a 75 en intervalos de 5mm)
-            wire_length_combo = QComboBox()
-            for value in range(30, 80, 5):  # 30, 35, 40, 45, 50, 55, 60, 65, 70, 75
-                wire_length_combo.addItem(str(value), value)
-            wire_length_combo.setCurrentText("75")  # Valor por defecto
-            form_layout.addRow("線材長:", wire_length_combo)
             
             layout.addLayout(form_layout)
             layout.addStretch()
@@ -14479,10 +14429,8 @@ class MainWindow(QMainWindow):
             if result == QDialog.Accepted:
                 # Procesar selecciones
                 selected_params = {
-                    'brush': brush_combo.currentData(),
                     'diameter': diameter_combo.currentData(),
                     'material': material_combo.currentData(),
-                    'wire_length': wire_length_combo.currentData()
                 }
                 
                 print(f"📊 Parámetros seleccionados: {selected_params}")
@@ -14496,6 +14444,91 @@ class MainWindow(QMainWindow):
             traceback.print_exc()
             return None
 
+    @staticmethod
+    def _normalize_columns_inplace(df):
+        """Normaliza nombres de columnas para evitar fallos por espacios invisibles."""
+        try:
+            import pandas as pd
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = [" ".join([str(x).strip() for x in tup if str(x).strip() != ""]).strip() for tup in df.columns]
+            else:
+                df.columns = [str(c).strip() for c in df.columns]
+        except Exception:
+            pass
+
+    def _read_table_any(self, file_path, nrows=None, usecols=None):
+        """Lee XLSX/XLS/CSV de forma uniforme."""
+        import pandas as pd
+        ext = os.path.splitext(str(file_path))[1].lower()
+        if ext == ".csv":
+            return pd.read_csv(file_path, encoding="utf-8-sig", nrows=nrows, usecols=usecols)
+        # Excel: soporta xlsx/xls
+        return pd.read_excel(file_path, nrows=nrows, usecols=usecols)
+
+    def _extract_brush_and_wire_length_from_unexperimental(self, unexperimental_file):
+        """
+        Extrae (desde *_未実験データ.(xlsx|csv)):
+        - brush_types: lista de tipos encontrados (p.ej. ["A11","A13"])
+        - wire_lengths: lista de 線材長 encontrados (p.ej. [30.0, 35.0, ...])
+        Requisitos (si falta, lanzar error):
+        - columnas one-hot: A13/A11/A21/A32
+        - columna 線材長
+        Además, valida que:
+        - cada fila tiene exactamente un 1 en A13/A11/A21/A32
+        """
+        import pandas as pd
+
+        # Leer solo header para validar columnas
+        df_head = self._read_table_any(unexperimental_file, nrows=0)
+        self._normalize_columns_inplace(df_head)
+        headers = set(df_head.columns)
+
+        brush_cols = ["A13", "A11", "A21", "A32"]
+        required = brush_cols + ["線材長"]
+        missing = [c for c in required if c not in headers]
+        if missing:
+            raise ValueError(
+                f"❌ 未実験データファイルに必要な列がありません: {', '.join(missing)}\n"
+                f"必要列: {', '.join(required)}\n"
+                f"ファイル: {os.path.basename(str(unexperimental_file))}"
+            )
+
+        # Leer solo columnas necesarias
+        df = self._read_table_any(unexperimental_file, usecols=required)
+        self._normalize_columns_inplace(df)
+        if df.empty:
+            raise ValueError("❌ 未実験データファイルが空です。")
+
+        # Brush one-hot
+        onehot = df[brush_cols].apply(pd.to_numeric, errors="coerce").fillna(0).astype(int)
+        s = onehot.sum(axis=1)
+        bad_idx = df.index[s != 1]
+        if len(bad_idx) > 0:
+            raise ValueError(
+                f"❌ 未実験データのブラシ列が不正です。各行で A13/A11/A21/A32 の合計が 1 である必要があります。"
+                f" 不正行(先頭10): {bad_idx.tolist()[:10]}"
+            )
+
+        per_row_brush = onehot.idxmax(axis=1)
+        uniq_brush = list(pd.unique(per_row_brush))
+        # preservar orden A13/A11/A21/A32
+        uniq_brush.sort(key=lambda x: brush_cols.index(str(x)) if str(x) in brush_cols else 999)
+        brush_types = [str(x) for x in uniq_brush]
+
+        # 線材長
+        wire = pd.to_numeric(df["線材長"], errors="coerce").dropna()
+        if wire.empty:
+            raise ValueError("❌ 未実験データの 線材長 列に有効な値がありません。")
+        uniq_wire = list(pd.unique(wire))
+        try:
+            uniq_wire = sorted([float(x) for x in uniq_wire])
+        except Exception:
+            # fallback: keep raw ordering
+            uniq_wire = [float(x) for x in uniq_wire]
+        wire_lengths = uniq_wire
+
+        return brush_types, wire_lengths
+
     def find_latest_formulas_file(self):
         """Encontrar el archivo XEBEC_予測計算機_逆変換対応.xlsx en la carpeta del análisis lineal más reciente"""
         try:
@@ -14506,20 +14539,36 @@ class MainWindow(QMainWindow):
                 print(f"❌ No se encontró la carpeta: {linear_regression_folder}")
                 return None
             
-            # Buscar subcarpetas con formato de fecha
+            # Buscar subcarpetas de ejecución. Prioridad: NN_YYYYMMDD_HHMMSS (p.ej. 15_20260126_134704).
+            import re
+            from datetime import datetime
+
             subfolders = []
+            dated = []
             for item in os.listdir(linear_regression_folder):
                 item_path = os.path.join(linear_regression_folder, item)
-                if os.path.isdir(item_path) and item.startswith("82_"):
-                    subfolders.append(item_path)
+                if not os.path.isdir(item_path):
+                    continue
+                subfolders.append(item_path)
+                m = re.match(r"^\d+_(\d{8})_(\d{6})", str(item))
+                if m:
+                    try:
+                        dt = datetime.strptime(m.group(1) + m.group(2), "%Y%m%d%H%M%S")
+                        dated.append((dt, item_path))
+                    except Exception:
+                        pass
             
             if not subfolders:
                 print(f"❌ No se encontraron subcarpetas de análisis lineal en: {linear_regression_folder}")
                 return None
             
-            # Ordenar por fecha (más reciente primero)
-            subfolders.sort(reverse=True)
-            latest_folder = subfolders[0]
+            # Elegir última: primero por timestamp en nombre; fallback por mtime
+            if dated:
+                dated.sort(key=lambda t: t[0], reverse=True)
+                latest_folder = dated[0][1]
+            else:
+                subfolders.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+                latest_folder = subfolders[0]
             print(f"📊 Carpeta más reciente encontrada: {latest_folder}")
             
             # Buscar la subcarpeta 04_予測計算
@@ -14546,34 +14595,83 @@ class MainWindow(QMainWindow):
             return None
 
     def validate_filtered_data(self, selected_params):
-        """Validar el archivo filtered_data.xlsx contra los parámetros seleccionados"""
+        """
+        Validar el archivo filtered_data.xlsx contra los parámetros seleccionados.
+        Devuelve: (is_valid: bool, errors: list[str], warnings: list[str])
+        """
         try:
             # Buscar la carpeta del análisis lineal más reciente
             linear_regression_folder = os.path.join(self.current_project_folder, "03_線形回帰")
             
             if not os.path.exists(linear_regression_folder):
                 return False, ["❌ No se encontró la carpeta de análisis lineal: 03_線形回帰"]
-            
-            # Buscar subcarpetas con formato de fecha
-            subfolders = []
-            for item in os.listdir(linear_regression_folder):
-                item_path = os.path.join(linear_regression_folder, item)
-                if os.path.isdir(item_path) and item.startswith("82_"):
-                    subfolders.append(item_path)
-            
-            if not subfolders:
-                return False, ["❌ No se encontraron subcarpetas de análisis lineal"]
-            
-            # Ordenar por fecha (más reciente primero)
-            subfolders.sort(reverse=True)
-            latest_folder = subfolders[0]
+
+            # Elegir la última carpeta de ejecución dentro de 03_線形回帰.
+            # Prioridad: NN_YYYYMMDD_HHMMSS (p.ej. 15_20260126_134704). Fallback: mtime.
+            import re
+            from datetime import datetime
+
+            run_candidates = []
+            try:
+                for item in os.listdir(linear_regression_folder):
+                    item_path = os.path.join(linear_regression_folder, item)
+                    if not os.path.isdir(item_path):
+                        continue
+                    m = re.match(r"^\d+_(\d{8})_(\d{6})", str(item))
+                    if m:
+                        try:
+                            dt = datetime.strptime(m.group(1) + m.group(2), "%Y%m%d%H%M%S")
+                            run_candidates.append((dt, item_path))
+                        except Exception:
+                            continue
+            except Exception:
+                run_candidates = []
+
+            if run_candidates:
+                run_candidates.sort(key=lambda t: t[0], reverse=True)
+                latest_folder = run_candidates[0][1]
+            else:
+                # Fallback: cualquier subcarpeta más reciente por mtime
+                subfolders = []
+                try:
+                    for item in os.listdir(linear_regression_folder):
+                        item_path = os.path.join(linear_regression_folder, item)
+                        if os.path.isdir(item_path):
+                            subfolders.append(item_path)
+                except Exception:
+                    subfolders = []
+
+                if not subfolders:
+                    return False, ["❌ No se encontraron subcarpetas de análisis lineal en 03_線形回帰"]
+                latest_folder = max(subfolders, key=lambda x: os.path.getmtime(x))
             
             # Buscar el archivo filtered_data.xlsx en la carpeta 01_学習モデル
-            model_folder = os.path.join(latest_folder, "01_学習モデル")
-            filtered_data_file = os.path.join(model_folder, "filtered_data.xlsx")
-            
-            if not os.path.exists(filtered_data_file):
-                return False, [f"❌ No se encontró el archivo: {os.path.basename(filtered_data_file)}"]
+            candidate_paths = [
+                os.path.join(latest_folder, "01_学習モデル", "filtered_data.xlsx"),
+                os.path.join(latest_folder, "03_モデル学習", "filtered_data.xlsx"),
+                os.path.join(latest_folder, "03_モデル学習", "01_学習モデル", "filtered_data.xlsx"),
+            ]
+
+            filtered_data_file = next((p for p in candidate_paths if os.path.exists(p)), None)
+            if not filtered_data_file:
+                # Búsqueda acotada dentro de latest_folder (profundidad <= 4)
+                found = []
+                try:
+                    for root, dirs, files in os.walk(latest_folder):
+                        rel = os.path.relpath(root, latest_folder)
+                        if rel != "." and rel.count(os.sep) >= 4:
+                            dirs[:] = []
+                            continue
+                        if "filtered_data.xlsx" in files:
+                            found.append(os.path.join(root, "filtered_data.xlsx"))
+                except Exception:
+                    found = []
+
+                if found:
+                    # Elegir el más reciente por mtime
+                    filtered_data_file = max(found, key=lambda p: os.path.getmtime(p))
+                else:
+                    return False, ["❌ No se encontró el archivo: filtered_data.xlsx (01_学習モデル/03_モデル学習)"]
             
             print(f"📊 Validando archivo: {filtered_data_file}")
             
@@ -14585,6 +14683,7 @@ class MainWindow(QMainWindow):
             print(f"📊 Columnas disponibles: {list(data_df.columns)}")
             
             errors = []
+            warnings = []
             
             # 1. Validar tipos de cepillo (A13, A11, A21, A32)
             brush_columns = ['A13', 'A11', 'A21', 'A32']
@@ -14598,15 +14697,16 @@ class MainWindow(QMainWindow):
                 else:
                     brush_values[col] = 0
             
-            # Verificar si hay más de un tipo de cepillo con valor 1
-            active_brushes = sum(1 for count in brush_values.values() if count > 0)
-            if active_brushes > 1:
-                errors.append(f"❌ Múltiples tipos de cepillo activos encontrados: {active_brushes}")
-            
-            # Verificar si el tipo de cepillo seleccionado está presente
-            selected_brush = selected_params['brush']
-            if selected_brush in brush_values and brush_values[selected_brush] == 0:
-                errors.append(f"❌ El tipo de cepillo seleccionado '{selected_brush}' no está presente en los datos")
+            # Verificar que los brushes requeridos (desde 未実験データ) estén presentes en filtered_data
+            required_brushes = []
+            if isinstance(selected_params, dict):
+                if selected_params.get("brush") in brush_columns:
+                    required_brushes = [selected_params.get("brush")]
+                elif isinstance(selected_params.get("brushes"), (list, tuple)):
+                    required_brushes = [b for b in selected_params.get("brushes") if b in brush_columns]
+            for b in required_brushes:
+                if b in brush_values and brush_values[b] == 0:
+                    errors.append(f"❌ filtered_data にブラシ '{b}' のデータがありません")
             
             # 2. Validar material
             material_column = '材料'
@@ -14643,17 +14743,28 @@ class MainWindow(QMainWindow):
                 if len(wire_length_values) > 0:
                     min_wire_length = wire_length_values.min()
                     max_wire_length = wire_length_values.max()
-                    selected_wire_length = selected_params['wire_length']
-                    
-                    # Verificar si el rango está dentro del rango del usuario - 5mm
-                    expected_min = selected_wire_length - 5
-                    expected_max = selected_wire_length
-                    
-                    if min_wire_length < expected_min or max_wire_length > expected_max:
-                        errors.append(f"❌ Rango de 線材長 fuera del rango esperado:")
-                        errors.append(f"   - Rango en datos: {min_wire_length} - {max_wire_length}")
-                        errors.append(f"   - Rango esperado: {expected_min} - {expected_max}")
-                        errors.append(f"   - Seleccionado por usuario: {selected_wire_length}")
+                    # Si se proporcionó un único wire_length, mantener validación legacy.
+                    if isinstance(selected_params, dict) and selected_params.get("wire_length") is not None:
+                        selected_wire_length = selected_params["wire_length"]
+                        expected_min = selected_wire_length - 5
+                        expected_max = selected_wire_length
+                        if min_wire_length < expected_min or max_wire_length > expected_max:
+                            errors.append(f"❌ Rango de 線材長 fuera del rango esperado:")
+                            errors.append(f"   - Rango en datos: {min_wire_length} - {max_wire_length}")
+                            errors.append(f"   - Rango esperado: {expected_min} - {expected_max}")
+                            errors.append(f"   - Seleccionado por usuario: {selected_wire_length}")
+                    # Nuevo: múltiples wire_lengths (desde 未実験データ) -> comprobar que están dentro del rango de filtered_data
+                    elif isinstance(selected_params, dict) and isinstance(selected_params.get("wire_lengths"), (list, tuple)):
+                        try:
+                            req = [float(x) for x in selected_params.get("wire_lengths")]
+                            out = [x for x in req if not (min_wire_length <= x <= max_wire_length)]
+                            if out:
+                                warnings.append("⚠️ 未実験データ の 線材長 が filtered_data の範囲外です")
+                                warnings.append(f"   - filtered_data range: {min_wire_length} - {max_wire_length}")
+                                warnings.append(f"   - out of range (first 10): {out[:10]}")
+                        except Exception:
+                            # Si no se puede convertir, no bloquear aquí (YosokuWorker validará)
+                            pass
                 else:
                     errors.append(f"❌ No hay datos válidos en la columna 線材長")
             else:
@@ -14661,20 +14772,29 @@ class MainWindow(QMainWindow):
             
             # Retornar resultado de validación
             if errors:
-                print(f"❌ Errores de validación encontrados:")
+                print("❌ Errores de validación encontrados:")
                 for error in errors:
                     print(f"   {error}")
-                return False, errors
+                if warnings:
+                    print("⚠️ Warnings de validación:")
+                    for w in warnings:
+                        print(f"   {w}")
+                return False, errors, warnings
             else:
-                print(f"✅ Validación exitosa - Todos los parámetros son consistentes")
-                return True, []
+                if warnings:
+                    print("⚠️ Warnings de validación:")
+                    for w in warnings:
+                        print(f"   {w}")
+                else:
+                    print("✅ Validación exitosa - Todos los parámetros son consistentes")
+                return True, [], warnings
                 
         except Exception as e:
             error_msg = f"❌ Error durante la validación: {str(e)}"
             print(error_msg)
             import traceback
             traceback.print_exc()
-            return False, [error_msg]
+            return False, [error_msg], []
 
     def run_prediction(self):
         """Ejecutar predicción Yosoku con parámetros del usuario y diálogo de progreso"""
@@ -14685,18 +14805,70 @@ class MainWindow(QMainWindow):
             if not hasattr(self, 'current_project_folder') or not self.current_project_folder:
                 QMessageBox.warning(self, "エラー", "❌ プロジェクトフォルダが見つかりません。")
                 return
+
+            # Buscar archivo 未実験データ (xlsx/csv)
+            unexperimental_file = self.find_unexperimental_file()
+            if not unexperimental_file:
+                QMessageBox.warning(self, "エラー", "❌ 未実験データファイルが見つかりません。")
+                return
+
+            # Validar que existan columnas (A13/A11/A21/A32, 線材長) en 未実験データ y recoger valores
+            try:
+                brush_types, wire_lengths = self._extract_brush_and_wire_length_from_unexperimental(unexperimental_file)
+                print(f"✅ 未実験データから取得: brushes={brush_types}, 線材長={wire_lengths[:10]}{'...' if len(wire_lengths) > 10 else ''}")
+            except Exception as e:
+                QMessageBox.critical(self, "エラー", f"❌ 未実験データの読み込み/検証に失敗しました:\n{str(e)}")
+                return
+
+            # ⚠️ Confirmación si hay múltiples brushes y/o múltiples 線材長
+            try:
+                multi_brush = isinstance(brush_types, (list, tuple)) and len(brush_types) > 1
+                multi_len = isinstance(wire_lengths, (list, tuple)) and len(wire_lengths) > 1
+                if multi_brush or multi_len:
+                    lines = []
+                    lines.append("⚠️ 未実験データに複数の値が含まれています。予測を続行しますか？")
+                    lines.append("")
+                    if multi_brush:
+                        bt = ", ".join([str(x) for x in brush_types[:8]])
+                        more = "..." if len(brush_types) > 8 else ""
+                        lines.append(f"- ブラシタイプ: {bt}{more} (count={len(brush_types)})")
+                    if multi_len:
+                        wl = ", ".join([str(x) for x in wire_lengths[:10]])
+                        more = "..." if len(wire_lengths) > 10 else ""
+                        lines.append(f"- 線材長: {wl}{more} (count={len(wire_lengths)})")
+                    lines.append("")
+                    lines.append("※ 続行すると、各行の A13/A11/A21/A32 と 線材長 をそのまま使用して予測します。")
+
+                    reply = QMessageBox.question(
+                        self,
+                        "警告",
+                        "\n".join(lines),
+                        QMessageBox.Yes | QMessageBox.No,
+                        QMessageBox.No,
+                    )
+                    if reply != QMessageBox.Yes:
+                        print("ℹ️ Usuario canceló la predicción tras advertencia de múltiples valores")
+                        return
+            except Exception:
+                # Si falla el warning por cualquier motivo, no bloquear la predicción
+                pass
             
             # Mostrar diálogo de selección de parámetros
             selected_params = self.show_yosoku_parameters_dialog()
             if not selected_params:
                 print("❌ Usuario canceló la selección de parámetros")
                 return
+
+            # Completar parámetros desde archivo (no UI)
+            # Nota: el archivo puede contener múltiples brush/線材長; Yosoku los usa por fila.
+            selected_params["brushes"] = brush_types
+            selected_params["wire_lengths"] = wire_lengths
             
             print(f"📊 Parámetros seleccionados: {selected_params}")
             
             # Validar datos filtrados antes de continuar
             print("🔍 Validando datos filtrados...")
-            is_valid, validation_errors = self.validate_filtered_data(selected_params)
+            is_valid, validation_errors, validation_warnings = self.validate_filtered_data(selected_params)
             
             if not is_valid:
                 # Mostrar resumen de errores
@@ -14713,11 +14885,30 @@ class MainWindow(QMainWindow):
                     error_summary
                 )
                 return
+
+            # Si hay warnings (p.ej. 線材長 fuera de rango), preguntar si desea continuar
+            if validation_warnings:
+                try:
+                    msg = "⚠️ データ検証で警告が見つかりました。続行しますか？\n\n"
+                    msg += "\n".join(validation_warnings)
+                    reply = QMessageBox.question(
+                        self,
+                        "警告",
+                        msg,
+                        QMessageBox.Yes | QMessageBox.No,
+                        QMessageBox.No,
+                    )
+                    if reply != QMessageBox.Yes:
+                        print("ℹ️ Usuario canceló la predicción tras warnings de validación")
+                        return
+                except Exception:
+                    # Si el popup falla, continuar por defecto (no bloquear)
+                    pass
             
             print("✅ Validación exitosa - Continuando con la predicción")
             
             # Iniciar predicción con diálogo de progreso
-            self.start_yosoku_prediction_with_progress(selected_params)
+            self.start_yosoku_prediction_with_progress(selected_params, unexperimental_file=unexperimental_file)
             
         except Exception as e:
             print(f"❌ Error ejecutando predicción: {e}")
@@ -14725,28 +14916,36 @@ class MainWindow(QMainWindow):
             traceback.print_exc()
             QMessageBox.critical(self, "エラー", f"❌ 予測実行中にエラーが発生しました:\n{str(e)}")
 
-    def start_yosoku_prediction_with_progress(self, selected_params):
+    def start_yosoku_prediction_with_progress(self, selected_params, unexperimental_file=None):
         """Iniciar predicción Yosoku con diálogo de progreso"""
         try:
             # Buscar archivos necesarios
-            unexperimental_file = self.find_unexperimental_file()
+            if not unexperimental_file:
+                unexperimental_file = self.find_unexperimental_file()
             if not unexperimental_file:
                 QMessageBox.warning(self, "エラー", "❌ 未実験データファイルが見つかりません。")
                 return
             
-            formulas_file = self.find_latest_formulas_file()
-            if not formulas_file:
-                QMessageBox.warning(self, "エラー", "❌ XEBEC_予測計算機_逆変換対応.xlsxファイルが見つかりません。")
+            # Localizar carpeta de predicción del análisis lineal más reciente (para guardar el CSV)
+            prediction_folder = None
+            try:
+                prediction_folder = self.find_latest_prediction_folder()
+            except Exception:
+                prediction_folder = None
+            if not prediction_folder or not os.path.exists(prediction_folder):
+                QMessageBox.warning(self, "エラー", "❌ 04_予測計算 フォルダが見つかりません。")
                 return
             
             # Crear ruta de salida
             from datetime import datetime
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            output_filename = f"{os.path.basename(unexperimental_file).replace('_未実験データ.xlsx', '')}_予測結果_{timestamp}.xlsx"
-            
-            # Obtener la carpeta donde está el archivo de fórmulas
-            formulas_folder = os.path.dirname(formulas_file)
-            output_path = os.path.join(formulas_folder, output_filename)
+            base = os.path.basename(unexperimental_file)
+            for suf in ("_未実験データ.xlsx", "_未実験データ.xls", "_未実験データ.csv"):
+                if base.endswith(suf):
+                    base = base[: -len(suf)]
+                    break
+            output_filename = f"{base}_予測結果_{timestamp}.csv"
+            output_path = os.path.join(prediction_folder, output_filename)
             
             # Crear y mostrar diálogo de progreso
             self.yosoku_progress_dialog = YosokuProgressDialog(self)
@@ -14754,7 +14953,8 @@ class MainWindow(QMainWindow):
             self.set_console_overlay_topmost(True)
             
             # Crear worker thread
-            self.yosoku_worker = YosokuWorker(selected_params, unexperimental_file, formulas_file, output_path)
+            # YosokuWorker ahora calcula predicciones en Python y guarda CSV (sin límite de filas de Excel)
+            self.yosoku_worker = YosokuWorker(selected_params, unexperimental_file, output_path, prediction_folder=prediction_folder)
             
             # Conectar señales
             self.yosoku_worker.progress_updated.connect(self.yosoku_progress_dialog.update_progress)
@@ -14775,20 +14975,31 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "エラー", f"❌ 予測開始中にエラーが発生しました:\n{str(e)}")
 
     def find_unexperimental_file(self):
-        """Encontrar el archivo 未実験データ.xlsx"""
+        """Encontrar el archivo 未実験データ (xlsx/csv/xls)"""
         try:
             project_name = os.path.basename(self.current_project_folder)
-            expected_filename = f"{project_name}_未実験データ.xlsx"
-            unexperimental_path = os.path.join(self.current_project_folder, expected_filename)
-            
-            if os.path.exists(unexperimental_path):
-                return unexperimental_path
-            else:
-                # Buscar cualquier archivo que termine en _未実験データ.xlsx
-                for file in os.listdir(self.current_project_folder):
-                    if file.endswith("_未実験データ.xlsx"):
+            candidates = [
+                os.path.join(self.current_project_folder, f"{project_name}_未実験データ.xlsx"),
+                os.path.join(self.current_project_folder, f"{project_name}_未実験データ.xls"),
+                os.path.join(self.current_project_folder, f"{project_name}_未実験データ.csv"),
+            ]
+            for p in candidates:
+                if os.path.exists(p):
+                    return p
+
+            # Fallback: buscar por patrón, preferir Excel, luego CSV
+            files = []
+            try:
+                files = os.listdir(self.current_project_folder)
+            except Exception:
+                files = []
+
+            preferred_exts = (".xlsx", ".xls", ".csv")
+            for ext in preferred_exts:
+                for file in files:
+                    if file.endswith(f"_未実験データ{ext}"):
                         return os.path.join(self.current_project_folder, file)
-                return None
+            return None
         except Exception as e:
             print(f"❌ Error buscando archivo 未実験データ: {e}")
             return None
@@ -15288,17 +15499,21 @@ class MainWindow(QMainWindow):
             # Crear copia para no modificar el original
             df_prepared = df.copy()
             
-            # Agregar columnas de tipo de cepillo
-            brush_type = selected_params['brush']
-            df_prepared['A13'] = 1 if brush_type == 'A13' else 0
-            df_prepared['A11'] = 1 if brush_type == 'A11' else 0
-            df_prepared['A21'] = 1 if brush_type == 'A21' else 0
-            df_prepared['A32'] = 1 if brush_type == 'A32' else 0
+            # Brush/線材長 deben venir del archivo (no UI).
+            # Si faltan, es un error (no podemos inferirlos aquí).
+            required_brush_cols = ["A13", "A11", "A21", "A32"]
+            missing_brush = [c for c in required_brush_cols if c not in df_prepared.columns]
+            if missing_brush:
+                raise ValueError(
+                    f"❌ Prediction file must include brush one-hot columns: {', '.join(required_brush_cols)} "
+                    f"(missing: {', '.join(missing_brush)})"
+                )
+            if "線材長" not in df_prepared.columns:
+                raise ValueError("❌ Prediction file must include column: 線材長")
             
             # Agregar columnas de usuario
             df_prepared['直径'] = selected_params['diameter']
             df_prepared['材料'] = selected_params['material']
-            df_prepared['線材長'] = selected_params['wire_length']
             
             # Renombrar columnas de predicción si tienen prefijo 'prediction_'
             rename_map = {}
@@ -15335,7 +15550,7 @@ class MainWindow(QMainWindow):
     def import_nonlinear_pareto_to_database(self, excel_path):
         """Importa resultados de Pareto del análisis no lineal a la base de datos"""
         try:
-            # 1. Mostrar diálogo de parámetros PRIMERO (sin loading)
+            # 1. Mostrar diálogo de parámetros (solo diámetro/material) PRIMERO (sin loading)
             selected_params = self.show_yosoku_parameters_dialog()
             
             if not selected_params:
@@ -15620,13 +15835,18 @@ class MainWindow(QMainWindow):
                     'reason': 'No hay filtros aplicados, se pueden usar cualquier parámetro'
                 }
             
-            # Verificar brush
-            if 'brush' in selected_params:
+            # Verificar brush (legacy: único) o brushes (múltiples desde 未実験データ)
+            if 'brush' in selected_params and selected_params.get('brush') in ['A13', 'A11', 'A21', 'A32']:
                 brush = selected_params['brush']
-                if brush in ['A13', 'A11', 'A21', 'A32']:
-                    # Verificar que el brush seleccionado esté en los filtros
-                    if brush not in filters or filters[brush] != 1:
-                        errors.append(f"Brush {brush} no está seleccionado en los filtros aplicados")
+                if brush not in filters or filters[brush] != 1:
+                    errors.append(f"Brush {brush} no está seleccionado en los filtros aplicados")
+            elif 'brushes' in selected_params and isinstance(selected_params.get('brushes'), (list, tuple)):
+                req = [b for b in selected_params.get('brushes') if b in ['A13', 'A11', 'A21', 'A32']]
+                for b in req:
+                    if b in filters and filters.get(b) == 1:
+                        continue
+                    # si no hay filtro de brush aplicado, no bloqueamos
+                    # (los filtros pueden no incluir brush)
             
             # Verificar diameter
             if 'diameter' in selected_params:
@@ -15640,8 +15860,8 @@ class MainWindow(QMainWindow):
                 if '材料' in filters and filters['材料'] != material:
                     errors.append(f"Material {material} no coincide con el filtro aplicado ({filters['材料']})")
             
-            # Verificar wire_length con tolerancia de -5mm
-            if 'wire_length' in selected_params:
+            # Verificar wire_length (legacy) con tolerancia de -5mm
+            if 'wire_length' in selected_params and selected_params.get('wire_length') is not None:
                 wire_length = selected_params['wire_length']
                 if '線材長' in filters:
                     filter_wire_length = filters['線材長']
@@ -15682,6 +15902,25 @@ class MainWindow(QMainWindow):
                                 errors.append(f"線材長 {filter_wire_length} no está dentro del rango permitido ({min_length}-{max_length}mm) para el valor seleccionado {wire_length}mm")
                         except (ValueError, TypeError) as e:
                             errors.append(f"Error convirtiendo filter_wire_length: {e}")
+            # Nuevo: múltiples wire_lengths desde 未実験データ
+            elif 'wire_lengths' in selected_params and isinstance(selected_params.get('wire_lengths'), (list, tuple)):
+                if '線材長' in filters:
+                    # Si hay un filtro de 線材長 aplicado, comprobamos que no contradice completamente
+                    try:
+                        req = [int(float(x)) for x in selected_params.get('wire_lengths')]
+                    except Exception:
+                        req = []
+                    # Si el filtro es único, al menos uno debe estar dentro del rango [-5, 0] respecto a ese valor
+                    filter_wire_length = filters.get('線材長')
+                    try:
+                        fw = int(float(filter_wire_length)) if not isinstance(filter_wire_length, tuple) else None
+                    except Exception:
+                        fw = None
+                    if fw is not None and req:
+                        min_ok = fw - 5
+                        max_ok = fw
+                        if not any(min_ok <= v <= max_ok for v in req):
+                            errors.append(f"線材長 フィルタ({fw}) と 未実験データ の 線材長 が一致しません")
             
             if errors:
                 return {
@@ -15714,20 +15953,52 @@ class MainWindow(QMainWindow):
             if not os.path.exists(linear_regression_folder):
                 print("⚠️ Carpeta 03_線形回帰 no encontrada")
                 return None
+
+            # Helper: elegir la última carpeta de ejecución dentro de 03_線形回帰
+            def _pick_latest_run_folder(base_dir: str):
+                import re
+                from datetime import datetime
+
+                candidates = []
+                try:
+                    for item in os.listdir(base_dir):
+                        p = os.path.join(base_dir, item)
+                        if not os.path.isdir(p):
+                            continue
+                        m = re.match(r"^\d+_(\d{8})_(\d{6})", str(item))
+                        if m:
+                            try:
+                                dt = datetime.strptime(m.group(1) + m.group(2), "%Y%m%d%H%M%S")
+                                candidates.append((dt, p))
+                            except Exception:
+                                continue
+                except Exception:
+                    candidates = []
+
+                if candidates:
+                    candidates.sort(key=lambda t: t[0], reverse=True)
+                    return candidates[0][1]
+
+                # Fallback: por mtime (ignorando carpetas "01_..." típicas si es posible)
+                subdirs = []
+                try:
+                    for item in os.listdir(base_dir):
+                        p = os.path.join(base_dir, item)
+                        if os.path.isdir(p):
+                            subdirs.append(p)
+                except Exception:
+                    subdirs = []
+                if not subdirs:
+                    return None
+                try:
+                    return max(subdirs, key=lambda x: os.path.getmtime(x))
+                except Exception:
+                    return subdirs[-1]
             
-            # Buscar todas las subcarpetas con formato de timestamp
-            subfolders = []
-            for item in os.listdir(linear_regression_folder):
-                item_path = os.path.join(linear_regression_folder, item)
-                if os.path.isdir(item_path) and item.startswith("15_"):
-                    subfolders.append(item_path)
-            
-            if not subfolders:
+            latest_subfolder = _pick_latest_run_folder(linear_regression_folder)
+            if not latest_subfolder:
                 print("⚠️ No se encontraron carpetas de análisis lineal")
                 return None
-            
-            # Encontrar la más reciente por fecha de creación
-            latest_subfolder = max(subfolders, key=lambda x: os.path.getctime(x))
             
             # Buscar la carpeta 04_予測計算 dentro de la carpeta más reciente
             prediction_folder = os.path.join(latest_subfolder, "04_予測計算")
@@ -15756,6 +16027,34 @@ class MainWindow(QMainWindow):
                 return None
             
             print(f"🔍 Buscando archivo de fórmulas en: {linear_regression_folder}")
+
+            # Preferir la última carpeta de ejecución (NN_YYYYMMDD_HHMMSS) si existe
+            latest_subfolder = None
+            try:
+                latest_subfolder = self.find_latest_prediction_folder()
+            except Exception:
+                latest_subfolder = None
+
+            if latest_subfolder:
+                # find_latest_prediction_folder devuelve 04_予測計算; subir un nivel para reusar lógica
+                base_run = os.path.dirname(latest_subfolder)
+                formulas_file = os.path.join(latest_subfolder, "XEBEC_予測計算機_逆変換対応.xlsx")
+                if os.path.exists(formulas_file):
+                    print(f"✅ Archivo de fórmulas encontrado: {formulas_file}")
+                    return formulas_file
+                # fallback: búsqueda acotada dentro del run
+                try:
+                    for root, dirs, files in os.walk(base_run):
+                        rel = os.path.relpath(root, base_run)
+                        if rel != "." and rel.count(os.sep) >= 4:
+                            dirs[:] = []
+                            continue
+                        if "XEBEC_予測計算機_逆変換対応.xlsx" in files:
+                            found = os.path.join(root, "XEBEC_予測計算機_逆変換対応.xlsx")
+                            print(f"✅ Archivo de fórmulas encontrado (search): {found}")
+                            return found
+                except Exception:
+                    pass
             
             # Buscar todas las subcarpetas de análisis lineal
             subfolders = []
