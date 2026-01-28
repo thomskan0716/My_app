@@ -173,6 +173,15 @@ class SampleCombiner:
                     part_rows += take
                     pos += take
 
+        # ES: Si el CSV ya existe, borrarlo para no acumular filas de ejecuciones anteriores (mode="a")
+        # EN: If the CSV already exists, remove it so we don't accumulate rows from previous runs (mode="a")
+        # JP: 既存CSVがあれば削除し、前回実行分が追記されないようにする（mode="a"のため）
+        if os.path.exists(csv_path):
+            try:
+                os.remove(csv_path)
+            except OSError as e:
+                raise IOError(f"⚠️ No se pudo borrar el CSV previo para escritura limpia: {csv_path}\n{e}") from e
+
         # ES: Generación en streaming
         # EN: Streaming generation
         # JA: ストリーミング生成
