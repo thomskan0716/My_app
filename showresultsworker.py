@@ -8,12 +8,13 @@ class ShowResultsWorker(QObject):
     finished = Signal(dict)
     error = Signal(str)
 
-    def __init__(self, project_folder, results_file_path, diameter, material, backup_function, process_function, experiment_info=None):
+    def __init__(self, project_folder, results_file_path, diameter, material, wire_count, backup_function, process_function, experiment_info=None):
         super().__init__()
         self.project_folder = project_folder
         self.results_file_path = results_file_path
         self.diameter = diameter
         self.material = material
+        self.wire_count = wire_count
         self.backup_function = backup_function
         self.process_function = process_function
         self.experiment_info = experiment_info  # Experiment info found
@@ -176,6 +177,7 @@ class ShowResultsWorker(QObject):
                 None,  # Brush is always from file (A13/A11/A21/A32)
                 self.diameter, 
                 self.material,
+                self.wire_count,
                 self.conn  # Pass the connection created in this thread
             )
             

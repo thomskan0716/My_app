@@ -213,7 +213,7 @@ class Config:
     # ========== 説明変数設定 ==========
     FEATURE_COLUMNS = [
         #'A32', 'A11', 'A21',           
-        '送り速度', '切込量', '突出量', '載せ率', '回転速度', 'パス数', 'UPカット', 'A32', 'A11', 'A21', 'A13', #'切削時間',                      
+        '送り速度', '切込量', '突出量', '載せ率', '回転速度', 'パス数', '線材本数', 'UPカット', 'A32', 'A11', 'A21', 'A13', #'切削時間',                      
         ##'v_m_per_s', 'k_N_per_m', 'Fn_N', 'Ff_N', 'CuttingTime_s', 'FrictionHeat_J', 'FrictionWork_J',
         #'Material_鋼', 'Material_アルミ', 'Material_SUS', 'Material_チタン', 'Material_銅', 'Material_ジュラルミン'
     ]
@@ -231,7 +231,7 @@ class Config:
         #'Material_鋼', 'Material_アルミ', 'Material_SUS', 'Material_チタン', 'Material_銅', 'Material_ジュラルミン'
     ]
     
-    INTEGER_FEATURES = ['パス数']
+    INTEGER_FEATURES = ['パス数', '線材本数']
 
     # ========== 目的変数変換方法 ==========
     TRANSFORM_METHOD = 'auto'  # 'auto','log','sqrt','none' 等（auto推奨）

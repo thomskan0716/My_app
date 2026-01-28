@@ -1,0 +1,21 @@
+---
+description: Enforce basic security: validate inputs, least privilege, never commit secrets.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: Seguridad básica
+
+### ✅ Qué hacer
+- Validar entradas externas (usuario/red/archivos/sensores).
+- Mínimo privilegio.
+- Sanitizar inputs.
+- Evitar exponer datos sensibles en logs/excepciones.
+
+### ❌ Qué NO hacer
+- ❌ Guardar tokens/keys/passwords en el repo.
+- ❌ Loguear credenciales o secretos.
+- ❌ Confiar en inputs sin validar.
+
+### Conflictos y prioridad
+- Seguridad tiene prioridad sobre todas las demás reglas.

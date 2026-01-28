@@ -1,0 +1,27 @@
+---
+description: Enforce one function/class responsibility; keep functions small.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: Funciones pequeñas y SRP
+
+### ✅ Qué hacer
+
+- 1 función = 1 responsabilidad
+- Si una función hace:
+  - parseo + validación + IO + UI
+  -> dividir en funciones separadas
+
+✅ Ejemplo (conceptual):
+- LoadConfig()
+- ValidateConfig()
+- ApplyConfig()
+
+### ❌ Qué NO hacer
+
+- ❌ Mega-función:
+  - `DoEverything()` que hace UI + red + parseo + guardado
+
+### Conflictos y prioridad
+- Si SRP parece “más lento”, igual aplicar SRP hasta tener mediciones reales.

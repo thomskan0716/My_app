@@ -1,0 +1,31 @@
+---
+
+```text
+---
+description: Enforce error handling; ban silent catches and ignored exceptions.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: Manejo de errores (sin silencios)
+
+### ✅ Qué hacer
+- Capturar excepciones específicas.
+- Log + contexto.
+- Fallback seguro o rethrow según corresponda.
+
+Ejemplo conceptual:
+- TimeoutError -> retry
+- AuthError -> detener y reportar
+
+### ❌ Qué NO hacer
+```python
+try:
+    do_work()
+except Exception:
+    pass  # ❌
+catch (Exception) { return false; }  # ❌ sin contexto
+Conflictos y prioridad
+Si UX requiere mensaje simple, log detallado igualmente.
+
+Seguridad > “ocultar” errores.

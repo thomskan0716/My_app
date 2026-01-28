@@ -162,13 +162,15 @@ class ClassificationConfigDialog(QDialog):
         # EN: Get the list of all available features
         # JA: 利用可能な特徴量一覧を取得
         try:
-            all_features = sorted(list(getattr(ConfigCLS, 'ALLOWED_FEATURES', set([
+            all_features_set = set(getattr(ConfigCLS, 'ALLOWED_FEATURES', set([
                 'A32', 'A11', 'A21', '送り速度', '切込量', '突出し量',
-                '載せ率', '回転速度', 'UPカット', 'パス数'
-            ]))))
+                '載せ率', '回転速度', 'UPカット', 'パス数', '線材本数'
+            ])))
+            all_features_set.add('線材本数')
+            all_features = sorted(list(all_features_set))
         except:
             all_features = sorted(['A32', 'A11', 'A21', '送り速度', '切込量', '突出し量',
-                                  '載せ率', '回転速度', 'UPカット', 'パス数'])
+                                  '載せ率', '回転速度', 'UPカット', 'パス数', '線材本数'])
         
         # ALLOWED_FEATURES - Lista con checkboxes
         allowed_group = QGroupBox("使用可能な特徴量 (ALLOWED_FEATURES)")
@@ -183,6 +185,7 @@ class ClassificationConfigDialog(QDialog):
                 default_allowed = default_allowed
             else:
                 default_allowed = set(default_allowed)
+            default_allowed.add('線材本数')
         except:
             default_allowed = set(all_features)
         
@@ -302,9 +305,9 @@ class ClassificationConfigDialog(QDialog):
         self.integer_features_list.setSelectionMode(QAbstractItemView.MultiSelection)
         
         try:
-            default_integer = getattr(ConfigCLS, 'INTEGER_FEATURES', ['パス数'])
+            default_integer = getattr(ConfigCLS, 'INTEGER_FEATURES', ['パス数', '線材本数'])
         except:
-            default_integer = ['パス数']
+            default_integer = ['パス数', '線材本数']
         
         for feature in all_features:
             item = QListWidgetItem(feature)

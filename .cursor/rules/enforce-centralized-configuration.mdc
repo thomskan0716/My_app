@@ -1,0 +1,24 @@
+---
+description: Enforce centralized configuration; ban hardcoded parameters.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: Configuración centralizada (no hardcode)
+
+### ✅ Qué hacer
+- Timeouts, thresholds, rutas, flags, calibraciones -> AppConfig/Settings.
+
+✅ Correcto (conceptual):
+- Config.Robot.ConnectionTimeoutMs
+- Config.Vision.ContourThreshold
+- Config.Paths.LogDirectory
+
+### ❌ Qué NO hacer
+```python
+timeout_ms = 3000  # ❌ magic number
+"C:\\temp\\logs"  # ❌ ruta hardcodeada
+Conflictos y prioridad
+Si una librería requiere constantes, define constantes SOLO en un lugar y documenta.
+
+Secretos nunca en repo (ver regla de seguridad).

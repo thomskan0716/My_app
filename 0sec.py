@@ -3735,6 +3735,7 @@ class MainWindow(QMainWindow):
         self.left_layout.addWidget(self.material_selector)
         
         self.create_diameter_selector()
+        self.create_wire_count_selector()
         self.create_show_results_button()
 
         self.create_export_button()
@@ -3750,6 +3751,8 @@ class MainWindow(QMainWindow):
         # JA: セレクタには正しい名前を使用
         self.widgets_below_sample_selector.append(self.diameter_label)
         self.widgets_below_sample_selector.append(self.diameter_selector)
+        self.widgets_below_sample_selector.append(self.wire_count_label)
+        self.widgets_below_sample_selector.append(self.wire_count_selector)
         self.widgets_below_sample_selector.append(self.material_label)
         self.widgets_below_sample_selector.append(self.material_selector)
         # ES: NOTA: sample_size_label y sample_size_input NO están aquí porque deben estar siempre habilitados
@@ -4700,6 +4703,18 @@ class MainWindow(QMainWindow):
         # ES: Por defecto: sin restricción (solo se restringe si el archivo detecta A13) | EN: Default: no restriction (restrict only if file detects A13) | JA: デフォルト：制限なし（A13検出時のみ制限）
         self.update_diameter_options("")
 
+    def create_wire_count_selector(self):
+        """ES: Crear selector de número de hilos (solo enteros) para resultados/import.
+        EN: Create wire-count selector (integers only) for results/import.
+        JA: 結果/取込用の線材本数セレクタ（整数のみ）を作成。"""
+        self.wire_count_label = QLabel("線材本数")
+        self.wire_count_selector = QSpinBox()
+        self.wire_count_selector.setMinimum(1)
+        self.wire_count_selector.setMaximum(999)
+        self.wire_count_selector.setValue(6)
+        self.left_layout.addWidget(self.wire_count_label)
+        self.left_layout.addWidget(self.wire_count_selector)
+
     def update_diameter_options(self, brush_name):
         """ES: Restringe el selector de diámetro si el cepillo es A13
         EN: Restrict diameter selector when brush is A13
@@ -4779,8 +4794,55 @@ class MainWindow(QMainWindow):
 
 
 
+    def _qt_is_valid(self, obj) -> bool:
+        """ES: Comprueba si un objeto Qt sigue siendo válido (no fue eliminado).
+        EN: Check whether a Qt object is still valid (not deleted).
+        JP: Qtオブジェクトが有効か（削除済みでないか）を確認。"""
+        if obj is None:
+            return False
+        try:
+            import shiboken6
+            return bool(shiboken6.isValid(obj))
+        except Exception:
+            # Fallback when shiboken6 is unavailable
+            try:
+                _ = obj.objectName()  # Touching deleted objects raises RuntimeError
+                return True
+            except RuntimeError:
+                return False
+            except Exception:
+                return True
+
+    def _safe_set_enabled(self, obj, enabled: bool) -> bool:
+        """ES: Activa/desactiva un widget Qt sin fallar si ya fue eliminado.
+        EN: Enable/disable a Qt widget without failing if already deleted.
+        JP: 既に削除済みでも落ちないようにQtウィジェットの有効/無効を切替。"""
+        if not self._qt_is_valid(obj):
+            return False
+        try:
+            obj.setEnabled(bool(enabled))
+            return True
+        except RuntimeError:
+            return False
+        except Exception:
+            return False
+
+
     def create_navigation_buttons(self):
+        # ES: Si existe un frame previo pero fue eliminado (deleteLater), limpiar referencias y recrear.
+        # EN: If a previous frame exists but was deleted (deleteLater), clear references and recreate.
+        # JP: 以前のフレームが deleteLater 済みなら参照をクリアして作り直す。
         if self.graph_navigation_frame is not None:
+            if self._qt_is_valid(self.graph_navigation_frame):
+                return
+            self.graph_navigation_frame = None
+            self.prev_button = None
+            self.next_button = None
+
+        # ES: Si graph_container no existe o ya fue eliminado, no crear botones aquí.
+        # EN: If graph_container does not exist or was deleted, do not create buttons here.
+        # JP: graph_container が無い/削除済みならここでは作成しない。
+        if not hasattr(self, "graph_container") or not self._qt_is_valid(getattr(self, "graph_container", None)):
             return
 
         self.graph_navigation_frame = QFrame()
@@ -4798,7 +4860,22 @@ class MainWindow(QMainWindow):
         nav_layout.addSpacing(10)
         nav_layout.addWidget(self.next_button)
 
-        self.graph_container.layout().addWidget(self.graph_navigation_frame)
+        try:
+            container_layout = self.graph_container.layout()
+            if container_layout is None:
+                container_layout = QVBoxLayout()
+                container_layout.setContentsMargins(0, 0, 0, 0)
+                container_layout.setSpacing(0)
+                self.graph_container.setLayout(container_layout)
+            container_layout.addWidget(self.graph_navigation_frame)
+        except RuntimeError:
+            # ES: graph_container ya fue eliminado entre medias; cancelar creación.
+            # EN: graph_container was deleted meanwhile; abort creation.
+            # JP: graph_container が途中で削除されたため作成中止。
+            self.graph_navigation_frame = None
+            self.prev_button = None
+            self.next_button = None
+            return
 
         # ES: ❗️Conectar aquí
         # EN: ❗️Connect here
@@ -4806,8 +4883,8 @@ class MainWindow(QMainWindow):
         self.prev_button.clicked.connect(self.show_previous_graph)
         self.next_button.clicked.connect(self.show_next_graph)
 
-        self.prev_button.setEnabled(False)
-        self.next_button.setEnabled(False)
+        self._safe_set_enabled(self.prev_button, False)
+        self._safe_set_enabled(self.next_button, False)
 
     def show_previous_graph(self):
         if self.current_graph_index > 0:
@@ -4826,6 +4903,12 @@ class MainWindow(QMainWindow):
         # ES: Limpiar el layout central COMPLETAMENTE (incluye layouts anidados)
         # EN: Clear the center layout completely (including nested layouts)
         # JA: 中央レイアウトを完全にクリア（ネストしたレイアウト含む）
+        # ES: Evitar referencias colgantes a botones Qt eliminados al cambiar de vista.
+        # EN: Avoid dangling references to deleted Qt buttons when switching views.
+        # JP: 画面切替時に削除済みQtボタン参照が残らないようにする。
+        self.graph_navigation_frame = None
+        self.prev_button = None
+        self.next_button = None
         self._clear_layout_recursive(self.center_layout)
         try:
             QApplication.processEvents()
@@ -5136,6 +5219,19 @@ class MainWindow(QMainWindow):
         hasta.setPlaceholderText("max")
         self.filter_inputs["直径"] = (desde, hasta)
         add_filter_row("直径", desde, hasta)
+
+        # 線材本数
+        desde = QLineEdit()
+        hasta = QLineEdit()
+        desde.setPlaceholderText("min")
+        hasta.setPlaceholderText("max")
+        try:
+            desde.setValidator(QIntValidator())
+            hasta.setValidator(QIntValidator())
+        except Exception:
+            pass
+        self.filter_inputs["線材本数"] = (desde, hasta)
+        add_filter_row("線材本数", desde, hasta)
 
         # 回転速度
         desde = QLineEdit()
@@ -5574,10 +5670,16 @@ class MainWindow(QMainWindow):
 
                 if desde:
                     query += f" AND {db_field} >= ?"
-                    params.append(float(desde))
+                    if db_field == "線材本数":
+                        params.append(int(desde))
+                    else:
+                        params.append(float(desde))
                 if hasta:
                     query += f" AND {db_field} <= ?"
-                    params.append(float(hasta))
+                    if db_field == "線材本数":
+                        params.append(int(hasta))
+                    else:
+                        params.append(float(hasta))
 
         try:
             conn = sqlite3.connect(RESULTS_DB_PATH, timeout=10)
@@ -6552,8 +6654,8 @@ class MainWindow(QMainWindow):
         self.ng_button.setEnabled(True)
 
         self.create_navigation_buttons()
-        self.prev_button.setEnabled(True)
-        self.next_button.setEnabled(True)
+        self._safe_set_enabled(getattr(self, "prev_button", None), True)
+        self._safe_set_enabled(getattr(self, "next_button", None), True)
 
     def find_matching_experiment_file(self, project_folder):
         """
@@ -7075,6 +7177,7 @@ class MainWindow(QMainWindow):
             print(f"  - results_file_path: {self.results_file_path}")
             print(f"  - brush(from_file): {getattr(self, '_results_brush_type', None)}")
             print(f"  - diameter: {self.diameter_selector.currentText()}")
+            print(f"  - wire_count: {self.wire_count_selector.value() if hasattr(self, 'wire_count_selector') else 6}")
             print(f"  - material: {self.material_selector.currentText()}")
             
             # ES: Verificar el contenido del archivo de resultados | EN: Verify results file content | JA: 結果ファイルの内容を確認
@@ -7180,6 +7283,7 @@ class MainWindow(QMainWindow):
                 self.results_file_path,
                 float(self.diameter_selector.currentText()),
                 self.material_selector.currentText(),
+                int(self.wire_count_selector.value()) if hasattr(self, "wire_count_selector") else 6,
                 self.backup_and_update_sample_file,
                 self.processor.process_results_file_with_ui_values,
                 experiment_info  # Pass the found experiment info
@@ -7331,10 +7435,8 @@ class MainWindow(QMainWindow):
                 self.ng_button.setEnabled(False)
 
             self.create_navigation_buttons()
-            if hasattr(self, 'prev_button'):
-                self.prev_button.setEnabled(True)
-            if hasattr(self, 'next_button'):
-                self.next_button.setEnabled(True)
+            self._safe_set_enabled(getattr(self, "prev_button", None), True)
+            self._safe_set_enabled(getattr(self, "next_button", None), True)
                 
         except Exception as e:
             print(f"❌ 結果表示完了ハンドラでエラー: {e}")
@@ -7422,8 +7524,8 @@ class MainWindow(QMainWindow):
             # EN: Enable navigation buttons
             # JP: ナビゲーションボタンを有効化
             self.create_navigation_buttons()
-            self.prev_button.setEnabled(True)
-            self.next_button.setEnabled(True)
+            self._safe_set_enabled(getattr(self, "prev_button", None), True)
+            self._safe_set_enabled(getattr(self, "next_button", None), True)
             
             QMessageBox.information(self, "分析ページ", "✅ 分析ページに移動しました。\nフィルターを設定してデータを分析してください。")
             
@@ -8021,8 +8123,8 @@ class MainWindow(QMainWindow):
         self.graph_images_content = getattr(self, "graph_images_content", [])
         self.graph_images_content.append(table_container)
 
-        self.next_button.setEnabled(True)
-        self.prev_button.setEnabled(True)
+        self._safe_set_enabled(getattr(self, "next_button", None), True)
+        self._safe_set_enabled(getattr(self, "prev_button", None), True)
 
     def show_loader(self, show: bool):
         if show:
@@ -8639,8 +8741,9 @@ class MainWindow(QMainWindow):
                     # brush y 線材長 vienen del Excel/CSV de resultados (A13/A11/A21/A32 y 線材長)
                     selected_brush = None
                     diameter = float(self.diameter_selector.currentText()) if hasattr(self, "diameter_selector") else 0.15
+                    wire_count = int(self.wire_count_selector.value()) if hasattr(self, "wire_count_selector") else 6
                     material = self.material_selector.currentText() if hasattr(self, "material_selector") else "Steel"
-                    self.processor.process_results_file_with_ui_values(file_path, selected_brush, diameter, material)
+                    self.processor.process_results_file_with_ui_values(file_path, selected_brush, diameter, material, wire_count)
                 else:
                     # fallback
                     self.processor.process_results_file(file_path, None, None)
@@ -9020,6 +9123,7 @@ class MainWindow(QMainWindow):
         # brush y 線材長 deben venir del archivo de resultados (no de la UI)
         selected_brush = None
         diameter = float(self.diameter_selector.currentText())
+        wire_count = int(self.wire_count_selector.value()) if hasattr(self, "wire_count_selector") else 6
         material = self.material_selector.currentText()
 
         try:
@@ -9039,7 +9143,8 @@ class MainWindow(QMainWindow):
                 self.results_file_path, 
                 selected_brush, 
                 diameter, 
-                material
+                material,
+                wire_count
             )
             
             # ES: Mostrar mensaje de éxito con información del backup | EN: Show success message with backup info | JA: バックアップ情報付き成功メッセージを表示
@@ -9488,7 +9593,7 @@ class MainWindow(QMainWindow):
                 "面粗度(Ra)後",
                 "A13", "A11", "A21", "A32",
                 "直径", "材料",
-                "回転速度", "送り速度", "UPカット", "切込量", "突出量", "載せ率", "線材長", "パス数",
+                "回転速度", "送り速度", "UPカット", "切込量", "突出量", "載せ率", "線材長", "線材本数", "パス数",
                 "加工時間",
                 "面粗度(Ra)前",
                 "実験日",
@@ -10942,8 +11047,8 @@ class MainWindow(QMainWindow):
                 # ES: Crear la vista de filtros primero | EN: Create filter view first | JA: 先にフィルタビューを作成
                 self.create_filter_view()
                 self.create_navigation_buttons()
-                self.prev_button.setEnabled(True)
-                self.next_button.setEnabled(True)
+                self._safe_set_enabled(getattr(self, "prev_button", None), True)
+                self._safe_set_enabled(getattr(self, "next_button", None), True)
                 QMessageBox.information(self, "分析ページ", "✅ 分析ページに移動しました。\nフィルターを設定して線形解析を実行してください。")
                 return
             
@@ -11090,8 +11195,8 @@ class MainWindow(QMainWindow):
                 # ES: Crear la vista de filtros primero | EN: Create filter view first | JA: 先にフィルタビューを作成
                 self.create_filter_view()
                 self.create_navigation_buttons()
-                self.prev_button.setEnabled(True)
-                self.next_button.setEnabled(True)
+                self._safe_set_enabled(getattr(self, "prev_button", None), True)
+                self._safe_set_enabled(getattr(self, "next_button", None), True)
                 QMessageBox.information(self, "分析ページ", "✅ 分析ページに移動しました。\nフィルターを設定して非線形解析を実行してください。")
                 return
             
@@ -11137,7 +11242,10 @@ class MainWindow(QMainWindow):
                         if desde and hasta:
                             try:
                                 query += f" AND {field_name} BETWEEN ? AND ?"
-                                params.extend([float(desde), float(hasta)])
+                                if field_name == "線材本数":
+                                    params.extend([int(desde), int(hasta)])
+                                else:
+                                    params.extend([float(desde), float(hasta)])
                             except (ValueError, TypeError):
                                 continue
                     elif isinstance(filter_value, (str, int, float)) and filter_value:
@@ -13667,8 +13775,8 @@ class MainWindow(QMainWindow):
                 # ES: Crear la vista de filtros primero | EN: Create filter view first | JA: 先にフィルタビューを作成
                 self.create_filter_view()
                 self.create_navigation_buttons()
-                self.prev_button.setEnabled(True)
-                self.next_button.setEnabled(True)
+                self._safe_set_enabled(getattr(self, "prev_button", None), True)
+                self._safe_set_enabled(getattr(self, "next_button", None), True)
                 QMessageBox.information(self, "分析ページ", "✅ 分析ページに移動しました。\nフィルターを設定して分類分析を実行してください。")
                 return
             
@@ -13714,7 +13822,10 @@ class MainWindow(QMainWindow):
                         if desde and hasta:
                             try:
                                 query += f" AND {field_name} BETWEEN ? AND ?"
-                                params.extend([float(desde), float(hasta)])
+                                if field_name == "線材本数":
+                                    params.extend([int(desde), int(hasta)])
+                                else:
+                                    params.extend([float(desde), float(hasta)])
                             except (ValueError, TypeError):
                                 continue
                     elif isinstance(filter_value, (str, int, float)) and filter_value:
@@ -13778,6 +13889,7 @@ class MainWindow(QMainWindow):
             selected_brush = None
             selected_material = None
             selected_wire_length = None
+            selected_wire_count = None
             
             if not is_load_existing:
                 # ES: Mostrar diálogo | EN: Show dialog | JA: ダイアログを表示 para seleccionar parámetros (similar a yosoku)
@@ -13821,6 +13933,13 @@ class MainWindow(QMainWindow):
                     wire_length_combo.addItem(str(value), value)
                 wire_length_combo.setCurrentText("75")  # Valor por defecto
                 form_layout.addRow("線材長:", wire_length_combo)
+
+                # 線材本数 (solo enteros)
+                wire_count_spin = QSpinBox()
+                wire_count_spin.setMinimum(1)
+                wire_count_spin.setMaximum(999)
+                wire_count_spin.setValue(6)
+                form_layout.addRow("線材本数:", wire_count_spin)
                 
                 layout.addLayout(form_layout)
                 layout.addStretch()
@@ -13850,11 +13969,13 @@ class MainWindow(QMainWindow):
                     selected_brush = brush_combo.currentData()
                     selected_material = material_combo.currentData()
                     selected_wire_length = wire_length_combo.currentData()
+                    selected_wire_count = int(wire_count_spin.value())
                     
                     print("✅ 選択したパラメータ:")
                     print(f"   - Brush: {selected_brush}")
                     print(f"   - Material: {selected_material}")
                     print(f"   - Wire Length: {selected_wire_length}")
+                    print(f"   - Wire Count: {selected_wire_count}")
                 else:
                     print("❌ ユーザーがパラメータ選択をキャンセルしました")
                     return
@@ -13872,7 +13993,8 @@ class MainWindow(QMainWindow):
                 config_values,
                 selected_brush=selected_brush,
                 selected_material=selected_material,
-                selected_wire_length=selected_wire_length
+                selected_wire_length=selected_wire_length,
+                selected_wire_count=selected_wire_count if not is_load_existing else None
             )
             
             # ES: Conectar señales | EN: Connect signals | JA: シグナルを接続

@@ -1,0 +1,26 @@
+---
+description: Global priority order for all rules (conflict resolution).
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Prioridad global (en caso de conflicto)
+
+### Orden de prioridad (de mayor a menor)
+
+1) Seguridad (no secretos, no datos sensibles en logs)
+2) Comentarios (ES/EN/JP en bloque; inline solo EN)
+3) Strings centralizados (UI y errores al usuario traducibles)
+4) Configuración centralizada (no hardcodear parámetros)
+5) Manejo de errores (no silenciar)
+6) Logging estructurado
+7) Separación de responsabilidades (UI/Core/IO)
+8) Testing
+9) Nombrado y legibilidad
+10) Diseño (KISS/DRY/YAGNI/SRP)
+11) Rendimiento (solo con medición)
+12) Git (higiene de commits)
+
+### Regla práctica
+- Si dos reglas chocan, aplica la de mayor prioridad.
+- Si no está claro, documenta el supuesto con comentario ES/EN/JP.

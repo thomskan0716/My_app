@@ -31,6 +31,7 @@ class DBManager:
                     直径 REAL,
                     材料 TEXT,
                     線材長 INTEGER,
+                    線材本数 INTEGER DEFAULT 6,
                     回転速度 INTEGER,
                     送り速度 INTEGER,
                     UPカット INTEGER,
@@ -70,6 +71,7 @@ class DBManager:
                     載せ率 REAL,
                     パス数 INTEGER,
                     線材長 INTEGER,
+                    線材本数 INTEGER DEFAULT 6,
                     加工時間 REAL
                 );
             """)
@@ -104,6 +106,7 @@ class DBManager:
                     載せ率 REAL,
                     パス数 INTEGER,
                     線材長 INTEGER,
+                    線材本数 INTEGER DEFAULT 6,
                     加工時間 REAL
                 );
             """)
@@ -118,6 +121,7 @@ class DBManager:
                 "切削力X": "REAL",
                 "切削力Y": "REAL",
                 "切削力Z": "REAL",
+                "線材本数": "INTEGER DEFAULT 6",
             }
 
             for table in targets:
@@ -128,6 +132,14 @@ class DBManager:
                     for col, col_type in desired_cols.items():
                         if col not in existing:
                             self.conn.execute(f"ALTER TABLE {table} ADD COLUMN {col} {col_type}")
+                    # ES: Backfill NULLs para columna nueva
+                    # EN: Backfill NULLs for the new column
+                    # JP: 新列のNULLを埋める
+                    if "線材本数" in desired_cols:
+                        try:
+                            self.conn.execute(f"UPDATE {table} SET 線材本数 = 6 WHERE 線材本数 IS NULL")
+                        except Exception:
+                            pass
                 except Exception:
                     # ES: La tabla puede no existir en instalaciones antiguas; create_tables() la crea para main_results
                     # EN: The table may not exist in older installations; create_tables() creates it for main_results
@@ -185,6 +197,7 @@ class DBManager:
             "A13", "A11", "A21", "A32",
             "直径", "材料",
             "線材長",
+            "線材本数",
             "回転速度", "送り速度", "UPカット", "切込量", "突出量", "載せ率", "パス数",
             "バリ除去",
             "上面ダレ量", "側面ダレ量", "摩耗量",

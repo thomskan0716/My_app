@@ -34,7 +34,7 @@ class ClassificationWorker(QThread):
     console_output = Signal(str)  # console output (for IDE/terminal)
     file_selection_requested = Signal(str)  # (initial_path) - request file selection
     
-    def __init__(self, filtered_df, project_folder, parent=None, config_values=None, selected_brush=None, selected_material=None, selected_wire_length=None):
+    def __init__(self, filtered_df, project_folder, parent=None, config_values=None, selected_brush=None, selected_material=None, selected_wire_length=None, selected_wire_count=None):
         """
         ES: Inicializa el worker.
         EN: Initialize the worker.
@@ -70,6 +70,10 @@ class ClassificationWorker(QThread):
             ES: Longitud de alambre seleccionada (30-75mm) para Prediction_input.xlsx
             EN: Selected wire length (30–75mm) for Prediction_input.xlsx
             JA: Prediction_input.xlsx 用に選択した線材長（30–75mm）
+        selected_wire_count : int, optional
+            ES: Número de hilos seleccionado (solo enteros) para Prediction_input.xlsx
+            EN: Selected wire count (integers only) for Prediction_input.xlsx
+            JA: Prediction_input.xlsx 用に選択した線材本数（整数のみ）
         """
         super().__init__(parent)
         self.filtered_df = filtered_df
@@ -78,6 +82,7 @@ class ClassificationWorker(QThread):
         self.selected_brush = selected_brush or "A13"  # Default: A13
         self.selected_material = selected_material or "Steel"  # Default: Steel
         self.selected_wire_length = selected_wire_length or 75  # Default: 75
+        self.selected_wire_count = int(selected_wire_count) if selected_wire_count is not None else 6  # Default: 6
         self.output_folder = None
         self._cancelled = False
         self._current_process = None
@@ -765,13 +770,14 @@ class ConfigCLS:
             # Agregar columnas 材料 y 線材長 con los valores seleccionados
             df_predict['材料'] = self.selected_material
             df_predict['線材長'] = self.selected_wire_length
+            df_predict['線材本数'] = self.selected_wire_count
             
             # Reordenar columnas para que A13 esté primero (columna A)
             # Obtener todas las columnas
             all_columns = list(df_predict.columns)
             # Remover A13, A11, A21, A32, 材料, 線材長 de la lista
             brush_columns = ['A13', 'A11', 'A21', 'A32']
-            param_columns = ['材料', '線材長']
+            param_columns = ['材料', '線材長', '線材本数']
             other_columns = [col for col in all_columns if col not in brush_columns + param_columns]
             # Crear nuevo orden: A13 primero, luego A11, A21, A32, luego 材料, 線材長, luego el resto
             new_column_order = brush_columns + param_columns + other_columns

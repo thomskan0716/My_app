@@ -1,0 +1,31 @@
+---
+
+```text
+---
+description: Enforce descriptive naming; prohibit vague names.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: Nombrado descriptivo
+
+### ✅ Qué hacer
+
+- Variables:
+  - ✅ totalPrice, retryCount, isConnected, targetPosition
+- Funciones:
+  - ✅ LoadConfig(), CalculateHomography(), TryConnect()
+- Clases:
+  - ✅ RobotController, CameraCalibrator, SettingsProvider
+- Colecciones en plural:
+  - ✅ devices, points, samples
+
+### ❌ Qué NO hacer
+
+- ❌ x, tmp, data, data1, foo, bar, handle(), flag1
+- ❌ nombres que no dicen intención:
+  - `process()` (¿qué procesa?)
+
+### Conflictos y prioridad
+- Si un framework obliga un nombre (override/interface), respétalo.
+- Si la brevedad choca con claridad, prioriza claridad.

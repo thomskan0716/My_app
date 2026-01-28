@@ -84,7 +84,7 @@ class LinearAnalysisConfig:
     # JA: DB列名→解析列名のマッピング
     FEATURE_COLUMNS = [
         '送り速度', 'UPカット', '切込量', 
-        '突出量', '載せ率', '回転速度', 'パス数'  # Fixed: DB uses '突出量'
+        '突出量', '載せ率', '回転速度', 'パス数', '線材本数'  # Fixed: DB uses '突出量'
     ]
     
     # ES: Mapeo de nombres de la BD a nombres del análisis
@@ -100,7 +100,8 @@ class LinearAnalysisConfig:
         '突出量': '突出量',  # Fixed: DB uses '突出量'
         '載せ率': '載せ率',
         '回転速度': '回転速度',
-        'パス数': 'パス数'
+        'パス数': 'パス数',
+        '線材本数': '線材本数',
     }
     
     # Mapeo inverso

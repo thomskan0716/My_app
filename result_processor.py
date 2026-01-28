@@ -18,6 +18,7 @@ class DBManager:
             self.conn = sqlite3.connect(db_path)
             self.db_path = db_path
         self.create_tables()
+        self._migrate_db_schema()
 
     @staticmethod
     def _infer_db_path_from_conn(conn) -> Optional[str]:
@@ -84,6 +85,7 @@ class DBManager:
             直径 REAL,
             材料 TEXT,
             線材長 INTEGER,
+            線材本数 INTEGER DEFAULT 6,
             回転速度 INTEGER,
             送り速度 INTEGER,
             UPカット INTEGER,
@@ -96,6 +98,30 @@ class DBManager:
         """
         self.conn.execute(query)
         self.conn.commit()
+
+    def _migrate_db_schema(self):
+        """ES: Añade columnas nuevas a tablas existentes sin romper BDs antiguas.
+        EN: Add new columns to existing tables without breaking old DBs.
+        JA: 既存テーブルに新列を追加（古いDBを壊さない）。"""
+        try:
+            table = "main_results"
+            desired_cols = {
+                "線材本数": "INTEGER DEFAULT 6",
+            }
+            cur = self.conn.cursor()
+            cur.execute(f"PRAGMA table_info({table});")
+            existing = {row[1] for row in cur.fetchall()}  # row[1] = name
+            for col, col_type in desired_cols.items():
+                if col not in existing:
+                    self.conn.execute(f"ALTER TABLE {table} ADD COLUMN {col} {col_type}")
+            try:
+                self.conn.execute("UPDATE main_results SET 線材本数 = 6 WHERE 線材本数 IS NULL")
+                self.conn.commit()
+            except Exception:
+                pass
+        except Exception:
+            # Migración best-effort
+            pass
 
     @staticmethod
     def normalize_for_hash(df, key_cols):
@@ -120,6 +146,7 @@ class DBManager:
             "A13", "A11", "A21", "A32",
             "直径", "材料",
             "線材長",
+            "線材本数",
             "回転速度", "送り速度", "UPカット", "切込量", "突出量", "載せ率", "パス数",
             "バリ除去",
             "上面ダレ量", "側面ダレ量", "摩耗量",
@@ -196,6 +223,7 @@ class DBManager:
             "A13", "A11", "A21", "A32",
             "直径", "材料",
             "線材長",
+            "線材本数",
             "回転速度", "送り速度", "UPカット", "切込量", "突出量", "載せ率", "パス数",
         ]
 
@@ -566,7 +594,7 @@ class ResultProcessor:
         print("✅ 処理と挿入が完了しました。")
         self.db.print_all_results()
 
-    def process_results_file_with_ui_values(self, file_path, selected_brush, diameter, material, custom_conn=None):
+    def process_results_file_with_ui_values(self, file_path, selected_brush, diameter, material, wire_count, custom_conn=None):
         """ES: Procesar archivo de resultados importando columnas específicas y usando valores de UI
         EN: Process a results file importing specific columns and using UI values
         JA: 結果ファイルを処理（特定列を取り込み、UI値を使用）
@@ -648,6 +676,11 @@ class ResultProcessor:
         # JA: 直径/材料：ファイルにあれば使用、なければUI
         df_filtered['直径'] = df['直径'] if '直径' in df.columns else diameter
         df_filtered['材料'] = df['材料'] if '材料' in df.columns else material
+
+        # ES: 線材本数: SIEMPRE desde UI (ignorar archivo si existe)
+        # EN: 線材本数: ALWAYS from UI (ignore file even if present)
+        # JA: 線材本数：常にUI値（ファイルにあっても無視）
+        df_filtered['線材本数'] = int(wire_count)
 
         # ES: Cutting forces opcionales:
         # EN: Optional cutting forces:

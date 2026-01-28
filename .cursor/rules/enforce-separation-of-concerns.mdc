@@ -1,0 +1,22 @@
+---
+description: Enforce separation of concerns (UI/Core/IO) and layering boundaries.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: Separación UI/Core/IO
+
+### ✅ Qué hacer
+- UI llama a servicios (interfaces).
+- Core no conoce UI (no MessageBox/Dialogs desde core).
+- IO/Infra encapsula archivos, red, DB, robot, cámara.
+
+### ❌ Qué NO hacer
+- ❌ UI haciendo calibraciones o lógica crítica directamente.
+- ❌ Core mostrando diálogos.
+- ❌ Mezclar scripts de prueba dentro de producción.
+
+### Conflictos y prioridad
+- Si hay prisa, se permite temporal SOLO si:
+  - se marca TODO en ES/EN/JP
+  - se crea tarea/issue para limpiar.
