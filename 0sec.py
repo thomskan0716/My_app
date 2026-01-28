@@ -10687,21 +10687,6 @@ class MainWindow(QMainWindow):
                 os.makedirs(subfolder_path, exist_ok=True)
                 print(f"📁 フォルダを作成しました: {subfolder_path}")
             
-            # ES: Crear subcarpetas específicas dentro de 03_線形回帰 | EN: Create specific subfolders inside 03_線形回帰 | JA: 03_線形回帰内に特定サブフォルダを作成
-            linear_subfolders = [
-                "01_データ分割",
-                "02_特徴選択", 
-                "03_モデル学習",
-                "04_予測計算",
-                "05_結果評価"
-            ]
-            
-            linear_path = os.path.join(project_path, "03_線形回帰")
-            for subfolder in linear_subfolders:
-                subfolder_path = os.path.join(linear_path, subfolder)
-                os.makedirs(subfolder_path, exist_ok=True)
-                print(f"📁 サブフォルダを作成しました: {subfolder_path}")
-            
             print(f"✅ プロジェクト構造を作成しました: {project_path}")
             return project_path
             
