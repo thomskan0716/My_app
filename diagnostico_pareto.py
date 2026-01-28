@@ -1,79 +1,84 @@
 """
-Script de diagnóstico para el error de Pareto Analysis
-Ejecuta este script para identificar la causa del problema
+ES: Script de diagnóstico para el error de Pareto Analysis.
+EN: Diagnostic script for the Pareto Analysis error.
+JA: Pareto Analysis エラーの診断スクリプト。
+
+ES: Ejecuta este script para identificar la causa del problema.
+EN: Run this script to identify the root cause.
+JA: 原因特定のために実行。
 """
 import sys
 import os
 from pathlib import Path
 
 print("=" * 80)
-print("DIAGNÓSTICO DE ERROR DE PARETO ANALYSIS")
+print("Pareto解析エラーの診断")
 print("=" * 80)
 
-# 1. Verificar xlsxwriter
-print("\n[1] Verificando xlsxwriter...")
+# ES: 1. Verificar xlsxwriter | EN: 1) Check xlsxwriter | JA: 1) xlsxwriter を確認
+print("\n[1] xlsxwriter を確認中...")
 try:
     import xlsxwriter
-    print(f"  ✅ xlsxwriter instalado: versión {xlsxwriter.__version__}")
-    print(f"  📍 Ubicación: {xlsxwriter.__file__}")
+    print(f"  ✅ xlsxwriter インストール済み: バージョン {xlsxwriter.__version__}")
+    print(f"  📍 場所: {xlsxwriter.__file__}")
 except ImportError as e:
-    print(f"  ❌ xlsxwriter NO está instalado: {e}")
+    print(f"  ❌ xlsxwriter がインストールされていません: {e}")
     sys.exit(1)
 except Exception as e:
-    print(f"  ❌ Error al importar xlsxwriter: {e}")
+    print(f"  ❌ xlsxwriter のインポート中にエラー: {e}")
     sys.exit(1)
 
-# 2. Verificar pandas
-print("\n[2] Verificando pandas...")
+# ES: 2. Verificar pandas | EN: 2) Check pandas | JA: 2) pandas を確認
+print("\n[2] pandas を確認中...")
 try:
     import pandas as pd
-    print(f"  ✅ pandas instalado: versión {pd.__version__}")
-    print(f"  📍 Ubicación: {pd.__file__}")
+    print(f"  ✅ pandas インストール済み: バージョン {pd.__version__}")
+    print(f"  📍 場所: {pd.__file__}")
 except ImportError as e:
-    print(f"  ❌ pandas NO está instalado: {e}")
+    print(f"  ❌ pandas がインストールされていません: {e}")
     sys.exit(1)
 
-# 3. Probar ExcelWriter
-print("\n[3] Probando ExcelWriter con engine='xlsxwriter'...")
+# ES: 3. Probar ExcelWriter | EN: 3) Test ExcelWriter | JA: 3) ExcelWriter をテスト
+print("\n[3] ExcelWriter をテスト中（engine='xlsxwriter'）...")
 try:
     test_file = "test_pareto_diagnostico.xlsx"
     writer = pd.ExcelWriter(test_file, engine='xlsxwriter')
-    print("  ✅ ExcelWriter creado exitosamente")
+    print("  ✅ ExcelWriter を作成しました")
     
-    # Crear un DataFrame de prueba
+    # ES: Crear un DataFrame de prueba | EN: Create a test DataFrame | JA: テスト用DataFrameを作成
     test_df = pd.DataFrame({'test': [1, 2, 3]})
     test_df.to_excel(writer, sheet_name='test', index=False)
     writer.close()
-    print("  ✅ Archivo Excel creado exitosamente")
+    print("  ✅ Excelファイルを作成しました")
     
-    # Limpiar
+    # ES: Limpiar | EN: Cleanup | JA: 後片付け
     if os.path.exists(test_file):
         os.remove(test_file)
-        print("  ✅ Archivo de prueba eliminado")
+        print("  ✅ テストファイルを削除しました")
 except Exception as e:
-    print(f"  ❌ Error al crear ExcelWriter: {e}")
+    print(f"  ❌ ExcelWriter 作成中にエラー: {e}")
     import traceback
     traceback.print_exc()
     sys.exit(1)
 
-# 4. Verificar entorno
-print("\n[4] Verificando entorno...")
-print(f"  Python ejecutable: {sys.executable}")
-print(f"  Python versión: {sys.version}")
-print(f"  Directorio actual: {os.getcwd()}")
+# ES: 4. Verificar entorno | EN: 4) Check environment | JA: 4) 環境を確認
+print("\n[4] 環境を確認中...")
+print(f"  Python 実行ファイル: {sys.executable}")
+print(f"  Python バージョン: {sys.version}")
+print(f"  現在のディレクトリ: {os.getcwd()}")
 
-# 5. Verificar sys.path
-print("\n[5] Verificando sys.path...")
+# ES: 5. Verificar sys.path | EN: 5) Check sys.path | JA: 5) sys.path を確認
+print("\n[5] sys.path を確認中...")
 venv_paths = [p for p in sys.path if '.venv' in p or 'venv' in p or 'site-packages' in p]
 if venv_paths:
-    print(f"  ✅ Encontrados {len(venv_paths)} paths del venv:")
+    print(f"  ✅ venv のパスを {len(venv_paths)} 件検出:")
     for p in venv_paths[:5]:  # Mostrar primeros 5
         print(f"    - {p}")
 else:
-    print("  ⚠️ No se encontraron paths del venv en sys.path")
+    print("  ⚠️ sys.path に venv のパスが見つかりません")
 
-# 6. Verificar variables de entorno relevantes
-print("\n[6] Verificando variables de entorno...")
+# ES: 6. Verificar variables de entorno relevantes | EN: 6) Check relevant env vars | JA: 6) 関連する環境変数を確認
+print("\n[6] 環境変数を確認中...")
 env_vars = [
     'PYTHONPATH',
     'OMP_NUM_THREADS',
@@ -84,30 +89,30 @@ env_vars = [
     'QT_QPA_PLATFORM'
 ]
 for var in env_vars:
-    value = os.environ.get(var, 'No definida')
+    value = os.environ.get(var, '未設定')
     print(f"  {var}: {value}")
 
-# 7. Verificar permisos de escritura
-print("\n[7] Verificando permisos de escritura...")
+# ES: 7. Verificar permisos de escritura | EN: 7) Check write permissions | JA: 7) 書込み権限を確認
+print("\n[7] 書き込み権限を確認中...")
 try:
     test_write = "test_write_permissions.txt"
     with open(test_write, 'w') as f:
         f.write("test")
     os.remove(test_write)
-    print("  ✅ Permisos de escritura OK en el directorio actual")
+    print("  ✅ 現在のディレクトリで書き込み権限OK")
 except Exception as e:
-    print(f"  ❌ Error de permisos de escritura: {e}")
+    print(f"  ❌ 書き込み権限エラー: {e}")
 
-# 8. Verificar DLLs (solo Windows)
+# ES: 8. Verificar DLLs (solo Windows) | EN: 8) Check DLLs (Windows only) | JA: 8) DLL確認（Windowsのみ）
 if sys.platform == 'win32':
-    print("\n[8] Verificando DLLs (Windows)...")
+    print("\n[8] DLL を確認中（Windows）...")
     try:
         from dll_debug import detect_openmp_runtimes, get_loaded_dlls
         dll_list = get_loaded_dlls()
         omp_info = detect_openmp_runtimes(dll_list)
         
         if omp_info['all_omp_dlls']:
-            print(f"  ⚠️ Se detectaron {len(omp_info['all_omp_dlls'])} DLLs OpenMP:")
+            print(f"  ⚠️ OpenMP DLL を {len(omp_info['all_omp_dlls'])} 件検出:")
             for category, dlls in omp_info.items():
                 if category != 'all_omp_dlls' and dlls:
                     print(f"    {category}: {len(dlls)} DLLs")
@@ -119,55 +124,55 @@ if sys.platform == 'win32':
                 len(omp_info['other']) > 0
             ])
             if total_runtimes > 1:
-                print("  ❌ CONFLICTO: Múltiples runtimes OpenMP detectados")
+                print("  ❌ 競合: 複数のOpenMPランタイムを検出")
             else:
-                print("  ✅ Solo un runtime OpenMP (sin conflicto)")
+                print("  ✅ OpenMP ランタイムは1つのみ（競合なし）")
         else:
-            print("  ✅ No se detectaron DLLs OpenMP")
+            print("  ✅ OpenMP DLL は検出されませんでした")
     except ImportError:
-        print("  ⚠️ No se pudo importar dll_debug (no crítico)")
+        print("  ⚠️ dll_debug をインポートできません（致命的ではありません）")
     except Exception as e:
-        print(f"  ⚠️ Error verificando DLLs: {e}")
+        print(f"  ⚠️ DLL確認中にエラー: {e}")
 
-# 9. Verificar estructura de carpetas esperada
-print("\n[9] Verificando estructura de carpetas...")
+# ES: 9. Verificar estructura de carpetas esperada | EN: 9) Check expected folder structure | JA: 9) 想定フォルダ構造を確認
+print("\n[9] フォルダー構造を確認中...")
 expected_folders = [
     "03_予測",
     "04_パレート解"
 ]
 for folder in expected_folders:
     if os.path.exists(folder):
-        print(f"  ✅ Carpeta existe: {folder}")
-        # Verificar permisos de escritura
+        print(f"  ✅ フォルダーあり: {folder}")
+        # ES: Verificar permisos de escritura | EN: Check write permissions | JA: 書込み権限を確認
         try:
             test_file = os.path.join(folder, "test_write.txt")
             with open(test_file, 'w') as f:
                 f.write("test")
             os.remove(test_file)
-            print(f"    ✅ Permisos de escritura OK")
+            print(f"    ✅ 書き込み権限OK")
         except Exception as e:
-            print(f"    ❌ Sin permisos de escritura: {e}")
+            print(f"    ❌ 書き込み権限なし: {e}")
     else:
-        print(f"  ⚠️ Carpeta no existe: {folder} (se creará automáticamente)")
+        print(f"  ⚠️ フォルダーなし: {folder}（自動作成します）")
 
-# 10. Simular el entorno del subproceso
-print("\n[10] Simulando entorno del subproceso...")
-print("  Este es el entorno actual. Cuando se ejecuta desde subprocess:")
-print("  - El directorio de trabajo puede ser diferente")
-print("  - Las variables de entorno pueden ser diferentes")
-print("  - sys.path puede no incluir todas las rutas necesarias")
+# ES: 10. Simular el entorno del subproceso | EN: 10) Simulate subprocess environment | JA: 10) サブプロセス環境を想定
+print("\n[10] サブプロセス環境を想定中...")
+print("  これは現在の環境です。subprocess から実行すると:")
+print("  - 作業ディレクトリが異なる可能性があります")
+print("  - 環境変数が異なる可能性があります")
+print("  - sys.path に必要なパスが含まれない可能性があります")
 
 print("\n" + "=" * 80)
-print("DIAGNÓSTICO COMPLETADO")
+print("診断完了")
 print("=" * 80)
-print("\nSi todos los checks pasaron (✅), el problema probablemente está en:")
-print("  1. El entorno del subproceso (variables de entorno diferentes)")
-print("  2. El directorio de trabajo cuando se ejecuta desde nonlinear_worker")
-print("  3. Conflictos de DLLs que solo aparecen en subprocesos")
-print("\nRecomendación: Revisa nonlinear_worker.py para asegurar que:")
-print("  - sys.executable apunta al Python del venv")
-print("  - PYTHONPATH incluye site-packages del venv")
-print("  - Las variables de entorno no interfieren con xlsxwriter")
+print("\nすべてのチェックが通った(✅)場合、問題は次の可能性が高いです:")
+print("  1. サブプロセス環境（環境変数が異なる）")
+print("  2. nonlinear_worker から実行したときの作業ディレクトリ")
+print("  3. サブプロセスでのみ発生する DLL 競合")
+print("\n推奨: nonlinear_worker.py を確認して次を保証してください:")
+print("  - sys.executable が venv の Python を指している")
+print("  - PYTHONPATH に venv の site-packages が含まれている")
+print("  - 環境変数が xlsxwriter に影響しない")
 
 
 

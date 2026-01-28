@@ -108,7 +108,10 @@ class LightGBMModel(BaseModel):
             metric="mae",
             boosting_type="gbdt",
             verbosity=-1,
-            n_jobs=1,  # ★ CRÍTICO: Forzar a 1 para evitar conflictos de threading con OpenMP/MKL
+            # ES: ★ CRÍTICO: Forzar a 1 para evitar conflictos de threading con OpenMP/MKL
+            # EN: ★ CRITICAL: Force to 1 to avoid threading conflicts with OpenMP/MKL
+            # JP: ★ 重要: OpenMP/MKLとのスレッド競合を避けるため1に固定する
+            n_jobs=1,
             num_threads=1,  # ★ LightGBM también usa num_threads
             random_state=clean_params.get("random_state", 42),
             importance_type="gain",

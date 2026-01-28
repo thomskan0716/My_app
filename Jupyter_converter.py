@@ -66,12 +66,12 @@ class App(tk.Tk):
         frm = ttk.Frame(self)
         frm.pack(fill="x", **pad)
 
-        # Selección de archivo
+        # ES: Selección de archivo | EN: File selection | JA: ファイル選択
         ttk.Label(frm, text="Archivo .ipynb:").grid(row=0, column=0, sticky="w")
         ttk.Entry(frm, textvariable=self.file_var, width=70).grid(row=0, column=1, sticky="we", padx=6)
         ttk.Button(frm, text="Elegir archivo…", command=self.browse_file).grid(row=0, column=2)
 
-        # Selección de carpeta
+        # ES: Selección de carpeta | EN: Folder selection | JA: フォルダ選択
         ttk.Label(frm, text="Carpeta notebooks:").grid(row=1, column=0, sticky="w")
         ttk.Entry(frm, textvariable=self.dir_var, width=70).grid(row=1, column=1, sticky="we", padx=6)
         ttk.Button(frm, text="Elegir carpeta…", command=self.browse_folder).grid(row=1, column=2)
@@ -83,7 +83,7 @@ class App(tk.Tk):
         ttk.Checkbutton(opt, text="Solo código (sin Markdown)", variable=self.code_only_var).pack(side="left", padx=12)
         ttk.Checkbutton(opt, text="Sobrescribir si existe", variable=self.overwrite_var).pack(side="left", padx=12)
 
-        # Botón convertir
+        # ES: Botón convertir | EN: Convert button | JA: 変換ボタン
         actions = ttk.Frame(self)
         actions.pack(fill="x", **pad)
         ttk.Button(actions, text="Convertir", command=self.run_convert).pack(side="left")
@@ -146,9 +146,12 @@ class App(tk.Tk):
                 logger=self.log
             )
             if res is None:
-                # Heurística para contar skips/errores por el log:
-                # (no perfecto, pero informativo)
-                # Aquí no diferenciamos bien sin estados; está bien mantener simple.
+                # ES: Heurística para contar skips/errores por el log (no perfecto, pero informativo)
+                # EN: Heuristic to count skips/errors from the log (not perfect, but informative)
+                # JA: ログからSKIP/ERRORを数える簡易ヒューリスティック（完全ではないが目安になる）
+                # ES: Aquí no diferenciamos bien sin estados; está bien mantener simple.
+                # EN: Without explicit states we can't distinguish perfectly; keeping it simple is fine.
+                # JA: 状態が無いので厳密には分けられないため、シンプルに保つ。
                 pass
             else:
                 ok += 1

@@ -705,7 +705,9 @@ class IntegratedMLPipeline:
         self.dirs['models_classification'] = self.dirs['models'] / 'classification'
         self.dirs['evaluation_graphs'] = self.dirs['results'] / '01_チャート'  # evaluation_graphs -> 01_チャート
 
-        # Solo crear las carpetas que se van a exportar (no crear raw_data ni preprocessed)
+        # ES: Solo crear las carpetas que se van a exportar (no crear raw_data ni preprocessed)
+        # EN: Only create folders that will be exported (do not create raw_data or preprocessed)
+        # JP: エクスポート対象のフォルダのみ作成（raw_data / preprocessed は作成しない）
         folders_to_create = ['models', 'parameters', 'results', 'predictions', 'models_regression', 'models_classification', 'evaluation_graphs']
         for folder_name in folders_to_create:
             self.dirs[folder_name].mkdir(parents=True, exist_ok=True)
@@ -1514,18 +1516,18 @@ class IntegratedMLPipeline:
     def create_excel_prediction_calculator_with_inverse(self, parent_widget=None):
         """逆変換対応Excel予測計算機作成"""
         if not OPENPYXL_AVAILABLE:
-            print("⚠️ openpyxl no disponible, no se puede crear la calculadora Excel")
+            print("⚠️ openpyxl が利用できないため、Excel計算機を作成できません")
             return None
 
         try:
-            print(f"🔧 Creando Excel calculator...")
-            print(f"🔧 Modelos disponibles: {len(self.models) if hasattr(self, 'models') else 'No disponible'}")
-            print(f"🔧 Transformación disponible: {len(self.transformation_info) if hasattr(self, 'transformation_info') else 'No disponible'}")
+            print(f"🔧 Excel計算機を作成中...")
+            print(f"🔧 利用可能なモデル数: {len(self.models) if hasattr(self, 'models') else '利用不可'}")
+            print(f"🔧 変換情報: {len(self.transformation_info) if hasattr(self, 'transformation_info') else '利用不可'}")
             
             prediction_info = self.load_models_for_excel_prediction()
 
             if not prediction_info:
-                print("⚠️ No hay modelos compatibles para Excel")
+                print("⚠️ Excel に対応するモデルがありません")
                 return None
 
             wb = Workbook()
@@ -1545,11 +1547,11 @@ class IntegratedMLPipeline:
             excel_file_path = self.dirs['predictions'] / 'XEBEC_予測計算機_逆変換対応.xlsx'
             wb.save(excel_file_path)
 
-            print(f"✅ Excel creado exitosamente: {excel_file_path}")
+            print(f"✅ Excel を作成しました: {excel_file_path}")
             return excel_file_path
             
         except Exception as e:
-            print(f"❌ Error creating Excel calculator: {e}")
+            print(f"❌ Excel計算機作成中にエラー: {e}")
             import traceback
             traceback.print_exc()
             return None
@@ -2056,44 +2058,52 @@ if __name__ == "__main__":
 
 
 # ======================================
-# FUNCIONES DE CONEXIÓN CON LA APLICACIÓN
+# ES: FUNCIONES DE CONEXIÓN CON LA APLICACIÓN
+# EN: APPLICATION INTEGRATION FUNCTIONS
+# JA: アプリ連携用関数
 # ======================================
 
 
 
 def run_advanced_linear_analysis_from_db(db_manager, filters, output_folder):
     """
-    Ejecuta el análisis lineal avanzado usando datos filtrados de la base de datos
+    ES: Ejecuta el análisis lineal avanzado usando datos filtrados de la base de datos.
+    EN: Run the advanced linear analysis using filtered data from the database.
+    JA: DBでフィルタしたデータを用いて高度な線形解析を実行。
     
     Args:
-        db_manager: Instancia del gestor de base de datos
-        filters: Diccionario con los filtros aplicados
-        output_folder: Carpeta donde guardar los resultados
+        db_manager: ES: Instancia del gestor de base de datos | EN: DB manager instance | JA: DBマネージャ
+        filters: ES: Diccionario con los filtros aplicados | EN: Dict of applied filters | JA: 適用フィルタ辞書
+        output_folder: ES: Carpeta donde guardar los resultados | EN: Output folder | JA: 出力フォルダ
     
     Returns:
-        dict: Resultados del análisis
+        dict: ES: Resultados del análisis | EN: Analysis results | JA: 解析結果
     """
     try:
-        print("🔧 Iniciando análisis lineal desde base de datos...")
-        print(f"🔧 Filtros aplicados: {filters}")
-        print(f"🔧 Carpeta de salida: {output_folder}")
+        print("🔧 DBから線形解析を開始...")
+        print(f"🔧 適用フィルタ: {filters}")
+        print(f"🔧 出力フォルダー: {output_folder}")
         
-        # Obtener datos filtrados de la base de datos
-        print("📊 Obteniendo datos filtrados de la base de datos...")
+        # ES: Obtener datos filtrados de la base de datos | EN: Fetch filtered data from DB | JA: DBからフィルタ済みデータを取得
+        print("📊 DBからフィルタ済みデータを取得中...")
         
-        # Construir consulta SQL con filtros
+        # ES: Construir consulta SQL con filtros | EN: Build SQL query with filters | JA: フィルタ付きSQLを構築
         query = "SELECT * FROM main_results WHERE 1=1"
         params = []
         
-        # Aplicar filtros de cepillo (A13, A11, A21, A32 son columnas directas en la tabla)
+        # ES: Aplicar filtros de cepillo (A13/A11/A21/A32 son columnas directas en la tabla)
+        # EN: Apply brush filters (A13/A11/A21/A32 are direct columns)
+        # JA: ブラシフィルタを適用（A13/A11/A21/A32 は直接列）
         brush_selections = []
         if 'すべて' in filters and filters['すべて']:
-            # Si "すべて" está seleccionado, filtrar por cualquier cepillo que tenga valor 1
+            # ES: Si "すべて" está seleccionado, filtrar por cualquier cepillo que tenga valor 1
+            # EN: If "すべて" is selected, match any brush with value 1
+            # JA: 「すべて」選択時は、いずれかのブラシ列が1の行を対象
             brush_condition = " OR ".join([f"{brush} = 1" for brush in ['A13', 'A11', 'A21', 'A32']])
             query += f" AND ({brush_condition})"
-            print("🔧 Filtro 'すべて' seleccionado - aplicando filtro para cualquier cepillo con valor 1")
+            print("🔧 'すべて' が選択されました - いずれかのブラシ列が 1 の行を対象にします")
         else:
-            # Filtrar por cepillos específicos seleccionados
+            # ES: Filtrar por cepillos específicos seleccionados | EN: Filter by selected specific brushes | JA: 選択されたブラシのみでフィルタ
             for brush_type in ['A13', 'A11', 'A21', 'A32']:
                 if brush_type in filters and filters[brush_type]:
                     brush_selections.append(brush_type)
@@ -2101,17 +2111,19 @@ def run_advanced_linear_analysis_from_db(db_manager, filters, output_folder):
             if brush_selections:
                 brush_condition = " OR ".join([f"{brush} = 1" for brush in brush_selections])
                 query += f" AND ({brush_condition})"
-                print(f"🔧 Filtros de cepillo específicos aplicados: {brush_selections}")
+                print(f"🔧 ブラシの個別フィルタを適用: {brush_selections}")
             else:
-                print("🔧 No se aplicaron filtros de cepillo específicos")
+                print("🔧 ブラシの個別フィルタは適用されませんでした")
         
-        # Aplicar filtros de rango
+        # ES: Aplicar filtros de rango | EN: Apply range filters | JA: 範囲フィルタを適用
         range_filters_applied = []
         for field_name, filter_value in filters.items():
             if field_name in ['すべて', 'A13', 'A11', 'A21', 'A32']:
                 continue
                 
-            # Verificar si es un filtro de rango (tupla) o valor único
+            # ES: Verificar si es un filtro de rango (tupla) o valor único
+            # EN: Check whether it's a range filter (tuple) or a single value
+            # JA: 範囲（タプル）か単一値かを判定
             if isinstance(filter_value, tuple) and len(filter_value) == 2:
                 desde, hasta = filter_value
                 if desde is not None and hasta is not None:
@@ -2123,7 +2135,7 @@ def run_advanced_linear_analysis_from_db(db_manager, filters, output_folder):
                         params.extend([desde_str, hasta_str])
                         range_filters_applied.append(f"{field_name}: {desde_str} - {hasta_str}")
                     else:
-                        # Filtro numérico - convertir a números
+                        # ES: Filtro numérico - convertir a números | EN: Numeric filter - coerce to numbers | JA: 数値フィルタ：数値に変換
                         try:
                             desde_num = float(desde) if isinstance(desde, str) else desde
                             hasta_num = float(hasta) if isinstance(hasta, str) else hasta
@@ -2131,77 +2143,87 @@ def run_advanced_linear_analysis_from_db(db_manager, filters, output_folder):
                             params.extend([desde_num, hasta_num])
                             range_filters_applied.append(f"{field_name}: {desde_num} - {hasta_num}")
                         except (ValueError, TypeError) as e:
-                            print(f"⚠️ Error convirtiendo valores de filtro para {field_name}: {e}")
+                            print(f"⚠️ フィルタ値の変換中にエラー: {field_name}: {e}")
                             continue
             elif isinstance(filter_value, (str, int, float)) and filter_value:
-                # Filtro de valor único - convertir a número si es posible
+                # ES: Filtro de valor único - convertir a número si es posible
+                # EN: Single-value filter - convert to number if possible
+                # JA: 単一値フィルタ：可能なら数値へ変換
                 try:
                     if field_name in ['線材長', '回転速度', '送り速度', 'UPカット', '突出量', 'パス数', 'バリ除去']:
-                        # Columnas enteras
+                        # ES: Columnas enteras | EN: Integer columns | JA: 整数列
                         value_num = int(filter_value) if isinstance(filter_value, str) else filter_value
                     else:
-                        # Columnas decimales
+                        # ES: Columnas decimales | EN: Decimal/float columns | JA: 小数（浮動小数）列
                         value_num = float(filter_value) if isinstance(filter_value, str) else filter_value
                     
                     query += f" AND {field_name} = ?"
                     params.append(value_num)
                     range_filters_applied.append(f"{field_name}: {value_num}")
                 except (ValueError, TypeError) as e:
-                    print(f"⚠️ Error convirtiendo valor de filtro para {field_name}: {e}")
+                    print(f"⚠️ フィルタ値の変換中にエラー: {field_name}: {e}")
                     continue
         
         if range_filters_applied:
-            print(f"🔧 Filtros de rango aplicados: {range_filters_applied}")
+            print(f"🔧 範囲フィルタを適用: {range_filters_applied}")
         else:
-            print("🔧 No se aplicaron filtros de rango")
+            print("🔧 範囲フィルタは適用されませんでした")
         
-        print(f"🔧 Query SQL: {query}")
-        print(f"🔧 Parámetros: {params}")
+        print(f"🔧 SQLクエリ: {query}")
+        print(f"🔧 パラメータ: {params}")
         
-        # Ejecutar consulta usando el método correcto del DBManager
+        # ES: Ejecutar consulta usando el método correcto del DBManager
+        # EN: Execute query using the appropriate DBManager method
+        # JA: DBManagerの適切なメソッドでクエリを実行
         try:
-            # Verificar qué tablas existen
+            # ES: Verificar qué tablas existen | EN: List existing tables | JA: テーブル一覧を確認
             cursor = db_manager.conn.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
             available_tables = [row[0] for row in cursor.fetchall()]
-            print(f"🔧 Tablas disponibles: {available_tables}")
+            print(f"🔧 利用可能なテーブル: {available_tables}")
             
-            # Verificar qué tabla tiene datos
+            # ES: Verificar qué tabla tiene datos | EN: Find which table has data | JA: データがあるテーブルを確認
             target_table = None
             for table_name in available_tables:
                 cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
                 count = cursor.fetchone()[0]
-                print(f"📊 Tabla {table_name}: {count} registros")
+                print(f"📊 テーブル {table_name}: {count} 件")
                 if count > 0:
                     target_table = table_name
                     break
             
             if not target_table:
-                print("❌ No se encontraron datos en ninguna tabla")
-                return {'success': False, 'error': 'No se encontraron datos en la base de datos. Por favor, asegúrese de que haya datos disponibles.'}
+                print("❌ どのテーブルにもデータが見つかりませんでした")
+                return {'success': False, 'error': 'データベースにデータがありません。データが存在することを確認してください。'}
             
-            # Usar el método fetch_filtered para aplicar filtros
+            # ES: Usar el método fetch_filtered para aplicar filtros
+            # EN: Use fetch_filtered to apply filters
+            # JA: フィルタ適用に fetch_filtered を使用
             if hasattr(db_manager, 'fetch_filtered'):
                 filtered_data = db_manager.fetch_filtered(target_table, query.replace("Results", target_table), params)
             else:
-                # Fallback: obtener todos los datos si no hay método de filtrado
+                # ES: Fallback: obtener todos los datos si no hay método de filtrado
+                # EN: Fallback: fetch all data if no filtering method exists
+                # JA: フォールバック：フィルタメソッドが無ければ全件取得
                 filtered_data = db_manager.fetch_all(target_table)
             
             
             
-            print(f"✅ Datos obtenidos: {len(filtered_data)} registros")
+            print(f"✅ 取得データ: {len(filtered_data)} 件")
             
         except Exception as e:
-            print(f"❌ Error obteniendo datos: {e}")
-            return {'success': False, 'error': f'Error obteniendo datos: {str(e)}'}
+            print(f"❌ データ取得中にエラー: {e}")
+            return {'success': False, 'error': f'データ取得中にエラー: {str(e)}'}
         
         if not filtered_data:
-            return {'success': False, 'error': 'No se encontraron datos con los filtros aplicados'}
+            return {'success': False, 'error': '適用したフィルタでデータが見つかりませんでした'}
         
         # Convertir a DataFrame
         import pandas as pd
         
-        # Crear DataFrame con nombres de columnas correctos
+        # ES: Crear DataFrame con nombres de columnas correctos
+        # EN: Create DataFrame with correct column names
+        # JA: 正しい列名でDataFrameを作成
         if filtered_data and len(filtered_data) > 0:
             # Nombres de columnas basados en la estructura real de main_results
             column_names = [
@@ -2212,36 +2234,40 @@ def run_advanced_linear_analysis_from_db(db_manager, filters, output_folder):
             ]
             
             df = pd.DataFrame(filtered_data, columns=column_names)
-            print(f"✅ DataFrame creado con {len(df)} registros y {len(df.columns)} columnas")
+            print(f"✅ DataFrame を作成しました（{len(df)} 件, {len(df.columns)} 列）")
             
 
         else:
             df = pd.DataFrame()
         
-        # Obtener nombres de columnas
+        # ES: Obtener nombres de columnas | EN: Get column names | JA: 列名を取得
         if len(df) > 0:
             column_names = list(df.columns)
-            print(f"📊 Columnas disponibles: {column_names}")
+            print(f"📊 利用可能な列: {column_names}")
         else:
-            return {'success': False, 'error': 'DataFrame vacío después de aplicar filtros'}
+            return {'success': False, 'error': 'フィルタ適用後に DataFrame が空です'}
         
-        # Crear estructura de carpetas si no existe
+        # ES: Crear estructura de carpetas si no existe | EN: Create folder structure if missing | JA: フォルダ構造が無ければ作成
         os.makedirs(output_folder, exist_ok=True)
         models_folder = os.path.join(output_folder, "01_学習モデル")
         os.makedirs(models_folder, exist_ok=True)
         
-        # DEBUG: Verificar datos justo antes de generar el archivo filtered_data.xlsx
+        # ES: DEBUG: Verificar datos justo antes de generar el archivo filtered_data.xlsx
+        # EN: DEBUG: Check data right before generating filtered_data.xlsx
+        # JP: DEBUG: filtered_data.xlsx生成直前にデータを確認する
 
         
-        # Guardar datos filtrados
+        # ES: Guardar datos filtrados | EN: Save filtered data | JA: フィルタ済みデータを保存
         filtered_data_path = os.path.join(models_folder, "filtered_data.xlsx")
         df.to_excel(filtered_data_path, index=False)
-        print(f"✅ Datos filtrados guardados en: {filtered_data_path}")
+        print(f"✅ フィルタ済みデータを保存しました: {filtered_data_path}")
         
-        # Configurar y ejecutar el pipeline de análisis lineal
-        print("🔧 Configurando pipeline de análisis lineal...")
+        # ES: Configurar y ejecutar el pipeline de análisis lineal
+        # EN: Configure and run the linear analysis pipeline
+        # JA: 線形解析パイプラインを設定して実行
+        print("🔧 線形解析パイプラインを設定中...")
         
-        # Crear configuración personalizada
+        # ES: Crear configuración personalizada | EN: Create custom configuration | JA: カスタム設定を作成
         config = PipelineConfig()
         config.TRANSFORMATION['enable'] = True
         config.TRANSFORMATION['mode'] = 'advanced'
@@ -2250,14 +2276,18 @@ def run_advanced_linear_analysis_from_db(db_manager, filters, output_folder):
         config.PREPROCESSING['noise_augmentation_ratio'] = 0.3
         config.TRANSFORMATION['improvement_threshold'] = 0.005
         
-        # Crear pipeline con la carpeta de salida personalizada
+        # ES: Crear pipeline con la carpeta de salida personalizada
+        # EN: Create pipeline using the custom output folder
+        # JA: 出力フォルダを指定してパイプラインを作成
         pipeline = IntegratedMLPipeline(base_dir=output_folder, config=config)
         
-        # DEBUG: Verificar datos justo antes de empezar el análisis lineal
+        # ES: DEBUG: Verificar datos justo antes de empezar el análisis lineal
+        # EN: DEBUG: Check data right before starting the linear analysis
+        # JP: DEBUG: 線形解析開始直前にデータを確認する
 
         
-        # Ejecutar análisis completo
-        print("🚀 Ejecutando análisis lineal completo...")
+        # ES: Ejecutar análisis completo | EN: Run full analysis | JA: 解析を実行
+        print("🚀 線形解析を実行中...")
         results = pipeline.run_full_pipeline(
             file_path=filtered_data_path,
             index_col='Index'
@@ -2265,7 +2295,9 @@ def run_advanced_linear_analysis_from_db(db_manager, filters, output_folder):
         
         
         
-        # Preparar resultados para la aplicación
+        # ES: Preparar resultados para la aplicación
+        # EN: Prepare results for the application
+        # JA: アプリ用に結果を整形
         analysis_results = {
             'success': True,
             'data_count': len(df),
@@ -2280,7 +2312,7 @@ def run_advanced_linear_analysis_from_db(db_manager, filters, output_folder):
             'models': results.get('models', {})
         }
         
-        # Crear resumen de resultados
+        # ES: Crear resumen de resultados | EN: Build results summary | JA: 結果サマリを作成
         summary = []
         for target_name, model_info in results.get('models', {}).items():
             if model_info.get('model') is not None:
@@ -2306,14 +2338,14 @@ def run_advanced_linear_analysis_from_db(db_manager, filters, output_folder):
         
         analysis_results['summary'] = summary
         
-        print("✅ Análisis lineal completado exitosamente")
-        print(f"📊 Modelos entrenados: {len(results.get('models', {}))}")
-        print(f"📁 Resultados guardados en: {output_folder}")
+        print("✅ 線形解析が正常に完了しました")
+        print(f"📊 学習したモデル数: {len(results.get('models', {}))}")
+        print(f"📁 結果の保存先: {output_folder}")
         
         return analysis_results
         
     except Exception as e:
-        print(f"❌ Error en análisis lineal: {e}")
+        print(f"❌ 線形解析中にエラー: {e}")
         import traceback
         traceback.print_exc()
         return {'success': False, 'error': str(e)}
@@ -2335,11 +2367,15 @@ def create_analysis_summary_table(results):
     if not summary:
         return []
     
-    # Crear encabezados
+    # ES: Crear encabezados
+    # EN: Create headers
+    # JP: ヘッダーを作成
     headers = ['目的変数', 'モデル', 'R²/精度', 'MAE', 'RMSE', '変換']
     table_data = [headers]
     
-    # Agregar datos
+    # ES: Agregar datos
+    # EN: Add rows
+    # JP: データ行を追加
     for item in summary:
         target = item.get('target', 'Unknown')
         model = item.get('model', 'Unknown')

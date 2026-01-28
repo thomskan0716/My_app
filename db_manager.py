@@ -74,7 +74,9 @@ class DBManager:
                 );
             """)
 
-            # Tabla Temporal para Análisis (Solo los que pasaron)
+            # ES: Tabla Temporal para Análisis (Solo los que pasaron)
+            # EN: Temporary table for analysis (only rows that passed)
+            # JP: 解析用の一時テーブル（通過した行のみ）
             self.conn.execute("""
                 CREATE TABLE IF NOT EXISTS TemporaryResults (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -107,7 +109,9 @@ class DBManager:
             """)
 
     def _migrate_db_schema(self):
-        """Añade columnas nuevas a tablas existentes sin romper BDs antiguas."""
+        """ES: Añade columnas nuevas a tablas existentes sin romper BDs antiguas.
+        EN: Add new columns to existing tables without breaking old DBs.
+        JA: 既存テーブルに新列を追加（古いDBを壊さない）。"""
         try:
             targets = ["main_results", "Results", "TemporaryResults"]
             desired_cols = {
@@ -125,7 +129,9 @@ class DBManager:
                         if col not in existing:
                             self.conn.execute(f"ALTER TABLE {table} ADD COLUMN {col} {col_type}")
                 except Exception:
-                    # Tabla puede no existir en instalaciones antiguas; create_tables() la crea para main_results
+                    # ES: La tabla puede no existir en instalaciones antiguas; create_tables() la crea para main_results
+                    # EN: The table may not exist in older installations; create_tables() creates it for main_results
+                    # JP: 古い環境ではテーブルが存在しない可能性がある（main_results用はcreate_tables()で作成）
                     continue
         except Exception:
             # Migración best-effort
@@ -167,7 +173,7 @@ class DBManager:
     def insert_results(self, df):
         """Insertar resultados en la tabla main_results"""
         if df.empty:
-            print("⚠️ No hay datos para insertar.")
+            print("⚠️ 挿入するデータがありません。")
             return
 
         if "id" in df.columns:
@@ -188,9 +194,11 @@ class DBManager:
 
         for col in key_cols:
             if col not in df.columns:
-                raise ValueError(f"❌ Falta la columna clave en el archivo: {col}")
+                raise ValueError(f"❌ ファイルにキー列がありません: {col}")
 
-        # 💾 Leer registros actuales desde la BBDD
+        # ES: 💾 Leer registros actuales desde la BBDD
+        # EN: 💾 Read current records from the database
+        # JP: 💾 現在のレコードをDBから読み込む
         db_df = pd.read_sql_query(f"SELECT {', '.join(key_cols)} FROM main_results", self.conn)
 
         df_cmp_norm = DBManager.normalize_for_hash(df, key_cols)
@@ -206,11 +214,11 @@ class DBManager:
 
         # ✅ AHORA VA ESTO:
         if df_to_insert.empty:
-            print("⚠️ Todos los registros ya existían en la base de datos.")
+            print("⚠️ すべてのレコードはすでにDBに存在します。")
             return
 
         df_to_insert.to_sql("main_results", self.conn, if_exists="append", index=False)
-        print(f"✅ {len(df_to_insert)} registros nuevos insertados.")
+        print(f"✅ 新規レコードを {len(df_to_insert)} 件挿入しました。")
     
     @staticmethod
     def normalize_for_hash(df, key_cols):
@@ -226,13 +234,13 @@ class DBManager:
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM main_results")
         results = cursor.fetchall()
-        print(f"📊 Total de registros en la base de datos: {len(results)}")
+        print(f"📊 DBの総レコード数: {len(results)}")
         if results:
-            print("📋 Primeros 5 registros:")
+            print("📋 先頭5件:")
             for i, row in enumerate(results[:5]):
-                print(f"  Registro {i+1}: {row}")
+                print(f"  レコード {i+1}: {row}")
         else:
-            print("📋 No hay registros en la base de datos")
+            print("📋 DBにレコードがありません")
     
     @staticmethod
     def map_column_names(df):
@@ -254,8 +262,8 @@ class DBManager:
             '突出量': '突出量',
             '突出し量': '突出量',
             '載せ率': '載せ率',
-            '線材長': '線材長',  # Mantener el nombre original
-            '実験日': '実験日',  # Mantener el nombre original
+            '線材長': '線材長',  # Keep original name
+            '実験日': '実験日',  # Keep original name
             '摩耗量': '摩耗量',
             '回転速度': '回転速度',
             '送り速度': '送り速度',
@@ -263,21 +271,31 @@ class DBManager:
             '切削力X': '切削力X',
             '切削力Y': '切削力Y',
             '切削力Z': '切削力Z',
-            # '加工時間': '加工時間(s/100mm)'  # No se importa, se calcula automáticamente
+            # '加工時間': '加工時間(s/100mm)'  # Not imported; computed automatically
         }
         return df.rename(columns=column_mapping)
     
     def recreate_tables(self):
-        """Recrear las tablas con el nuevo esquema"""
+        """ES: Recrear las tablas con el nuevo esquema
+        EN: Recreate tables with the new schema
+        JA: 新スキーマでテーブルを再作成
+        """
         with self.conn:
-            # Eliminar tablas existentes
+            # ES: Eliminar tablas existentes
+            # EN: Drop existing tables
+            # JA: 既存テーブルを削除
             self.conn.execute("DROP TABLE IF EXISTS Results;")
             self.conn.execute("DROP TABLE IF EXISTS TemporaryResults;")
-            # Crear tablas con nuevo esquema
+            # ES: Crear tablas con nuevo esquema
+            # EN: Create tables with the new schema
+            # JA: 新スキーマでテーブルを作成
             self.create_tables()
     
     def get_table_info(self, table):
-        """Obtener información de la estructura de la tabla"""
+        """ES: Obtener información de la estructura de la tabla
+        EN: Get table schema info
+        JA: テーブル構造情報を取得
+        """
         cursor = self.conn.cursor()
         cursor.execute(f"PRAGMA table_info({table});")
         return cursor.fetchall()

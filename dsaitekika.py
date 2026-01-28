@@ -52,7 +52,7 @@ class Dsaitekika:
                 best_combined_criterion = combined
                 best_indices = indices
 
-        # Guardar gráficos
+        # ES: Guardar gráficos | EN: Save plots | JA: グラフを保存
         plt.figure(figsize=(10, 6))
         plt.hist(all_d_criteria, bins=50, alpha=0.7, label='D-criterion')
         plt.hist(all_i_criteria, bins=50, alpha=0.7, label='I-criterion')
@@ -150,12 +150,14 @@ class Dsaitekika:
         best_d_criterion = d_vals[np.argmax([d + i for d, i in zip(d_vals, i_vals)])]
         
         # Definir el orden y nombres de las columnas requeridas
-        # Nota: la columna de dirección puede ser "UPカット" o "回転方向" según el archivo de entrada.
+        # ES: Nota: la columna de dirección puede ser "UPカット" o "回転方向" según el archivo de entrada.
+        # EN: Note: the direction column can be "UPカット" or "回転方向" depending on the input file.
+        # JA: 注意：方向列は入力ファイルにより「UPカット」または「回転方向」になり得る。
         required_columns = ['No.', 'A13', 'A11', 'A21', 'A32',
                             '回転速度', '送り速度', dir_col, '切込量', '突出量', '載せ率', 'パス数',
                             'D基準値', '上面ダレ', '側面ダレ', '摩耗量', '面粗度(Ra)前', '面粗度(Ra)後', '実験日']
         
-        # Crear las columnas que falten
+        # ES: Crear las columnas que falten | EN: Create any missing columns | JA: 不足列を作成
         for col in required_columns:
             if col not in selected_data.columns and col != 'D基準値':
                 selected_data[col] = ''

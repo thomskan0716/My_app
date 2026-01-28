@@ -30,8 +30,12 @@ class FeatureAwareAugmentor:
         
         for col in self.config.CONTINUOUS_FEATURES:
             if col in X_noisy.columns:
-                # ★ Saneo: Asegurar copia propia y float64 para evitar vistas compartidas
-                # Evita que el GC/hilos encuentren vistas compartidas medio muertas
+                # ES: ★ Saneo: Asegurar copia propia y float64 para evitar vistas compartidas
+                # EN: ★ Sanity: ensure an owned copy and float64 to avoid shared views
+                # JA: ★ 安定化：共有ビュー回避のためコピー所有＆float64化
+                # ES: Evita que el GC/hilos encuentren vistas compartidas medio muertas
+                # EN: Prevent GC/threads from encountering half-dead shared views
+                # JA: GC/スレッドが不安定な共有ビューに遭遇するのを防ぐ
                 col_values = X_noisy[col].values
                 x = np.asarray(col_values, dtype=np.float64).copy(order="C")
                 

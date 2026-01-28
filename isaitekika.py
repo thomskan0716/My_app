@@ -36,7 +36,7 @@ class ISaitekika:
             if best_indices is None:
                 best_indices = indices
 
-        # Guardar distribución
+        # ES: Guardar distribución | EN: Save distribution | JA: 分布を保存
         plt.figure(figsize=(10, 6))
         plt.hist(all_criteria, bins=50)
         plt.title('Distribution of I-criterion Values')

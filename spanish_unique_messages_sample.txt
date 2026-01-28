@@ -1,0 +1,122 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         ⚠️  Variación encontrada: {...}
+         📁 Carpeta de gráficos: {...}
+        1. El layout no se está actualizando correctamente
+        2. Los widgets se crean pero no son visibles (problema de CSS)
+        3. El container_layout no está conectado correctamente
+       ... y {...} mas
+      Columna 切削時間 encontrada: {...}
+      Columnas de predicción encontradas: {...}/{...}
+      Esto explicaría por qué la pantalla está vacía
+      Se mostrará información básica pero no la sección de modelo
+      Se mostraría: 解析完了時刻, 解析時間
+      Se necesitan al menos 2 para el análisis de Pareto.
+      Si aún no se ven, el problema puede estar en:
+      Tamaño: {...} MB
+      tau_neg encontrado: {...}
+      tau_pos encontrado: {...}
+      ⚠️ No encontrado en: {...}
+      ✅ Encontrado (búsqueda directa): {...}
+      ✅ Encontrado en: {...}
+      ✅ Encontrado: {...}
+      ❌ Calibrator: No encontrado
+      ❌ No encontrado en ninguna ubicación
+      ❌ NP_ALPHA: No encontrado
+      ❌ τ+ (tau_pos): No encontrado
+      ❌ τ- (tau_neg): No encontrado
+      ❌ カバレッジ: No encontrado
+      ❌ ノイズレベル: No encontrado
+      ❌ ノイズ付加: No encontrado
+      ❌ 目的変数: No encontrado
+      ❌ 総データ数: No encontrado
+      ❌ 選択特徴量数: No encontrado
+     ... y {...} mas
+    ✅ Valores numéricos iguales: {...}
+    ❌ Valores numéricos diferentes: {...} != {...}
+   Archivo: {...}
+   Buscando: {...} o *_未実験データ.xlsx
+   Carpeta de salida: {...}
+   Carpeta raíz existe: {...}
+   Carpeta raíz: {...}
+   Contenido de carpeta raíz:
+   Información básica (info_label): {...}
+   Información de ruido (noise_card): {...}
+   Información del modelo (metric_card): {...}
+   Líneas: {...} líneas
+   Ruta intentada 1: {...}
+   Ruta intentada 2: {...}
+   Tamaño: {...} caracteres
+   ⚠️  PROBLEMA: Falta información del modelo (tau_pos o tau_neg)
+   ⚠️ Archivo de fórmulas no encontrado en: {...}
+   ⚠️ Carpeta de predicción no encontrada: {...}
+   ⚠️ No se encontraron archivos en estructura de análisis no lineal
+   ✅ Archivo encontrado: {...}
+   ✅ Archivo leído correctamente
+   ✅ Encontrado en (alternativa): {...}
+   ✅ Encontrado en: {...}
+   ✅ Se encontraron {...} archivo(s) de predicción:
+   ✅ Todo parece estar bien. Los datos deberían mostrarse correctamente.
+   ✅ Todos los modelos están disponibles
+   ❌ Archivo NO encontrado: {...}
+   ❌ Error leyendo el archivo: {...}
+   ❌ No encontrado en ubicaciones esperadas
+   ❌ PROBLEMA CRÍTICO: No se encontraron datos suficientes para mostrar
+   🔍 Buscando archivos de predicción en estructura de análisis no lineal...
+   🔍 Buscando desde: {...}
+   🔍 Intentando ruta por defecto: {...}
+  (continuando sin análisis de clasificación)
+  (continuando sin análisis no lineal)
+  (continuando sin diálogo)
+  (continuando sin diálogos)
+  - Botón anterior: {...}
+  - Botón siguiente: {...}
+  - El directorio de trabajo puede ser diferente
+  - Gráfico actual: {...}/{...}
+  - Gráficos disponibles: {...}
+  - Las variables de entorno no interfieren con xlsxwriter
+  - Nombre de carpeta original: '{...}'
+  - Número final extraído: '{...}'
+  - Patrón usado: '{...}'
+  - Tipo de optimización: '{...}'
+  - Total de gráficos: {...}
+  - {...} (archivo: {...}, dir: {...})
+  - {...}: sin transformación ({...})
+  - {...}: {...} transformación
+  1. El entorno del subproceso (variables de entorno diferentes)
+  2. El directorio de trabajo cuando se ejecuta desde nonlinear_worker
+  [OK] No se detectaron DLLs BLAS/LAPACK
+  [OK] No se detectaron DLLs GUI/COM
+  [OK] No se detectaron DLLs OpenMP
+  Directorio actual: {...}
+  Python versión: {...}
+  ⚠️ Carpeta no existe: {...} (se creará automáticamente)
+
+(total unique listed: 793)

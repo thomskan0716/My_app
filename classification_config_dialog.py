@@ -1,6 +1,11 @@
 """
-Diálogo de configuración para análisis de clasificación (bunrui kaiseki)
-Permite configurar parámetros de config_cls.py antes de ejecutar
+ES: Diálogo de configuración para análisis de clasificación (bunrui kaiseki).
+EN: Configuration dialog for classification analysis (bunrui kaiseki).
+JA: 分類解析（bunrui kaiseki）の設定ダイアログ。
+
+ES: Permite configurar parámetros de config_cls.py antes de ejecutar.
+EN: Lets the user configure config_cls.py parameters before running.
+JA: 実行前に config_cls.py のパラメータを設定できます。
 """
 import os
 import sys
@@ -15,9 +20,9 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 
-# Intentar importar config_cls
+# ES: Intentar importar config_cls | EN: Try to import config_cls | JA: config_cls のインポートを試行
 try:
-    # Buscar ml_modules/config_cls.py
+    # ES: Buscar ml_modules/config_cls.py | EN: Look for ml_modules/config_cls.py | JA: ml_modules/config_cls.py を探索
     current_dir = Path(__file__).parent.absolute()
     ml_modules_path = current_dir / "ml_modules" / "config_cls.py"
     
@@ -26,7 +31,7 @@ try:
             sys.path.insert(0, str(ml_modules_path.parent))
         from config_cls import ConfigCLS
     else:
-        # Buscar en otras ubicaciones
+        # ES: Buscar en otras ubicaciones | EN: Search in other locations | JA: 他の場所も探索
         potential_paths = [
             current_dir.parent / "ml_modules" / "config_cls.py",
             Path.cwd() / "ml_modules" / "config_cls.py",
@@ -44,18 +49,21 @@ try:
                     continue
         
         if not config_found:
-            # Crear un módulo dummy
+            # ES: Crear un módulo dummy | EN: Create a dummy module | JA: ダミーモジュールを作成
             import types
             ConfigCLS = types.SimpleNamespace()
-            print("⚠️ Advertencia: No se pudo importar config_cls.py, usando valores por defecto")
+            print("⚠️ Warning: config_cls.py could not be imported; using default values")
 except ImportError as e:
-    print(f"⚠️ Error importando config_cls: {e}")
+    print(f"⚠️ config_cls のインポート中にエラー: {e}")
     import types
     ConfigCLS = types.SimpleNamespace()
 
 
 class ClassificationConfigDialog(QDialog):
-    """Diálogo para configurar parámetros del análisis de clasificación"""
+    """ES: Diálogo para configurar parámetros del análisis de clasificación
+    EN: Dialog to configure classification analysis parameters
+    JA: 分類解析パラメータ設定ダイアログ
+    """
     
     def __init__(self, parent=None, filtered_df=None):
         super().__init__(parent)
@@ -66,27 +74,34 @@ class ClassificationConfigDialog(QDialog):
         self.filtered_df = filtered_df
         self.config_values = {}
         
-        # Variables para almacenar la validación de carpeta existente
+        # ES: Variables para almacenar la validación de carpeta existente
+        # EN: State for validating an existing folder
+        # JA: 既存フォルダ検証用の状態
         self.validated_folder_path = None
         self.project_folder_path = None
         self.is_folder_valid = False
         
         self.setup_ui()
         
-        # Si hay datos filtrados, mostrar información en el diálogo
+        # ES: Si hay datos filtrados, mostrar información en el diálogo
+        # EN: If filtered data is provided, show summary info in the dialog
+        # JA: フィルタ済みデータがあれば概要情報を表示
         if filtered_df is not None and not filtered_df.empty:
             self._show_data_info()
     
     def setup_ui(self):
-        """Configura la interfaz de usuario"""
+        """ES: Configura la interfaz de usuario
+        EN: Build the UI
+        JA: UIを構築
+        """
         layout = QVBoxLayout()
         
-        # Título
+        # ES: Título | EN: Title | JA: タイトル
         title = QLabel("分類分析パラメータ設定")
         title.setStyleSheet("font-size: 18px; font-weight: bold; margin: 10px;")
         layout.addWidget(title)
         
-        # Crear pestañas
+        # ES: Crear pestañas | EN: Create tabs | JA: タブを作成
         tabs = QTabWidget()
         
         # Tab 1: Características
@@ -113,7 +128,7 @@ class ClassificationConfigDialog(QDialog):
         evaluation_tab = self.create_evaluation_tab()
         tabs.addTab(evaluation_tab, "評価設定")
         
-        # Tab 7: Cargar existente
+        # ES: Tab 7: Cargar existente | EN: Tab 7: Load existing | JA: タブ7：既存読み込み
         load_existing_tab = self.create_load_existing_tab()
         tabs.addTab(load_existing_tab, "既存結果読み込み")
         
@@ -136,11 +151,16 @@ class ClassificationConfigDialog(QDialog):
         self.setLayout(layout)
     
     def create_features_tab(self):
-        """Crear tab de configuración de características"""
+        """ES: Crear tab de configuración de características
+        EN: Create the feature-configuration tab
+        JA: 特徴量設定タブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
-        # Obtener lista de todas las características disponibles
+        # ES: Obtener lista de todas las características disponibles
+        # EN: Get the list of all available features
+        # JA: 利用可能な特徴量一覧を取得
         try:
             all_features = sorted(list(getattr(ConfigCLS, 'ALLOWED_FEATURES', set([
                 'A32', 'A11', 'A21', '送り速度', '切込量', '突出し量',
@@ -202,11 +222,15 @@ class ClassificationConfigDialog(QDialog):
         must_keep_group.setLayout(must_keep_layout)
         layout.addWidget(must_keep_group)
         
-        # Tipo de características - Listas con checkboxes
+        # ES: Tipo de características - Listas con checkboxes
+        # EN: Feature types - checkbox lists
+        # JA: 特徴量タイプ（チェックボックス一覧）
         types_group = QGroupBox("特徴量タイプ定義")
         types_layout = QVBoxLayout()
         
-        # Crear un splitter para organizar las listas
+        # ES: Crear un splitter para organizar las listas
+        # EN: Create a splitter to lay out the lists
+        # JA: リスト配置用のスプリッターを作成
         splitter = QSplitter(Qt.Horizontal)
         
         # CONTINUOUS_FEATURES
@@ -291,7 +315,7 @@ class ClassificationConfigDialog(QDialog):
         integer_group.setLayout(integer_layout)
         splitter.addWidget(integer_group)
         
-        splitter.setSizes([200, 200, 200, 200])  # Distribuir espacio equitativamente
+        splitter.setSizes([200, 200, 200, 200])  # Distribute space evenly
         types_layout.addWidget(splitter)
         types_group.setLayout(types_layout)
         layout.addWidget(types_group)
@@ -301,7 +325,10 @@ class ClassificationConfigDialog(QDialog):
         return tab
     
     def create_models_tab(self):
-        """Crear tab de configuración de modelos"""
+        """ES: Crear tab de configuración de modelos
+        EN: Create the model-configuration tab
+        JA: モデル設定タブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
@@ -370,7 +397,10 @@ class ClassificationConfigDialog(QDialog):
         return tab
     
     def create_multiobjective_tab(self):
-        """Crear tab de optimización multiobjetivo"""
+        """ES: Crear tab de optimización multiobjetivo
+        EN: Create the multi-objective optimization tab
+        JA: 多目的最適化タブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
@@ -466,7 +496,10 @@ class ClassificationConfigDialog(QDialog):
         return tab
     
     def create_dcv_tab(self):
-        """Crear tab de configuración DCV"""
+        """ES: Crear tab de configuración DCV
+        EN: Create the DCV configuration tab
+        JA: DCV設定タブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
@@ -559,7 +592,10 @@ class ClassificationConfigDialog(QDialog):
         return tab
     
     def create_thresholds_tab(self):
-        """Crear tab de configuración de umbrales"""
+        """ES: Crear tab de configuración de umbrales
+        EN: Create the threshold-configuration tab
+        JA: 閾値設定タブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
@@ -633,7 +669,10 @@ class ClassificationConfigDialog(QDialog):
         return tab
     
     def create_evaluation_tab(self):
-        """Crear tab de configuración de evaluación"""
+        """ES: Crear tab de configuración de evaluación
+        EN: Create the evaluation-configuration tab
+        JA: 評価設定タブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
@@ -737,7 +776,10 @@ class ClassificationConfigDialog(QDialog):
         return tab
     
     def create_load_existing_tab(self):
-        """Crear tab para cargar análisis existente"""
+        """ES: Crear tab para cargar análisis existente
+        EN: Create the tab for loading an existing analysis
+        JA: 既存解析を読み込むタブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
@@ -761,7 +803,9 @@ class ClassificationConfigDialog(QDialog):
         info_label.setStyleSheet("font-size: 12px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;")
         layout.addWidget(info_label)
         
-        # Botón para seleccionar carpeta
+        # ES: Botón para seleccionar carpeta
+        # EN: Button to select a folder
+        # JA: フォルダ選択ボタン
         select_button = QPushButton("📁 フォルダを選択")
         select_button.setStyleSheet("""
             QPushButton {
@@ -779,7 +823,9 @@ class ClassificationConfigDialog(QDialog):
         select_button.clicked.connect(self.on_select_folder_clicked)
         layout.addWidget(select_button)
         
-        # Label para mostrar la ruta seleccionada
+        # ES: Label para mostrar la ruta seleccionada
+        # EN: Label to display the selected path
+        # JA: 選択パス表示ラベル
         self.selected_folder_label = QLabel("選択されていません")
         self.selected_folder_label.setStyleSheet("""
             QLabel {
@@ -794,7 +840,9 @@ class ClassificationConfigDialog(QDialog):
         self.selected_folder_label.setWordWrap(True)
         layout.addWidget(self.selected_folder_label)
         
-        # Label para mostrar estado de validación
+        # ES: Label para mostrar estado de validación
+        # EN: Label to display validation status
+        # JA: 検証ステータス表示ラベル
         self.validation_status_label = QLabel("")
         self.validation_status_label.setWordWrap(True)
         layout.addWidget(self.validation_status_label)
@@ -804,7 +852,10 @@ class ClassificationConfigDialog(QDialog):
         return tab
     
     def on_select_folder_clicked(self):
-        """Maneja el clic en el botón de seleccionar carpeta"""
+        """ES: Maneja el clic en el botón de seleccionar carpeta
+        EN: Handle the click on the folder selection button
+        JA: フォルダ選択ボタンのクリックを処理
+        """
         folder = QFileDialog.getExistingDirectory(
             self,
             "既存結果フォルダを選択",
@@ -815,7 +866,7 @@ class ClassificationConfigDialog(QDialog):
         if not folder:
             return
         
-        # Validar estructura
+        # ES: Validar estructura | EN: Validate structure | JA: 構造を検証
         validation_result = self.validate_folder_structure(folder)
         
         if validation_result['is_valid']:
@@ -856,62 +907,86 @@ class ClassificationConfigDialog(QDialog):
     
     def validate_folder_structure(self, folder_path):
         """
-        Valida la estructura de carpetas del análisis de clasificación existente
+        ES: Valida la estructura de carpetas del análisis de clasificación existente.
+        EN: Validate the folder structure of an existing classification analysis.
+        JA: 既存の分類解析フォルダ構造を検証する。
         
         Returns:
             dict: {
                 'is_valid': bool,
                 'error_message': str,
-                'validated_path': str,  # Ruta a la carpeta del análisis (分類解析結果_YYYYMMDD_HHMMSS)
-                'project_folder': str   # Carpeta del proyecto
+                'validated_path': str,  # Path to analysis folder (分類解析結果_YYYYMMDD_HHMMSS)
+                'project_folder': str   # Project folder path
             }
         """
         import re
         
         current_path = Path(folder_path)
-        analysis_folder = None  # Carpeta 分類解析結果_YYYYMMDD_HHMMSS
+        analysis_folder = None  # Classification analysis folder (分類解析結果_YYYYMMDD_HHMMSS)
         project_folder = None
         pattern = re.compile(r'^分類解析結果_\d{8}_\d{6}$')
         
-        # Archivos requeridos en 02_本学習結果/01_モデル
+        # ES: Archivos requeridos en 02_本学習結果/01_モデル
+        # EN: Required files in 02_本学習結果/01_モデル
+        # JA: 02_本学習結果/01_モデル の必須ファイル
         required_model_files = [
             'final_bundle_cls.pkl'
         ]
         
-        # Archivos requeridos en 02_本学習結果/04_診断情報
+        # ES: Archivos requeridos en 02_本学習結果/04_診断情報
+        # EN: Required files in 02_本学習結果/04_診断情報
+        # JA: 02_本学習結果/04_診断情報 の必須ファイル
         required_diagnostic_files = [
             'diagnostic_report.txt'
         ]
         
-        # Caso 1: El usuario seleccionó directamente la carpeta 分類解析結果_YYYYMMDD_HHMMSS
+        # ES: Caso 1: El usuario seleccionó directamente la carpeta 分類解析結果_YYYYMMDD_HHMMSS
+        # EN: Case 1: The user directly selected the 分類解析結果_YYYYMMDD_HHMMSS folder
+        # JA: ケース1：分類解析結果_YYYYMMDD_HHMMSS フォルダを直接選択
         if pattern.match(current_path.name):
             analysis_folder = current_path
-            # Buscar hacia arriba para encontrar 05_分類 y el proyecto
+            # ES: Buscar hacia arriba para encontrar 05_分類 y el proyecto
+            # EN: Walk up to find 05_分類 and the project folder
+            # JA: 上方向に辿って 05_分類 とプロジェクトを探す
             for parent in current_path.parents:
                 if parent.name == "05_分類":
                     project_folder = parent.parent
                     break
         
-        # Caso 2: El usuario seleccionó una subcarpeta (02_本学習結果, 01_モデル, etc.)
+        # ES: Caso 2: El usuario seleccionó una subcarpeta (02_本学習結果, 01_モデル, etc.)
+        # EN: Case 2: The user selected a subfolder (02_本学習結果, 01_モデル, etc.)
+        # JA: ケース2：サブフォルダ（02_本学習結果/01_モデル等）を選択
         elif current_path.name in ["02_本学習結果", "01_モデル", "02_評価結果", "04_診断情報", "00_データセット"]:
-            # La carpeta del análisis es el padre
+            # ES: La carpeta del análisis es el padre
+            # EN: The analysis folder is the parent
+            # JA: 解析フォルダは親ディレクトリ
             analysis_folder = current_path.parent
-            # Verificar que el nombre del padre coincida con el patrón
+            # ES: Verificar que el nombre del padre coincida con el patrón
+            # EN: Verify the parent name matches the expected pattern
+            # JA: 親フォルダ名がパターンに一致するか確認
             if not pattern.match(analysis_folder.name):
                 analysis_folder = None
             else:
-                # Buscar hacia arriba para encontrar 05_分類
+                # ES: Buscar hacia arriba para encontrar 05_分類
+                # EN: Walk up to find 05_分類
+                # JA: 上方向に辿って 05_分類 を探す
                 for parent in analysis_folder.parents:
                     if parent.name == "05_分類":
                         project_folder = parent.parent
                         break
         
-        # Caso 3: El usuario seleccionó 05_分類 o carpeta del proyecto
+        # ES: Caso 3: El usuario seleccionó 05_分類 o carpeta del proyecto
+        # EN: Case 3: The user selected 05_分類 or the project folder
+        # JA: ケース3：05_分類 またはプロジェクトフォルダを選択
         else:
-            # Buscar 05_分類 desde cualquier nivel
+            # ES: Buscar 05_分類 desde cualquier nivel
+            # EN: Look for 05_分類 from any level
+            # JA: どの階層からでも 05_分類 を探索
             classification_folder = None
             
-            # Buscar hacia arriba
+            # ES: Buscar hacia arriba
+            # EN: Search upwards
+            # JA: 上方向に探索
             for parent in [current_path] + list(current_path.parents):
                 classification_candidate = parent / "05_分類"
                 if classification_candidate.exists() and classification_candidate.is_dir():
@@ -919,7 +994,9 @@ class ClassificationConfigDialog(QDialog):
                     project_folder = parent
                     break
             
-            # Si no se encuentra hacia arriba, buscar en el folder seleccionado
+            # ES: Si no se encuentra hacia arriba, buscar en el folder seleccionado
+            # EN: If not found upwards, check within the selected folder
+            # JA: 上方向で見つからなければ選択フォルダ内を確認
             if classification_folder is None:
                 if current_path.name == "05_分類":
                     classification_folder = current_path
@@ -936,7 +1013,9 @@ class ClassificationConfigDialog(QDialog):
                     'project_folder': None
                 }
             
-            # Buscar carpeta con patrón 分類解析結果_YYYYMMDD_HHMMSS
+            # ES: Buscar carpeta con patrón 分類解析結果_YYYYMMDD_HHMMSS
+            # EN: Find a folder matching 分類解析結果_YYYYMMDD_HHMMSS
+            # JA: 分類解析結果_YYYYMMDD_HHMMSS に一致するフォルダを探索
             for item in classification_folder.iterdir():
                 if item.is_dir() and pattern.match(item.name):
                     analysis_folder = item
@@ -950,7 +1029,9 @@ class ClassificationConfigDialog(QDialog):
                     'project_folder': str(project_folder) if project_folder else None
                 }
         
-        # Verificar que se encontró la carpeta del análisis
+        # ES: Verificar que se encontró la carpeta del análisis
+        # EN: Verify the analysis folder was found
+        # JA: 解析フォルダが見つかったか確認
         if analysis_folder is None or not analysis_folder.exists():
             return {
                 'is_valid': False,
@@ -959,7 +1040,9 @@ class ClassificationConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Verificar carpeta 02_本学習結果
+        # ES: Verificar carpeta 02_本学習結果
+        # EN: Verify 02_本学習結果 folder
+        # JA: 02_本学習結果 フォルダを確認
         learning_result_folder = analysis_folder / "02_本学習結果"
         if not learning_result_folder.exists() or not learning_result_folder.is_dir():
             return {
@@ -969,7 +1052,9 @@ class ClassificationConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Verificar carpeta 02_本学習結果/01_モデル
+        # ES: Verificar carpeta 02_本学習結果/01_モデル
+        # EN: Verify 02_本学習結果/01_モデル folder
+        # JA: 02_本学習結果/01_モデル フォルダを確認
         model_folder = learning_result_folder / "01_モデル"
         if not model_folder.exists() or not model_folder.is_dir():
             return {
@@ -979,7 +1064,9 @@ class ClassificationConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Verificar archivos en 01_モデル
+        # ES: Verificar archivos en 01_モデル
+        # EN: Verify files in 01_モデル
+        # JA: 01_モデル 内のファイルを確認
         missing_model_files = []
         for file_name in required_model_files:
             file_path = model_folder / file_name
@@ -994,7 +1081,9 @@ class ClassificationConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Verificar carpeta 02_本学習結果/04_診断情報
+        # ES: Verificar carpeta 02_本学習結果/04_診断情報
+        # EN: Verify 02_本学習結果/04_診断情報 folder
+        # JA: 02_本学習結果/04_診断情報 フォルダを確認
         diagnostic_folder = learning_result_folder / "04_診断情報"
         if not diagnostic_folder.exists() or not diagnostic_folder.is_dir():
             return {
@@ -1004,7 +1093,9 @@ class ClassificationConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Verificar archivos en 04_診断情報
+        # ES: Verificar archivos en 04_診断情報
+        # EN: Verify files in 04_診断情報
+        # JA: 04_診断情報 内のファイルを確認
         missing_diagnostic_files = []
         for file_name in required_diagnostic_files:
             file_path = diagnostic_folder / file_name
@@ -1019,14 +1110,18 @@ class ClassificationConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Si no se encontró project_folder, intentar buscarlo desde analysis_folder
+        # ES: Si no se encontró project_folder, intentar buscarlo desde analysis_folder
+        # EN: If project_folder was not found, try to infer it from analysis_folder
+        # JA: project_folder が見つからなければ analysis_folder から推定
         if project_folder is None:
             for parent in analysis_folder.parents:
                 if parent.name == "05_分類":
                     project_folder = parent.parent
                     break
         
-        # Todo está correcto
+        # ES: Todo está correcto
+        # EN: Everything looks good
+        # JA: 問題なし
         return {
             'is_valid': True,
             'error_message': '',
@@ -1126,7 +1221,7 @@ class ClassificationConfigDialog(QDialog):
         config_vals['GRAY_ZONE_MIN_WIDTH'] = self.gray_zone_min_width.value()
         config_vals['GRAY_ZONE_MAX_WIDTH'] = self.gray_zone_max_width.value()
         
-        # Cargar existente
+        # ES: Cargar existente | EN: Load existing | JA: 既存読み込み
         config_vals['load_existing'] = self.is_folder_valid
         config_vals['selected_folder_path'] = self.validated_folder_path
         config_vals['project_folder'] = self.project_folder_path
@@ -1134,11 +1229,16 @@ class ClassificationConfigDialog(QDialog):
         return config_vals
     
     def _show_data_info(self):
-        """Muestra información de los datos filtrados en el diálogo"""
+        """ES: Muestra información de los datos filtrados en el diálogo
+        EN: Show information about the filtered data in the dialog
+        JA: ダイアログにフィルタ済みデータ情報を表示
+        """
         if self.filtered_df is None or self.filtered_df.empty:
             return
         
-        # Obtener información de los datos
+        # ES: Obtener información de los datos
+        # EN: Collect data info
+        # JA: データ情報を収集
         df = self.filtered_df
         info_lines = []
         
@@ -1189,5 +1289,5 @@ class ClassificationConfigDialog(QDialog):
         # Mostrar información en consola
         if info_lines:
             info_text = "\n".join(info_lines)
-            print(f"📋 Información de datos filtrados:\n{info_text}")
+            print(f"📋 フィルタ済みデータ情報:\n{info_text}")
 

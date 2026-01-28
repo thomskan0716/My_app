@@ -1,0 +1,546 @@
+Root: C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app
+Total matches: 184
+Unique messages: 169
+
+== Matches (by file) ==
+
+0sec.py
+  L11668 [print] ✅ Datos de análisis cargados desde: {...}
+    print(f"✅ Datos de análisis cargados desde: {analysis_results_path}")
+  L11670 [print] ⚠️ Error leyendo analysis_results.json: {...}
+    print(f"⚠️ Error leyendo analysis_results.json: {e}")
+  L11672 [print] ⚠️ analysis_results.json no encontrado en: {...}
+    print(f"⚠️ analysis_results.json no encontrado en: {analysis_results_path}")
+  L11967 [print] ✅ Carpeta abierta: {...}
+    print(f"✅ Carpeta abierta: {output_folder}")
+  L11969 [print] ❌ Error abriendo carpeta: {...}
+    print(f"❌ Error abriendo carpeta: {e}")
+  L12035 [print] ❌ Error cargando estadísticas del análisis: {...}
+    print(f"❌ Error cargando estadísticas del análisis: {e}")
+  L12083 [print] 🔧 Mostrando gráficos del análisis no lineal...
+    print("🔧 Mostrando gráficos del análisis no lineal...")
+  L12356 [print] ✅ Gráficos del análisis no lineal mostrados
+    print("✅ Gráficos del análisis no lineal mostrados")
+  L12359 [print] ❌ Error mostrando gráficos del análisis no lineal: {...}
+    print(f"❌ Error mostrando gráficos del análisis no lineal: {e}")
+  L12430 [print] ✅ Mostrando gráfico: {...}
+    print(f"✅ Mostrando gráfico: {filename}")
+  L12432 [print] ❌ No se pudo cargar la imagen: {...}
+    print(f"❌ No se pudo cargar la imagen: {current_image_path}")
+  L12439 [print] 🔧 Mostrando gráficos de Pareto en pantalla...
+    print("🔧 Mostrando gráficos de Pareto en pantalla...")
+  L12701 [print] ✅ Gráficos de Pareto mostrados en pantalla
+    print("✅ Gráficos de Pareto mostrados en pantalla")
+  L12704 [print] ❌ Error mostrando gráficos de Pareto: {...}
+    print(f"❌ Error mostrando gráficos de Pareto: {e}")
+  L12759 [print] ✅ Mostrando gráfico de Pareto: {...}
+    print(f"✅ Mostrando gráfico de Pareto: {filename}")
+  L12761 [print] ❌ No se pudo cargar la imagen: {...}
+    print(f"❌ No se pudo cargar la imagen: {current_image_path}")
+  L12768 [print] 🔧 Iniciando predicción no lineal desde pantalla de gráficos...
+    print("🔧 Iniciando predicción no lineal desde pantalla de gráficos...")
+  L12885 [print] ✅ Mostrando gráficos de Pareto desde: {...}
+    print(f"✅ Mostrando gráficos de Pareto desde: {pareto_plots_folder}")
+  L12894 [print] ❌ DEBUG: pareto_plots_folder no existe
+    print(f"❌ DEBUG: pareto_plots_folder no existe")
+  L12897 [print] ❌ DEBUG: prediction_output_file no existe
+    print(f"❌ DEBUG: prediction_output_file no existe")
+  L13006 [print] 📁 Creando backup: {...} → {...}
+    print(f"📁 Creando backup: {working_dir} → {dest_folder}")
+  L13017 [print] ⚠️ Error creando backup: {...}
+    print(f"⚠️ Error creando backup: {e}")
+  L13083 [print] ⚠️ Usando fallback para carpeta del proyecto: {...}
+    print(f"⚠️ Usando fallback para carpeta del proyecto: {project_folder}")
+  L13085 [print] 📁 Carpeta del proyecto encontrada: {...}
+    print(f"📁 Carpeta del proyecto encontrada: {project_folder}")
+  L13093 [print] 🔍 Buscando archivo: {...}
+    print(f"🔍 Buscando archivo: {expected_path}")
+  L13097 [print] ✅ Archivo encontrado: {...}
+    print(f"✅ Archivo encontrado: {prediction_source_file}")
+  L13102 [print] ⚠️ Archivo esperado no encontrado, buscando patrón *_未実験データ.xlsx...
+    print(f"⚠️ Archivo esperado no encontrado, buscando patrón *_未実験データ.xlsx...")
+  L13106 [print] ✅ Archivo encontrado (patrón): {...}
+    print(f"✅ Archivo encontrado (patrón): {prediction_source_file}")
+  L13108 [print] ❌ No se encontró ningún archivo con patrón *_未実験データ.xlsx en: {...}
+    print(f"❌ No se encontró ningún archivo con patrón *_未実験データ.xlsx en: {project_folder}")
+  L13117 [print] ⚠️ No se encontró el archivo de datos no experimentados en: {...}
+    print(f"⚠️ No se encontró el archivo de datos no experimentados en: {project_folder}")
+  L13118 [print]    Buscando: {...} o *_未実験データ.xlsx
+    print(f"   Buscando: {expected_filename} o *_未実験データ.xlsx")
+  L13126 [print] ✅ Archivo copiado: {...} → {...}
+    print(f"✅ Archivo copiado: {prediction_source_file} → {prediction_input_path}")
+  L13132 [print] ⚠️ No se encontró archivo fuente y no existe destino. Continuando...
+    print(f"⚠️ No se encontró archivo fuente y no existe destino. Continuando...")
+  L13164 [print] ❌ Script no encontrado: 02_prediction.py
+    print(f"❌ Script no encontrado: 02_prediction.py")
+  L13238 [print] 📁 00_Pythonコード encontrado en: {...}
+    print(f"📁 00_Pythonコード encontrado en: {python_code_folder}")
+  L13325 [print] ❌ 02_prediction.py falló con código {...}
+    print(f"❌ 02_prediction.py falló con código {returncode}")
+  L13369 [print] ❌ Script no encontrado: 03_pareto_analyzer.py
+    print(f"❌ Script no encontrado: 03_pareto_analyzer.py")
+  L13443 [print] 📁 00_Pythonコード encontrado en: {...}
+    print(f"📁 00_Pythonコード encontrado en: {python_code_folder}")
+  L13530 [print] ❌ 03_pareto_analyzer.py falló con código {...}
+    print(f"❌ 03_pareto_analyzer.py falló con código {returncode}")
+  L13549 [print] 🛑 DEBUG: Error no lineal recibido tras cancelación: {...}. Ignorando.
+    print(f"🛑 DEBUG: Error no lineal recibido tras cancelación: {error_message}. Ignorando.")
+  L13577 [print] 🔧 Iniciando análisis de clasificación...
+    print("🔧 Iniciando análisis de clasificación...")
+  L13581 [print] 📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto
+    print("📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto")
+  L13611 [print] ✅ Usando proyecto existente: {...}
+    print(f"✅ Usando proyecto existente: {project_path}")
+  L13625 [print] 📁 Creando nuevo proyecto: {...} en {...}
+    print(f"📁 Creando nuevo proyecto: {project_name} en {project_directory}")
+  L13749 [print] 📊 Datos filtrados obtenidos: {...} registros
+    print(f"📊 Datos filtrados obtenidos: {len(df)} registros")
+  L13752 [print] ❌ Error obteniendo datos filtrados: {...}
+    print(f"❌ Error obteniendo datos filtrados: {e}")
+  L13776 [print] ❌ Usuario canceló el análisis de clasificación
+    print("❌ Usuario canceló el análisis de clasificación")
+  L13865 [print] ✅ Parámetros seleccionados:
+    print(f"✅ Parámetros seleccionados:")
+  L13870 [print] ❌ Usuario canceló la selección de parámetros
+    print("❌ Usuario canceló la selección de parámetros")
+  L13873 [print] ℹ️ Carga de folder existente: no se requiere selección de parámetros
+    print("ℹ️ Carga de folder existente: no se requiere selección de parámetros")
+  L13878 [print] 🔧 Iniciando worker de clasificación...
+    print("🔧 Iniciando worker de clasificación...")
+  L13915 [print] ❌ Error en análisis de clasificación: {...}
+    print(f"❌ Error en análisis de clasificación: {e}")
+  L13935 [print] ✅ Análisis de clasificación completado
+    print("✅ Análisis de clasificación completado")
+  L13936 [print]    Carpeta de salida: {...}
+    print(f"   Carpeta de salida: {results.get('output_folder', 'N/A')}")
+  L14066 [print] ✅ Archivo seleccionado y validado: {...}
+    print(f"✅ Archivo seleccionado y validado: {file_path}")
+  L14089 [print] ❌ Error en selección de archivo: {...}
+    print(f"❌ Error en selección de archivo: {e}")
+  L14101 [print] 🛑 Cancelando análisis de clasificación...
+    print("🛑 Cancelando análisis de clasificación...")
+  L14393 [print] ✅ Datos de diagnóstico cargados desde: {...}
+    print(f"✅ Datos de diagnóstico cargados desde: {report_path}")
+  L14394 [print] 🔍 [DEBUG] Datos parseados: {...}
+    print(f"🔍 [DEBUG] Datos parseados: {diagnostic_data}")
+  L14400 [print] ⚠️ Error leyendo diagnostic_report.txt: {...}
+    print(f"⚠️ Error leyendo diagnostic_report.txt: {e}")
+  L14404 [print] ⚠️ diagnostic_report.txt no encontrado en: {...} o {...}
+    print(f"⚠️ diagnostic_report.txt no encontrado en: {diagnostic_report_path} o {alternative_path}")
+  L14464 [print] ✅ [DEBUG] Mostrando Model Information
+    print(f"✅ [DEBUG] Mostrando Model Information")
+  L14588 [print] ✅ [DEBUG] metric_card altura mínima: {...}px
+    print(f"✅ [DEBUG] metric_card altura mínima: {min_height}px")
+  L14611 [print] ✅ [DEBUG] Mostrando Noise Addition Settings
+    print(f"✅ [DEBUG] Mostrando Noise Addition Settings")
+  L14675 [print] ✅ [DEBUG] noise_card altura mínima: {...}px
+    print(f"✅ [DEBUG] noise_card altura mínima: {min_height}px")
+  L14680 [print] ❌ Error cargando estadísticas de clasificación: {...}
+    print(f"❌ Error cargando estadísticas de clasificación: {e}")
+  L14705 [print] ❌ Error cargando archivos existentes de clasificación: {...}
+    print(f"❌ Error cargando archivos existentes de clasificación: {e}")
+  L14757 [print] 🔧 Mostrando gráficos del análisis de clasificación...
+    print("🔧 Mostrando gráficos del análisis de clasificación...")
+  L15011 [print] ✅ Gráficos del análisis de clasificación mostrados
+    print("✅ Gráficos del análisis de clasificación mostrados")
+  L15014 [print] ❌ Error mostrando gráficos del análisis de clasificación: {...}
+    print(f"❌ Error mostrando gráficos del análisis de clasificación: {e}")
+  L15138 [print] 📁 Carpeta de análisis creada: {...}
+    print(f"📁 Carpeta de análisis creada: {analysis_folder}")
+  L15157 [print] 📁 Subcarpeta de gráficos creada: {...}
+    print(f"📁 Subcarpeta de gráficos creada: {chart_subfolder}")
+  L15165 [print] 🔧 Ejecutando análisis lineal...
+    print("🔧 Ejecutando análisis lineal...")
+  L15188 [print] ✅ Módulo de análisis lineal importado correctamente
+    print("✅ Módulo de análisis lineal importado correctamente")
+  L15190 [print] ❌ Error importando módulo de análisis lineal: {...}
+    print(f"❌ Error importando módulo de análisis lineal: {e}")
+  L15204 [print] ❌ Usuario canceló el análisis lineal
+    print("❌ Usuario canceló el análisis lineal")
+  L15212 [print] ⚠️ No se detectó carpeta de proyecto, usando carpeta por defecto
+    print("⚠️ No se detectó carpeta de proyecto, usando carpeta por defecto")
+  L15219 [print] ❌ Error ejecutando análisis lineal: {...}
+    print(f"❌ Error ejecutando análisis lineal: {e}")
+  L15237 [print] 🛑 DEBUG: Resultado recibido pero el usuario canceló. Ignorando resultados.
+    print("🛑 DEBUG: Resultado recibido pero el usuario canceló. Ignorando resultados.")
+  L15306 [print] 🛑 DEBUG: Error recibido tras cancelación: {...}. Ignorando.
+    print(f"🛑 DEBUG: Error recibido tras cancelación: {error_message}. Ignorando.")
+  L15342 [print] ❌ Error en análisis lineal: {...}
+    print(f"❌ Error en análisis lineal: {error_message}")
+  L15355 [print] 🛑 Análisis no lineal cancelado por el usuario
+    print("🛑 Análisis no lineal cancelado por el usuario")
+  L15383 [print] ✅ Worker de análisis no lineal cancelado correctamente
+    print("✅ Worker de análisis no lineal cancelado correctamente")
+  L15395 [print] 🛑 DEBUG: on_analysis_cancelled disparado - Iniciando parada segura
+    print("🛑 DEBUG: on_analysis_cancelled disparado - Iniciando parada segura")
+  L15410 [print] 🛑 DEBUG: Solicitando cancelación al worker {...}
+    print(f"🛑 DEBUG: Solicitando cancelación al worker {self.linear_worker}")
+  L15431 [print] 🛑 DEBUG: Cancelando proceso no lineal
+    print("🛑 DEBUG: Cancelando proceso no lineal")
+  L15441 [print] ✅ Parada segura completada. No debería haber crash.
+    print("✅ Parada segura completada. No debería haber crash.")
+  L15532 [print] 🔧 Mostrando resultados del análisis lineal...
+    print("🔧 Mostrando resultados del análisis lineal...")
+  L15722 [print] ✅ Archivo Excel abierto: {...}
+    print(f"✅ Archivo Excel abierto: {excel_file_path}")
+  L15724 [print] ❌ Error abriendo archivo Excel: {...}
+    print(f"❌ Error abriendo archivo Excel: {e}")
+  L15827 [print] ✅ Resultados del análisis lineal mostrados
+    print("✅ Resultados del análisis lineal mostrados")
+  L15830 [print] ❌ Error mostrando resultados: {...}
+    print(f"❌ Error mostrando resultados: {e}")
+  L15838 [print] 🔧 Mostrando gráficos de evaluación...
+    print("🔧 Mostrando gráficos de evaluación...")
+  L16101 [print] ✅ Gráficos de evaluación mostrados
+    print("✅ Gráficos de evaluación mostrados")
+  L16104 [print] ❌ Error mostrando gráficos de evaluación: {...}
+    print(f"❌ Error mostrando gráficos de evaluación: {e}")
+  L16161 [print] ✅ Mostrando gráfico: {...}
+    print(f"✅ Mostrando gráfico: {filename}")
+  L16163 [print] ❌ No se pudo cargar la imagen: {...}
+    print(f"❌ No se pudo cargar la imagen: {current_image_path}")
+  L16172 [print] ❌ Error en procesamiento de fórmulas: {...}
+    print(f"❌ Error en procesamiento de fórmulas: {error_msg}")
+  L16248 [print] 📊 Parámetros seleccionados: {...}
+    print(f"📊 Parámetros seleccionados: {selected_params}")
+  L16254 [print] ❌ Error mostrando diálogo de parámetros: {...}
+    print(f"❌ Error mostrando diálogo de parámetros: {e}")
+  L16359 [print] ❌ No se encontró la carpeta: {...}
+    print(f"❌ No se encontró la carpeta: {linear_regression_folder}")
+  L16384 [print] ❌ No se encontraron subcarpetas de análisis lineal en: {...}
+    print(f"❌ No se encontraron subcarpetas de análisis lineal en: {linear_regression_folder}")
+  L16394 [print] 📊 Carpeta más reciente encontrada: {...}
+    print(f"📊 Carpeta más reciente encontrada: {latest_folder}")
+  L16402 [print] ❌ No se encontró la carpeta: {...}
+    print(f"❌ No se encontró la carpeta: {prediction_folder}")
+  L16411 [print] ✅ Archivo de fórmulas encontrado: {...}
+    print(f"✅ Archivo de fórmulas encontrado: {formulas_file}")
+  L16414 [print] ❌ No se encontró el archivo: {...}
+    print(f"❌ No se encontró el archivo: {formulas_file}")
+  L16418 [print] ❌ Error buscando archivo de fórmulas: {...}
+    print(f"❌ Error buscando archivo de fórmulas: {e}")
+  L16508 [print] 📊 Validando archivo: {...}
+    print(f"📊 Validando archivo: {filtered_data_file}")
+  L16516 [print] 📊 Datos cargados para validación: {...} filas, {...} columnas
+    print(f"📊 Datos cargados para validación: {len(data_df)} filas, {len(data_df.columns)} columnas")
+  L16621 [print] ❌ Errores de validación encontrados:
+    print("❌ Errores de validación encontrados:")
+  L16625 [print] ⚠️ Warnings de validación:
+    print("⚠️ Warnings de validación:")
+  L16631 [print] ⚠️ Warnings de validación:
+    print("⚠️ Warnings de validación:")
+  L16635 [print] ✅ Validación exitosa - Todos los parámetros son consistentes
+    print("✅ Validación exitosa - Todos los parámetros son consistentes")
+  L16649 [print] 🔧 Iniciando predicción Yosoku...
+    print("🔧 Iniciando predicción Yosoku...")
+  L16702 [print] ℹ️ Usuario canceló la predicción tras advertencia de múltiples valores
+    print("ℹ️ Usuario canceló la predicción tras advertencia de múltiples valores")
+  L16713 [print] ❌ Usuario canceló la selección de parámetros
+    print("❌ Usuario canceló la selección de parámetros")
+  L16723 [print] 📊 Parámetros seleccionados: {...}
+    print(f"📊 Parámetros seleccionados: {selected_params}")
+  L16728 [print] 🔍 Validando datos filtrados...
+    print("🔍 Validando datos filtrados...")
+  L16736 [print] ❌ Validación fallida:
+    print("❌ Validación fallida:")
+  L16762 [print] ℹ️ Usuario canceló la predicción tras warnings de validación
+    print("ℹ️ Usuario canceló la predicción tras warnings de validación")
+  L16770 [print] ✅ Validación exitosa - Continuando con la predicción
+    print("✅ Validación exitosa - Continuando con la predicción")
+  L16778 [print] ❌ Error ejecutando predicción: {...}
+    print(f"❌ Error ejecutando predicción: {e}")
+  L16845 [print] ❌ Error iniciando predicción: {...}
+    print(f"❌ Error iniciando predicción: {e}")
+  L16882 [print] ❌ Error buscando archivo 未実験データ: {...}
+    print(f"❌ Error buscando archivo 未実験データ: {e}")
+  L16933 [print] ❌ Error en finalización: {...}
+    print(f"❌ Error en finalización: {e}")
+  L17007 [print] ❌ Error iniciando importación: {...}
+    print(f"❌ Error iniciando importación: {e}")
+  L17045 [print] ❌ Error en manejo de finalización: {...}
+    print(f"❌ Error en manejo de finalización: {e}")
+  L17099 [print] ❌ Error cancelando importación: {...}
+    print(f"❌ Error cancelando importación: {e}")
+  L17130 [print] 🔍 Carpeta raíz del análisis: {...}
+    print(f"🔍 Carpeta raíz del análisis: {analysis_root}")
+  L17131 [print] 🔍 Carpeta raíz existe: {...}
+    print(f"🔍 Carpeta raíz existe: {analysis_root.exists()}")
+  L17138 [print] 🔍 Buscando archivo de predicción en: {...}
+    print(f"🔍 Buscando archivo de predicción en: {pred_folder}")
+  L17139 [print] 🔍 Carpeta existe: {...}
+    print(f"🔍 Carpeta existe: {pred_folder.exists()}")
+  L17146 [print] 🔍 Intentando con ruta absoluta: {...}
+    print(f"🔍 Intentando con ruta absoluta: {pred_folder_abs}")
+  L17151 [print] ❌ Carpeta de predicción no encontrada
+    print(f"❌ Carpeta de predicción no encontrada")
+  L17152 [print]    Ruta intentada 1: {...}
+    print(f"   Ruta intentada 1: {pred_folder}")
+  L17153 [print]    Ruta intentada 2: {...}
+    print(f"   Ruta intentada 2: {pred_folder_abs}")
+  L17154 [print]    Carpeta raíz: {...}
+    print(f"   Carpeta raíz: {analysis_root}")
+  L17155 [print]    Carpeta raíz existe: {...}
+    print(f"   Carpeta raíz existe: {analysis_root.exists()}")
+  L17157 [print]    Contenido de carpeta raíz:
+    print(f"   Contenido de carpeta raíz:")
+  L17175 [print] 🔍 Archivos encontrados en carpeta ({...}):
+    print(f"🔍 Archivos encontrados en carpeta ({len(all_files)}):")
+  L17177 [print]   - {...} (archivo: {...}, dir: {...})
+    print(f"  - {f.name} (archivo: {f.is_file()}, dir: {f.is_dir()})")
+  L17191 [print] ✅ Archivo encontrado (Prioridad 1): {...}
+    print(f"✅ Archivo encontrado (Prioridad 1): {prediction_file}")
+  L17202 [print] ✅ Archivo encontrado (Prioridad 2): {...}
+    print(f"✅ Archivo encontrado (Prioridad 2): {prediction_file}")
+  L17213 [print] ✅ Archivo encontrado (Prioridad 3): {...}
+    print(f"✅ Archivo encontrado (Prioridad 3): {prediction_file}")
+  L17236 [print] ✅ Archivo de predicción seleccionado: {...}
+    print(f"✅ Archivo de predicción seleccionado: {prediction_file}")
+  L17282 [print] ❌ Error iniciando importación de clasificación: {...}
+    print(f"❌ Error iniciando importación de clasificación: {e}")
+  L17322 [print] ❌ Error en manejo de finalización: {...}
+    print(f"❌ Error en manejo de finalización: {e}")
+  L17377 [print] ❌ Error cancelando importación: {...}
+    print(f"❌ Error cancelando importación: {e}")
+  L17384 [print] ❌ Error cancelando importación: {...}
+    print(f"❌ Error cancelando importación: {e}")
+  L17417 [print] ❌ Error en manejo de finalización de exportación: {...}
+    print(f"❌ Error en manejo de finalización de exportación: {e}")
+  L17450 [print] ❌ Error en manejo de error de exportación: {...}
+    print(f"❌ Error en manejo de error de exportación: {e}")
+  L17474 [print] ❌ Error cancelando exportación: {...}
+    print(f"❌ Error cancelando exportación: {e}")
+  L17533 [print] ⚠️ 送り速度 no encontrado, 加工時間 = 0
+    print("⚠️ 送り速度 no encontrado, 加工時間 = 0")
+  L17556 [print] ❌ Usuario canceló la selección de parámetros
+    print("❌ Usuario canceló la selección de parámetros")
+  L17575 [print] 📊 Leyendo archivo: {...}
+    print(f"📊 Leyendo archivo: {excel_path}")
+  L17577 [print] ✅ Datos cargados: {...} filas, {...} columnas
+    print(f"✅ Datos cargados: {len(df)} filas, {len(df.columns)} columnas")
+  L17603 [print] 📁 Archivo intermedio guardado: {...}
+    print(f"📁 Archivo intermedio guardado: {intermediate_path}")
+  L17605 [print] ⚠️ Error guardando archivo intermedio: {...}
+    print(f"⚠️ Error guardando archivo intermedio: {e}")
+  L17616 [print] 📁 Archivo temporal creado: {...}
+    print(f"📁 Archivo temporal creado: {temp_file}")
+  L17637 [print] 🗑️ Archivo temporal eliminado: {...}
+    print(f"🗑️ Archivo temporal eliminado: {temp_file}")
+  L17644 [print] ❌ Error importando Pareto a BD: {...}
+    print(f"❌ Error importando Pareto a BD: {e}")
+  L17692 [print] ❌ Error iniciando worker de importación: {...}
+    print(f"❌ Error iniciando worker de importación: {e}")
+  L17870 [print] ❌ Error cancelando predicción: {...}
+    print(f"❌ Error cancelando predicción: {e}")
+  L18017 [print] ❌ Error validando parámetros: {...}
+    print(f"❌ Error validando parámetros: {e}")
+  L18030 [print] ⚠️ No hay carpeta de proyecto actual
+    print("⚠️ No hay carpeta de proyecto actual")
+  L18038 [print] ⚠️ Carpeta 03_線形回帰 no encontrada
+    print("⚠️ Carpeta 03_線形回帰 no encontrada")
+  L18090 [print] ⚠️ No se encontraron carpetas de análisis lineal
+    print("⚠️ No se encontraron carpetas de análisis lineal")
+  L18099 [print] ✅ Carpeta de predicción encontrada: {...}
+    print(f"✅ Carpeta de predicción encontrada: {prediction_folder}")
+  L18102 [print] ⚠️ Carpeta 04_予測計算 no encontrada en: {...}
+    print(f"⚠️ Carpeta 04_予測計算 no encontrada en: {latest_subfolder}")
+  L18106 [print] ❌ Error buscando carpeta de predicción: {...}
+    print(f"❌ Error buscando carpeta de predicción: {e}")
+  L18115 [print] ❌ No hay carpeta de proyecto configurada
+    print("❌ No hay carpeta de proyecto configurada")
+  L18120 [print] ❌ Carpeta de análisis lineal no encontrada
+    print("❌ Carpeta de análisis lineal no encontrada")
+  L18123 [print] 🔍 Buscando archivo de fórmulas en: {...}
+    print(f"🔍 Buscando archivo de fórmulas en: {linear_regression_folder}")
+  L18142 [print] ✅ Archivo de fórmulas encontrado: {...}
+    print(f"✅ Archivo de fórmulas encontrado: {formulas_file}")
+  L18155 [print] ✅ Archivo de fórmulas encontrado (search): {...}
+    print(f"✅ Archivo de fórmulas encontrado (search): {found}")
+  L18170 [print] ❌ No se encontraron subcarpetas de análisis lineal
+    print("❌ No se encontraron subcarpetas de análisis lineal")
+  L18178 [print] 📊 Encontradas {...} carpetas de análisis lineal
+    print(f"📊 Encontradas {len(subfolders)} carpetas de análisis lineal")
+  L18185 [print] 🔍 Verificando carpeta {...}/{...}: {...}
+    print(f"🔍 Verificando carpeta {i+1}/{len(subfolders)}: {folder_name}")
+  L18194 [print] ✅ Archivo de fórmulas encontrado: {...}
+    print(f"✅ Archivo de fórmulas encontrado: {formulas_file}")
+  L18197 [print]    ⚠️ Archivo de fórmulas no encontrado en: {...}
+    print(f"   ⚠️ Archivo de fórmulas no encontrado en: {prediction_folder}")
+  L18199 [print]    ⚠️ Carpeta de predicción no encontrada: {...}
+    print(f"   ⚠️ Carpeta de predicción no encontrada: {prediction_folder}")
+  L18201 [print] ❌ No se encontró ningún archivo de fórmulas válido
+    print("❌ No se encontró ningún archivo de fórmulas válido")
+  L18205 [print] ❌ Error buscando archivo de fórmulas: {...}
+    print(f"❌ Error buscando archivo de fórmulas: {e}")
+  L18223 [print] 🔍 DEBUG - No hay consola desplegable
+    print("🔍 DEBUG - No hay consola desplegable")
+
+== Unique messages (sorted) ==
+-    Buscando: {...} o *_未実験データ.xlsx
+-    Carpeta de salida: {...}
+-    Carpeta raíz existe: {...}
+-    Carpeta raíz: {...}
+-    Contenido de carpeta raíz:
+-    Ruta intentada 1: {...}
+-    Ruta intentada 2: {...}
+-    ⚠️ Archivo de fórmulas no encontrado en: {...}
+-    ⚠️ Carpeta de predicción no encontrada: {...}
+-   - {...} (archivo: {...}, dir: {...})
+- ℹ️ Carga de folder existente: no se requiere selección de parámetros
+- ℹ️ Usuario canceló la predicción tras advertencia de múltiples valores
+- ℹ️ Usuario canceló la predicción tras warnings de validación
+- ⚠️ analysis_results.json no encontrado en: {...}
+- ⚠️ Archivo esperado no encontrado, buscando patrón *_未実験データ.xlsx...
+- ⚠️ Carpeta 03_線形回帰 no encontrada
+- ⚠️ Carpeta 04_予測計算 no encontrada en: {...}
+- ⚠️ diagnostic_report.txt no encontrado en: {...} o {...}
+- ⚠️ Error creando backup: {...}
+- ⚠️ Error guardando archivo intermedio: {...}
+- ⚠️ Error leyendo analysis_results.json: {...}
+- ⚠️ Error leyendo diagnostic_report.txt: {...}
+- ⚠️ No hay carpeta de proyecto actual
+- ⚠️ No se detectó carpeta de proyecto, usando carpeta por defecto
+- ⚠️ No se encontraron carpetas de análisis lineal
+- ⚠️ No se encontró archivo fuente y no existe destino. Continuando...
+- ⚠️ No se encontró el archivo de datos no experimentados en: {...}
+- ⚠️ Usando fallback para carpeta del proyecto: {...}
+- ⚠️ Warnings de validación:
+- ⚠️ 送り速度 no encontrado, 加工時間 = 0
+- ✅ [DEBUG] metric_card altura mínima: {...}px
+- ✅ [DEBUG] Mostrando Model Information
+- ✅ [DEBUG] Mostrando Noise Addition Settings
+- ✅ [DEBUG] noise_card altura mínima: {...}px
+- ✅ Análisis de clasificación completado
+- ✅ Archivo copiado: {...} → {...}
+- ✅ Archivo de fórmulas encontrado (search): {...}
+- ✅ Archivo de fórmulas encontrado: {...}
+- ✅ Archivo de predicción seleccionado: {...}
+- ✅ Archivo encontrado (patrón): {...}
+- ✅ Archivo encontrado (Prioridad 1): {...}
+- ✅ Archivo encontrado (Prioridad 2): {...}
+- ✅ Archivo encontrado (Prioridad 3): {...}
+- ✅ Archivo encontrado: {...}
+- ✅ Archivo Excel abierto: {...}
+- ✅ Archivo seleccionado y validado: {...}
+- ✅ Carpeta abierta: {...}
+- ✅ Carpeta de predicción encontrada: {...}
+- ✅ Datos cargados: {...} filas, {...} columnas
+- ✅ Datos de análisis cargados desde: {...}
+- ✅ Datos de diagnóstico cargados desde: {...}
+- ✅ Gráficos de evaluación mostrados
+- ✅ Gráficos de Pareto mostrados en pantalla
+- ✅ Gráficos del análisis de clasificación mostrados
+- ✅ Gráficos del análisis no lineal mostrados
+- ✅ Mostrando gráfico de Pareto: {...}
+- ✅ Mostrando gráfico: {...}
+- ✅ Mostrando gráficos de Pareto desde: {...}
+- ✅ Módulo de análisis lineal importado correctamente
+- ✅ Parada segura completada. No debería haber crash.
+- ✅ Parámetros seleccionados:
+- ✅ Resultados del análisis lineal mostrados
+- ✅ Usando proyecto existente: {...}
+- ✅ Validación exitosa - Continuando con la predicción
+- ✅ Validación exitosa - Todos los parámetros son consistentes
+- ✅ Worker de análisis no lineal cancelado correctamente
+- ❌ 02_prediction.py falló con código {...}
+- ❌ 03_pareto_analyzer.py falló con código {...}
+- ❌ Carpeta de análisis lineal no encontrada
+- ❌ Carpeta de predicción no encontrada
+- ❌ DEBUG: pareto_plots_folder no existe
+- ❌ DEBUG: prediction_output_file no existe
+- ❌ Error abriendo archivo Excel: {...}
+- ❌ Error abriendo carpeta: {...}
+- ❌ Error buscando archivo de fórmulas: {...}
+- ❌ Error buscando archivo 未実験データ: {...}
+- ❌ Error buscando carpeta de predicción: {...}
+- ❌ Error cancelando exportación: {...}
+- ❌ Error cancelando importación: {...}
+- ❌ Error cancelando predicción: {...}
+- ❌ Error cargando archivos existentes de clasificación: {...}
+- ❌ Error cargando estadísticas de clasificación: {...}
+- ❌ Error cargando estadísticas del análisis: {...}
+- ❌ Error ejecutando análisis lineal: {...}
+- ❌ Error ejecutando predicción: {...}
+- ❌ Error en análisis de clasificación: {...}
+- ❌ Error en análisis lineal: {...}
+- ❌ Error en finalización: {...}
+- ❌ Error en manejo de error de exportación: {...}
+- ❌ Error en manejo de finalización de exportación: {...}
+- ❌ Error en manejo de finalización: {...}
+- ❌ Error en procesamiento de fórmulas: {...}
+- ❌ Error en selección de archivo: {...}
+- ❌ Error importando módulo de análisis lineal: {...}
+- ❌ Error importando Pareto a BD: {...}
+- ❌ Error iniciando importación de clasificación: {...}
+- ❌ Error iniciando importación: {...}
+- ❌ Error iniciando predicción: {...}
+- ❌ Error iniciando worker de importación: {...}
+- ❌ Error mostrando diálogo de parámetros: {...}
+- ❌ Error mostrando gráficos de evaluación: {...}
+- ❌ Error mostrando gráficos de Pareto: {...}
+- ❌ Error mostrando gráficos del análisis de clasificación: {...}
+- ❌ Error mostrando gráficos del análisis no lineal: {...}
+- ❌ Error mostrando resultados: {...}
+- ❌ Error obteniendo datos filtrados: {...}
+- ❌ Error validando parámetros: {...}
+- ❌ Errores de validación encontrados:
+- ❌ No hay carpeta de proyecto configurada
+- ❌ No se encontraron subcarpetas de análisis lineal
+- ❌ No se encontraron subcarpetas de análisis lineal en: {...}
+- ❌ No se encontró el archivo: {...}
+- ❌ No se encontró la carpeta: {...}
+- ❌ No se encontró ningún archivo con patrón *_未実験データ.xlsx en: {...}
+- ❌ No se encontró ningún archivo de fórmulas válido
+- ❌ No se pudo cargar la imagen: {...}
+- ❌ Script no encontrado: 02_prediction.py
+- ❌ Script no encontrado: 03_pareto_analyzer.py
+- ❌ Usuario canceló el análisis de clasificación
+- ❌ Usuario canceló el análisis lineal
+- ❌ Usuario canceló la selección de parámetros
+- ❌ Validación fallida:
+- 📁 00_Pythonコード encontrado en: {...}
+- 📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto
+- 📁 Archivo intermedio guardado: {...}
+- 📁 Archivo temporal creado: {...}
+- 📁 Carpeta de análisis creada: {...}
+- 📁 Carpeta del proyecto encontrada: {...}
+- 📁 Creando backup: {...} → {...}
+- 📁 Creando nuevo proyecto: {...} en {...}
+- 📁 Subcarpeta de gráficos creada: {...}
+- 📊 Carpeta más reciente encontrada: {...}
+- 📊 Datos cargados para validación: {...} filas, {...} columnas
+- 📊 Datos filtrados obtenidos: {...} registros
+- 📊 Encontradas {...} carpetas de análisis lineal
+- 📊 Leyendo archivo: {...}
+- 📊 Parámetros seleccionados: {...}
+- 📊 Validando archivo: {...}
+- 🔍 [DEBUG] Datos parseados: {...}
+- 🔍 Archivos encontrados en carpeta ({...}):
+- 🔍 Buscando archivo de fórmulas en: {...}
+- 🔍 Buscando archivo de predicción en: {...}
+- 🔍 Buscando archivo: {...}
+- 🔍 Carpeta existe: {...}
+- 🔍 Carpeta raíz del análisis: {...}
+- 🔍 Carpeta raíz existe: {...}
+- 🔍 DEBUG - No hay consola desplegable
+- 🔍 Intentando con ruta absoluta: {...}
+- 🔍 Validando datos filtrados...
+- 🔍 Verificando carpeta {...}/{...}: {...}
+- 🔧 Ejecutando análisis lineal...
+- 🔧 Iniciando análisis de clasificación...
+- 🔧 Iniciando predicción no lineal desde pantalla de gráficos...
+- 🔧 Iniciando predicción Yosoku...
+- 🔧 Iniciando worker de clasificación...
+- 🔧 Mostrando gráficos de evaluación...
+- 🔧 Mostrando gráficos de Pareto en pantalla...
+- 🔧 Mostrando gráficos del análisis de clasificación...
+- 🔧 Mostrando gráficos del análisis no lineal...
+- 🔧 Mostrando resultados del análisis lineal...
+- 🗑️ Archivo temporal eliminado: {...}
+- 🛑 Análisis no lineal cancelado por el usuario
+- 🛑 Cancelando análisis de clasificación...
+- 🛑 DEBUG: Cancelando proceso no lineal
+- 🛑 DEBUG: Error no lineal recibido tras cancelación: {...}. Ignorando.
+- 🛑 DEBUG: Error recibido tras cancelación: {...}. Ignorando.
+- 🛑 DEBUG: on_analysis_cancelled disparado - Iniciando parada segura
+- 🛑 DEBUG: Resultado recibido pero el usuario canceló. Ignorando resultados.
+- 🛑 DEBUG: Solicitando cancelación al worker {...}

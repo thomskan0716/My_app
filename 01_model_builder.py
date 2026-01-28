@@ -663,7 +663,9 @@ def _assert_cv_splits(n_samples: int, outer: int, inner: int):
 def _downcast_df(df: pd.DataFrame) -> pd.DataFrame:
     fcols = df.select_dtypes(include=["float64"]).columns
     icols = df.select_dtypes(include=["int64"]).columns
-    # DEBUG: inspeccionar tipos antes de downcast
+    # ES: DEBUG: inspeccionar tipos antes de downcast
+    # EN: DEBUG: inspect dtypes before downcast
+    # JA: DEBUG: downcast前に型を確認
     try:
         print("🔍 DEBUG _downcast_df: float64 cols =", list(fcols))
         print("🔍 DEBUG _downcast_df: int64 cols   =", list(icols))
@@ -671,12 +673,16 @@ def _downcast_df(df: pd.DataFrame) -> pd.DataFrame:
             print("🔍 DEBUG _downcast_df: dtypes int64 cols =", df[icols].dtypes.to_dict())
             print("🔍 DEBUG _downcast_df: head int64 cols =", df[icols].head(3).to_dict(orient="list"))
     except Exception as _e:
-        # No bloquear ejecución si el debug falla
-        print(f"⚠️ DEBUG _downcast_df falló: {_e}")
+        # ES: No bloquear ejecución si el debug falla
+        # EN: Do not block execution if debug fails
+        # JA: デバッグが失敗しても実行を止めない
+        print(f"⚠️ デバッグ: _downcast_df に失敗: {_e}")
     if len(fcols):
         df[fcols] = df[fcols].astype("float32")
     if len(icols):
-        # pd.to_numeric no acepta DataFrames completos; aplicar columna a columna
+        # ES: pd.to_numeric no acepta DataFrames completos; aplicar columna a columna
+        # EN: pd.to_numeric does not accept full DataFrames; apply column-by-column
+        # JA: pd.to_numeric はDataFrame全体に使えないため列ごとに適用
         df[icols] = df[icols].apply(pd.to_numeric, downcast="integer")
     return df
 

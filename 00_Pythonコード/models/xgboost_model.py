@@ -95,7 +95,10 @@ class XGBoostModel(BaseModel):
             min_child_weight=clean_params.get("min_child_weight", 1),
             objective="reg:squarederror",
             booster="gbtree",
-            n_jobs=1,  # ★ CRÍTICO: Forzar a 1 para evitar conflictos de threading con OpenMP/MKL
+            # ES: ★ CRÍTICO: Forzar a 1 para evitar conflictos de threading con OpenMP/MKL
+            # EN: ★ CRITICAL: Force to 1 to avoid threading conflicts with OpenMP/MKL
+            # JP: ★ 重要: OpenMP/MKLとのスレッド競合を避けるため1に固定する
+            n_jobs=1,
             nthread=1,  # ★ XGBoost también usa nthread
             random_state=clean_params.get("random_state", 42),
             verbosity=0,

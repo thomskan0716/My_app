@@ -1,0 +1,7 @@
+Root: C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app
+Total matches: 0
+Unique messages: 0
+
+== Matches (by file) ==
+
+== Unique messages (sorted) ==

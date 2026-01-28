@@ -17,7 +17,7 @@ from db_manager import DBManager
 
 def test_exact_reference():
     """Test that the analysis works exactly like the reference file"""
-    print("🧪 TESTEANDO ANÁLISIS EXACTO COMO ARCHIVO DE REFERENCIA")
+    print("🧪 参照ファイルと同一になる解析をテスト中")
     print("=" * 60)
     
     try:
@@ -25,13 +25,13 @@ def test_exact_reference():
         db_manager = DBManager()
         
         # Test without filters first
-        print("📊 Ejecutando análisis sin filtros...")
+        print("📊 フィルタなしで解析を実行中...")
         results = run_advanced_linear_analysis_from_db(db_manager, filters=None)
         
         if results['success']:
-            print("✅ ANÁLISIS EXITOSO")
-            print(f"📁 Directorio de salida: {results['output_directory']}")
-            print(f"📊 Forma de datos: {results['data_shape']}")
+            print("✅ 解析成功")
+            print(f"📁 出力ディレクトリ: {results['output_directory']}")
+            print(f"📊 データ形状: {results['data_shape']}")
             
             # Check models
             models = results.get('models', {})
@@ -60,45 +60,45 @@ def test_exact_reference():
             
             # Check transformations
             transformations = results.get('transformation_info', {})
-            print(f"🔄 Transformaciones aplicadas: {len([t for t in transformations.values() if t.get('applied', False)])}")
+            print(f"🔄 適用した変換: {len([t for t in transformations.values() if t.get('applied', False)])}")
             
             for target, trans_info in transformations.items():
                 if trans_info.get('applied', False):
                     method = trans_info.get('method', 'unknown')
-                    print(f"  - {target}: {method} transformación")
+                    print(f"  - {target}: {method} 変換")
                 else:
                     reason = trans_info.get('reason', 'no transformation')
-                    print(f"  - {target}: sin transformación ({reason})")
+                    print(f"  - {target}: 変換なし（{reason}）")
             
             # Check Excel calculator
             excel_path = results.get('excel_calculator')
             if excel_path:
-                print(f"📊 Calculadora Excel: {excel_path}")
+                print(f"📊 Excel計算機: {excel_path}")
                 if os.path.exists(excel_path):
-                    print("✅ Archivo Excel creado correctamente")
+                    print("✅ Excelファイルを作成しました")
                 else:
-                    print("❌ Archivo Excel no encontrado")
+                    print("❌ Excelファイルが見つかりません")
             else:
-                print("⚠️ No se creó calculadora Excel")
+                print("⚠️ Excel計算機は作成されませんでした")
             
             # Check output directory structure
             output_dir = Path(results['output_directory'])
             if output_dir.exists():
-                print(f"📁 Estructura de directorios:")
+                print(f"📁 ディレクトリ構造:")
                 for item in output_dir.rglob('*'):
                     if item.is_file():
                         rel_path = item.relative_to(output_dir)
                         size = item.stat().st_size
                         print(f"  - {rel_path} ({size} bytes)")
             
-            print("\n🎉 PRUEBA EXITOSA: El análisis funciona exactamente como el archivo de referencia")
+            print("\n🎉 テスト成功: 解析は参照ファイルと同一です")
             
         else:
-            print(f"❌ ANÁLISIS FALLIDO: {results.get('error', 'Unknown error')}")
+            print(f"❌ 解析失敗: {results.get('error', '不明なエラー')}")
             return False
             
     except Exception as e:
-        print(f"❌ ERROR EN PRUEBA: {e}")
+        print(f"❌ テスト中にエラー: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -108,6 +108,6 @@ def test_exact_reference():
 if __name__ == "__main__":
     success = test_exact_reference()
     if success:
-        print("\n✅ TODAS LAS PRUEBAS PASARON - El análisis es idéntico al archivo de referencia")
+        print("\n✅ 全テスト成功 - 解析は参照ファイルと同一です")
     else:
-        print("\n❌ ALGUNAS PRUEBAS FALLARON - Revisar implementación")
+        print("\n❌ 一部テスト失敗 - 実装を確認してください")

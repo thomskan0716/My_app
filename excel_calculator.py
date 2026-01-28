@@ -66,14 +66,14 @@ class ExcelCalculator:
     def create_excel_prediction_calculator_with_inverse(self, models: Dict, transformation_info: Dict) -> str:
         """逆変換対応Excel予測計算機作成"""
         if not OPENPYXL_AVAILABLE:
-            print("⚠️ openpyxl no disponible, no se puede crear la calculadora Excel")
+            print("⚠️ openpyxl が利用できないため、Excel計算機を作成できません")
             return None
 
         try:
             prediction_info = self.load_models_for_excel_prediction(models)
 
             if not prediction_info:
-                print("⚠️ No hay modelos compatibles para Excel")
+                print("⚠️ Excel に対応するモデルがありません")
                 return None
 
             # Calculate total operations for progress tracking

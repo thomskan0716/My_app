@@ -10,7 +10,9 @@ class DBManager:
     def __init__(self, db_path="results.db", custom_conn=None):
         if custom_conn is not None:
             self.conn = custom_conn
-            # Intentar deducir el path real del archivo DB desde la conexión (para backups)
+            # ES: Intentar deducir el path real del archivo DB desde la conexión (para backups)
+            # EN: Try to infer the real DB file path from the connection (for backups)
+            # JA: 接続からDBファイルの実パスを推定（バックアップ用）
             self.db_path = self._infer_db_path_from_conn(custom_conn) or db_path
         else:
             self.conn = sqlite3.connect(db_path)
@@ -51,8 +53,8 @@ class DBManager:
             '突出量': '突出量',
             '突出し量': '突出量',
             '載せ率': '載せ率',
-            '線材長': '線材長',  # Mantener el nombre original
-            '実験日': '実験日',  # Mantener el nombre original
+            '線材長': '線材長',  # Keep original name
+            '実験日': '実験日',  # Keep original name
             '摩耗量': '摩耗量',
             '回転速度': '回転速度',
             '送り速度': '送り速度',
@@ -106,7 +108,7 @@ class DBManager:
 
     def insert_results(self, df):
         if df.empty:
-            print("⚠️ No hay datos para insertar.")
+            print("⚠️ 挿入するデータがありません。")
             return
 
         if "id" in df.columns:
@@ -127,9 +129,11 @@ class DBManager:
 
         for col in key_cols:
             if col not in df.columns:
-                raise ValueError(f"❌ Falta la columna clave en el archivo: {col}")
+                raise ValueError(f"❌ ファイルにキー列がありません: {col}")
 
-        # 💾 Leer registros actuales desde la BBDD
+        # ES: 💾 Leer registros actuales desde la BBDD
+        # EN: 💾 Read current records from the database
+        # JP: 💾 現在のレコードをDBから読み込む
         db_df = pd.read_sql_query(f"SELECT {', '.join(key_cols)} FROM main_results", self.conn)
 
         df_cmp_norm = DBManager.normalize_for_hash(df, key_cols)
@@ -145,11 +149,11 @@ class DBManager:
 
         # ✅ AHORA VA ESTO:
         if df_to_insert.empty:
-            print("⚠️ Todos los registros ya existían en la base de datos.")
+            print("⚠️ すべてのレコードはすでにDBに存在します。")
             return
 
         df_to_insert.to_sql("main_results", self.conn, if_exists="append", index=False)
-        print(f"✅ {len(df_to_insert)} registros nuevos insertados.")
+        print(f"✅ 新規レコードを {len(df_to_insert)} 件挿入しました。")
 
     def _create_db_backup(self) -> Optional[str]:
         """
@@ -197,12 +201,20 @@ class DBManager:
 
         for col in key_cols:
             if col not in df.columns:
-                raise ValueError(f"❌ Falta la columna clave para upsert: {col}")
+                raise ValueError(f"❌ upsert 用のキー列がありません: {col}")
 
-        # Columnas a actualizar (todas menos la clave)
-        # Importante:
-        # - Ignorar columnas que no existan en la tabla real
-        # - Ignorar columnas totalmente vacías (suelen venir de defaults cuando el archivo no las trae)
+        # ES: Columnas a actualizar (todas menos la clave)
+        # EN: Columns to update (everything except the key)
+        # JA: 更新対象列（キー列以外すべて）
+        # ES: Importante:
+        # EN: Notes:
+        # JA: 注意:
+        # ES: - Ignorar columnas que no existan en la tabla real
+        # EN: - Ignore columns that do not exist in the actual table
+        # JA: - 実テーブルに存在しない列は無視
+        # ES: - Ignorar columnas totalmente vacías (suelen venir de defaults cuando el archivo no las trae)
+        # EN: - Ignore columns that are entirely empty (often defaults when the file doesn't include them)
+        # JA: - 全て空の列は無視（ファイル未提供時のデフォルト由来が多い）
         update_cols_raw = [c for c in df.columns if c not in key_cols]
         update_cols_raw = [c for c in update_cols_raw if not df[c].isna().all()]
 
@@ -212,7 +224,9 @@ class DBManager:
         existing_cols = {row[1] for row in cur.fetchall()}  # name
         update_cols = [c for c in update_cols_raw if c in existing_cols]
 
-        # Leer ids existentes + clave + columnas a comparar (mínimas)
+        # ES: Leer ids existentes + clave + columnas a comparar (mínimas)
+        # EN: Read existing ids + key + minimal columns to compare
+        # JP: 既存ID + キー + 比較用の最小列を読み込む
         db_cols = ["id"] + key_cols + update_cols
         db_df = pd.read_sql_query(f"SELECT {', '.join(db_cols)} FROM main_results", self.conn)
 
@@ -224,7 +238,9 @@ class DBManager:
         if not db_df.empty:
             db_keys = db_key_norm.apply(lambda r: "||".join(r.values.astype(str)), axis=1).tolist()
             for k, row_id in zip(db_keys, db_df["id"].tolist()):
-                # si hay duplicados previos, nos quedamos con el primero
+                # ES: Si hay duplicados previos, nos quedamos con el primero
+                # EN: If there are existing duplicates, keep the first one
+                # JA: 既存の重複がある場合は最初のものを採用
                 if k not in db_map:
                     db_map[k] = row_id
 
@@ -235,7 +251,9 @@ class DBManager:
         inserted_count = 0
 
         def _norm_val(v: Any) -> str:
-            # Normalización robusta para comparar "igualdad" (evita falsos positivos por formato)
+            # ES: Normalización robusta para comparar "igualdad" (evita falsos positivos por formato)
+            # EN: Robust normalization for equality checks (avoids format-based false positives)
+            # JA: 等価比較用の堅牢な正規化（書式差による誤判定を防ぐ）
             try:
                 if pd.isna(v):
                     return ""
@@ -243,13 +261,17 @@ class DBManager:
                 pass
             if v is None:
                 return ""
-            # numéricos: fijar precisión
+            # ES: Numéricos: fijar precisión
+            # EN: Numerics: fix precision
+            # JA: 数値：精度を固定
             try:
                 if isinstance(v, (int, float)) and not isinstance(v, bool):
                     return f"{float(v):.6f}"
             except Exception:
                 pass
-            # strings numéricos: intentar convertir
+            # ES: Strings numéricos: intentar convertir
+            # EN: Numeric strings: try to convert
+            # JA: 数値文字列：変換を試行
             try:
                 s = str(v).strip()
                 if s == "":
@@ -299,7 +321,9 @@ class DBManager:
                     for c in update_cols:
                         new_val = df.iloc[i][c]
                         old_val = old.get(c)
-                        # Si el archivo no trae valor (NaN/None/""), no lo usamos para decidir ni para sobrescribir
+                        # ES: Si el archivo no trae valor (NaN/None/""), no lo usamos para decidir ni para sobrescribir
+                        # EN: If the file does not provide a value (NaN/None/\"\"), do not use it to decide or overwrite
+                        # JP: ファイル側に値が無い場合（NaN/None/\"\"）、判断にも上書きにも使わない
                         if _norm_val(new_val) == "":
                             continue
                         if _norm_val(new_val) != _norm_val(old_val):
@@ -335,7 +359,7 @@ class DBManager:
                     if debug:
                         try:
                             brief = _key_brief_from_row(df.iloc[i])
-                            print(f"🟦 UPSERT SKIP (idéntico) id={row_id} | {brief}", flush=True)
+                            print(f"🟦 UPSERT SKIP（同一） id={row_id} | {brief}", flush=True)
                         except Exception:
                             pass
             else:
@@ -350,12 +374,14 @@ class DBManager:
 
         db_backup_path = None
         if updated_count > 0:
-            # ✅ Crear backup UNA SOLA VEZ antes de sobrescribir
+                # ES: ✅ Crear backup UNA SOLA VEZ antes de sobrescribir
+                # EN: ✅ Create a backup ONCE before overwriting
+                # JP: ✅ 上書き前にバックアップを一度だけ作成する
             db_backup_path = self._create_db_backup()
             if db_backup_path:
                 print(f"📋 Backup de BBDD creado: {db_backup_path}", flush=True)
             else:
-                print("⚠️ No se pudo crear backup automático de la BBDD (ruta no disponible).", flush=True)
+                print("⚠️ 自動DBバックアップを作成できませんでした（パスが利用できません）。", flush=True)
 
         # Ejecutar updates
         if to_update and update_cols:
@@ -384,13 +410,13 @@ class DBManager:
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM main_results")
         results = cursor.fetchall()
-        print(f"📊 Total de registros en la base de datos: {len(results)}")
+        print(f"📊 DBの総レコード数: {len(results)}")
         if results:
             print("📋 Primeros 5 registros:")
             for i, row in enumerate(results[:5]):
                 print(f"  Registro {i+1}: {row}")
         else:
-            print("📋 No hay registros en la base de datos")
+            print("📋 DBにレコードがありません")
 
         df["__hash"] = df_cmp_norm_hashes
         db_hashes = set(db_cmp_norm_hashes)
@@ -399,7 +425,7 @@ class DBManager:
 
         # ✅ AHORA VA ESTO:
         if df_to_insert.empty:
-            print("⚠️ Todos los registros ya existían en la base de datos.")
+            print("⚠️ すべてのレコードはすでにDBに存在します。")
             return
 
         df_to_insert.to_sql("main_results", self.conn, if_exists="append", index=False)
@@ -413,13 +439,13 @@ class DBManager:
         df = pd.read_sql_query(query, self.conn)
 
         if df.empty:
-            print("⚠️ La base de datos está vacía.")
+            print("⚠️ データベースが空です。")
         else:
             pd.set_option("display.max_columns", None)
             pd.set_option("display.max_rows", None)
             pd.set_option("display.width", None)
             pd.set_option("display.colheader_justify", "left")
-            print("📊 Contenido completo de la base de datos:\n")
+            print("📊 DBの全内容:\n")
             print(df)
 
 
@@ -448,7 +474,9 @@ class ResultProcessor:
         df = self._read_any_table(file_path)
         df = DBManager.map_column_names(df)
         
-        # Eliminar 加工時間 si está presente (se calcula automáticamente)
+        # ES: Eliminar 加工時間 si está presente (se calcula automáticamente)
+        # EN: Drop 加工時間 if present (it is computed automatically)
+        # JA: 加工時間 があれば削除（自動計算するため）
         if '加工時間' in df.columns:
             df = df.drop(columns=['加工時間'])
         if '加工時間(s/100mm)' in df.columns:
@@ -463,10 +491,14 @@ class ResultProcessor:
 
         df_filtered = df[columns_required].copy()
 
-        # Calcular バリ除去 basado en 上面ダレ量
+        # ES: Calcular バリ除去 basado en 上面ダレ量
+        # EN: Compute バリ除去 based on 上面ダレ量
+        # JA: 上面ダレ量 に基づき バリ除去 を算出
         df_filtered['バリ除去'] = df_filtered['上面ダレ量'].apply(lambda x: 1 if x > 0 else 0)
 
-        # Brush: SIEMPRE desde el archivo (one-hot A13/A11/A21/A32). No usar UI.
+        # ES: Brush: SIEMPRE desde el archivo (one-hot A13/A11/A21/A32). No usar UI.
+        # EN: Brush: ALWAYS from the file (one-hot A13/A11/A21/A32). Do not use UI.
+        # JA: ブラシ：必ずファイルから（A13/A11/A21/A32のone-hot）。UIは使わない。
         brush_cols = ["A13", "A11", "A21", "A32"]
         missing_brush = [c for c in brush_cols if c not in df.columns]
         if missing_brush:
@@ -478,7 +510,9 @@ class ResultProcessor:
         for c in brush_cols:
             df_filtered[c] = pd.to_numeric(df[c], errors="coerce").fillna(0).astype(int)
 
-        # Validación básica: exactamente 1 cepillo activo por fila
+        # ES: Validación básica: exactamente 1 cepillo activo por fila
+        # EN: Basic validation: exactly one active brush per row
+        # JA: 基本検証：各行で有効ブラシは1つのみ
         try:
             s = df_filtered[brush_cols].sum(axis=1)
             bad = df_filtered[(s != 1)]
@@ -490,45 +524,66 @@ class ResultProcessor:
         except ValueError:
             raise
         except Exception:
-            # Si falla la validación por algún motivo, no bloquear el import
+            # ES: Si falla la validación por algún motivo, no bloquear el import
+            # EN: If validation fails for any reason, do not block the import
+            # JA: 検証が失敗してもインポートをブロックしない（安全側）
             pass
         
-        # Calcular 加工時間 usando la fórmula: 100/送り速度*60
+        # ES: Calcular 加工時間 usando la fórmula: 100/送り速度*60
+        # EN: Compute 加工時間 using the formula: 100/送り速度*60
+        # JA: 加工時間 を計算（式：100/送り速度*60）
         df_filtered['加工時間'] = (100 / df_filtered['送り速度']) * 60
         
-        # Asignar valores por defecto para campos que pueden no estar en el archivo
+        # ES: Asignar valores por defecto para campos que pueden no estar en el archivo
+        # EN: Assign default values for fields that may be missing from the file
+        # JA: ファイルにない可能性のある項目にデフォルト値を設定
         if '直径' in df.columns:
             df_filtered['直径'] = df['直径']
         else:
-            df_filtered['直径'] = 0.15  # Valor por defecto
+            df_filtered['直径'] = 0.15  # Default value
         if '材料' in df.columns:
             df_filtered['材料'] = df['材料']
         else:
-            df_filtered['材料'] = 'Steel'  # Valor por defecto
+            df_filtered['材料'] = 'Steel'  # Default value
 
-        # Cutting forces opcionales:
-        # si no vienen en el archivo, NO crear la columna (así no se usa para comparar/actualizar)
+        # ES: Cutting forces opcionales:
+        # EN: Optional cutting forces:
+        # JA: 切削力（任意）
+        # ES: Si no vienen en el archivo, NO crear la columna (así no se usa para comparar/actualizar)
+        # EN: If they are not present in the file, do NOT create the column (so it won't be used for compare/update)
+        # JA: ファイルに無ければ列を作らない（比較/更新に使わないため）
         for c in ["切削力X", "切削力Y", "切削力Z"]:
             if c in df.columns:
                 df_filtered[c] = pd.to_numeric(df[c], errors="coerce")
 
         df_filtered = DBManager.map_column_names(df_filtered)
 
-        # Upsert: sobreescribe si ya existe la misma clave (condiciones)
+        # ES: Upsert: sobreescribe si ya existe la misma clave (condiciones)
+        # EN: Upsert: overwrite when the same key (conditions) already exists
+        # JA: アップサート：同一キー（条件）があれば上書き
         res = self.db.upsert_results(df_filtered, debug=True)
         print(f"✅ Upsert completado. insertados={res['inserted']} actualizados={res['updated']}")
-        print("✅ Procesamiento e inserción completados.")
+        print("✅ 処理と挿入が完了しました。")
         self.db.print_all_results()
 
     def process_results_file_with_ui_values(self, file_path, selected_brush, diameter, material, custom_conn=None):
-        """Procesar archivo de resultados importando columnas específicas y usando valores de UI"""
-        # Leer todas las columnas del archivo para asegurar que 実験日 esté incluido
+        """ES: Procesar archivo de resultados importando columnas específicas y usando valores de UI
+        EN: Process a results file importing specific columns and using UI values
+        JA: 結果ファイルを処理（特定列を取り込み、UI値を使用）
+        """
+        # ES: Leer todas las columnas del archivo para asegurar que 実験日 esté incluido
+        # EN: Read all columns to ensure 実験日 is included
+        # JA: 実験日 を確実に含めるため全列を読み込む
         df = self._read_any_table(file_path)
         
-        # Mapear nombres de columnas
+        # ES: Mapear nombres de columnas
+        # EN: Map column names
+        # JA: 列名をマッピング
         df = DBManager.map_column_names(df)
         
-        # Eliminar 加工時間 si está presente (se calcula automáticamente)
+        # ES: Eliminar 加工時間 si está presente (se calcula automáticamente)
+        # EN: Drop 加工時間 if present (it is computed automatically)
+        # JA: 加工時間 があれば削除（自動計算するため）
         if '加工時間' in df.columns:
             df = df.drop(columns=['加工時間'])
         if '加工時間(s/100mm)' in df.columns:
@@ -538,18 +593,26 @@ class ResultProcessor:
         columns_required = ['回転速度', '送り速度', 'UPカット', '切込量', '突出量', '載せ率', 'パス数',
                             '線材長', '上面ダレ量', '側面ダレ量', '摩耗量', '面粗度前', '面粗度後', '実験日']
         
-        # Verificar columnas faltantes
+        # ES: Verificar columnas faltantes
+        # EN: Check for missing columns
+        # JA: 不足列をチェック
         missing_columns = [col for col in columns_required if col not in df.columns]
         if missing_columns:
             raise ValueError(f"❌ El archivo de resultados no contiene las siguientes columnas necesarias: {', '.join(missing_columns)}")
         
-        # Filtrar solo las columnas requeridas
+        # ES: Filtrar solo las columnas requeridas
+        # EN: Keep only the required columns
+        # JA: 必須列のみ抽出
         df_filtered = df[columns_required].copy()
         
-        # Calcular バリ除去 basado en 上面ダレ量
+        # ES: Calcular バリ除去 basado en 上面ダレ量
+        # EN: Compute バリ除去 based on 上面ダレ量
+        # JA: 上面ダレ量 に基づき バリ除去 を算出
         df_filtered['バリ除去'] = df_filtered['上面ダレ量'].apply(lambda x: 1 if x > 0 else 0)
         
-        # Brush: SIEMPRE desde el archivo (one-hot A13/A11/A21/A32). No usar UI.
+        # ES: Brush: SIEMPRE desde el archivo (one-hot A13/A11/A21/A32). No usar UI.
+        # EN: Brush: ALWAYS from the file (one-hot A13/A11/A21/A32). Do not use UI.
+        # JA: ブラシ：必ずファイルから（A13/A11/A21/A32のone-hot）。UIは使わない。
         brush_cols = ["A13", "A11", "A21", "A32"]
         missing_brush = [c for c in brush_cols if c not in df.columns]
         if missing_brush:
@@ -561,7 +624,9 @@ class ResultProcessor:
         for c in brush_cols:
             df_filtered[c] = pd.to_numeric(df[c], errors="coerce").fillna(0).astype(int)
 
-        # Validación básica: exactamente 1 cepillo activo por fila
+        # ES: Validación básica: exactamente 1 cepillo activo por fila
+        # EN: Basic validation: exactly one active brush per row
+        # JA: 基本検証：各行で有効ブラシは1つのみ
         try:
             s = df_filtered[brush_cols].sum(axis=1)
             bad = df_filtered[(s != 1)]
@@ -573,32 +638,48 @@ class ResultProcessor:
         except ValueError:
             raise
         except Exception:
-            # Si falla la validación por algún motivo, no bloquear el import
+            # ES: Si falla la validación por algún motivo, no bloquear el import
+            # EN: If validation fails for any reason, do not block the import
+            # JA: 検証が失敗してもインポートをブロックしない（安全側）
             pass
         
-        # 直径/材料: usar archivo si existe, si no UI
+        # ES: 直径/材料: usar archivo si existe, si no UI
+        # EN: 直径/材料: use file values if present, otherwise UI
+        # JA: 直径/材料：ファイルにあれば使用、なければUI
         df_filtered['直径'] = df['直径'] if '直径' in df.columns else diameter
         df_filtered['材料'] = df['材料'] if '材料' in df.columns else material
 
-        # Cutting forces opcionales:
-        # si no vienen en el archivo, NO crear la columna (así no se usa para comparar/actualizar)
+        # ES: Cutting forces opcionales:
+        # EN: Optional cutting forces:
+        # JA: 切削力（任意）
+        # ES: Si no vienen en el archivo, NO crear la columna (así no se usa para comparar/actualizar)
+        # EN: If they are not present in the file, do NOT create the column (so it won't be used for compare/update)
+        # JA: ファイルに無ければ列を作らない（比較/更新に使わないため）
         for c in ["切削力X", "切削力Y", "切削力Z"]:
             if c in df.columns:
                 df_filtered[c] = pd.to_numeric(df[c], errors="coerce")
         
-        # Calcular 加工時間 usando la fórmula: 100/送り速度*60
+        # ES: Calcular 加工時間 usando la fórmula: 100/送り速度*60
+        # EN: Compute 加工時間 using the formula: 100/送り速度*60
+        # JA: 加工時間 を計算（式：100/送り速度*60）
         df_filtered['加工時間'] = (100 / df_filtered['送り速度']) * 60
         
-        # Mapear nombres de columnas para la base de datos
+        # ES: Mapear nombres de columnas para la base de datos
+        # EN: Map column names for the database
+        # JA: DB用に列名をマッピング
         df_filtered = DBManager.map_column_names(df_filtered)
         
-        # Usar conexión personalizada si se proporciona, sino usar la del db manager
+        # ES: Usar conexión personalizada si se proporciona, sino usar la del db manager
+        # EN: Use custom connection if provided; otherwise use the DB manager connection
+        # JA: カスタム接続があれば使用、なければDBマネージャの接続を使用
         if custom_conn is not None:
-            # Crear un DBManager temporal con la conexión personalizada
+            # ES: Crear un DBManager temporal con la conexión personalizada
+            # EN: Create a temporary DBManager with the custom connection
+            # JA: カスタム接続で一時DBManagerを作成
             temp_db = DBManager(custom_conn=custom_conn)
             res = temp_db.upsert_results(df_filtered, debug=True)
             print(f"✅ Upsert completado (conn personalizada). insertados={res['inserted']} actualizados={res['updated']}")
-            print("✅ Procesamiento e inserción completados con valores de UI (conexión personalizada).")
+            print("✅ UI値（カスタム接続）での処理と挿入が完了しました。")
             return res
         else:
             res = self.db.upsert_results(df_filtered, debug=True)
@@ -612,10 +693,10 @@ class ResultProcessor:
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM main_results")
         results = cursor.fetchall()
-        print(f"📊 Total de registros en la base de datos: {len(results)}")
+        print(f"📊 DBの総レコード数: {len(results)}")
         if results:
             print("📋 Primeros 5 registros:")
             for i, row in enumerate(results[:5]):
                 print(f"  Registro {i+1}: {row}")
         else:
-            print("📋 No hay registros en la base de datos")
+            print("📋 DBにレコードがありません")

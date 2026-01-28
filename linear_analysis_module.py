@@ -6,9 +6,17 @@
 # coding: utf-8
 
 """
-Módulo de Análisis Lineal para 0.00sec
-Basado en 線形モデル_回帰分離混合_Ver2_noA11A21A32.py
-Adaptado para trabajar con la base de datos del proyecto
+ES: Módulo de Análisis Lineal para 0.00sec.
+EN: Linear analysis module for 0.00sec.
+JA: 0.00sec 用の線形解析モジュール。
+
+ES: Basado en 線形モデル_回帰分離混合_Ver2_noA11A21A32.py.
+EN: Based on 線形モデル_回帰分離混合_Ver2_noA11A21A32.py.
+JA: 線形モデル_回帰分離混合_Ver2_noA11A21A32.py をベースにしています。
+
+ES: Adaptado para trabajar con la base de datos del proyecto.
+EN: Adapted to work with the project's database.
+JA: プロジェクトのDBで動くように調整されています。
 """
 
 import pandas as pd
@@ -48,12 +56,19 @@ import seaborn as sns
 warnings.filterwarnings('ignore')
 
 class LinearAnalysisConfig:
-    """Configuración del análisis lineal"""
+    """ES: Configuración del análisis lineal
+    EN: Linear analysis configuration
+    JA: 線形解析の設定
+    """
     
-    # Columnas objetivo (variables dependientes)
+    # ES: Columnas objetivo (variables dependientes)
+    # EN: Target columns (dependent variables)
+    # JA: 目的変数列（従属変数）
     TARGET_COLUMNS = ['バリ除去', '摩耗量', '上面ダレ量', '側面ダレ量']
     
-    # Tipos de tarea para cada objetivo
+    # ES: Tipos de tarea para cada objetivo
+    # EN: Task type per target
+    # JA: 目的変数ごとのタスク種別
     TARGET_TYPES = {
         'バリ除去': 'classification',
         '摩耗量': 'regression',
@@ -61,20 +76,28 @@ class LinearAnalysisConfig:
         '側面ダレ量': 'regression'
     }
     
-    # Columnas de características (variables independientes)
-    # Mapeo de nombres de la BD a nombres del análisis
+    # ES: Columnas de características (variables independientes)
+    # EN: Feature columns (independent variables)
+    # JA: 特徴量列（独立変数）
+    # ES: Mapeo de nombres de la BD a nombres del análisis
+    # EN: Map DB column names to analysis column names
+    # JA: DB列名→解析列名のマッピング
     FEATURE_COLUMNS = [
         '送り速度', 'UPカット', '切込量', 
-        '突出量', '載せ率', '回転速度', 'パス数'  # Corregido: BD usa '突出量'
+        '突出量', '載せ率', '回転速度', 'パス数'  # Fixed: DB uses '突出量'
     ]
     
-    # Mapeo de nombres de la BD a nombres del análisis
-    # Nota: La BD usa '突出量' pero el análisis espera '突出量' (sin し)
+    # ES: Mapeo de nombres de la BD a nombres del análisis
+    # EN: Map DB column names to analysis column names
+    # JA: DB列名→解析列名のマッピング
+    # ES: Nota: La BD usa '突出量' pero el análisis espera '突出量' (sin し)
+    # EN: Note: the DB uses '突出量' and the analysis expects '突出量' (no し)
+    # JA: 注意：DBは「突出量」、解析も「突出量」（し無し）を期待
     DB_TO_ANALYSIS_MAPPING = {
         '送り速度': '送り速度',
         'UPカット': 'UPカット', 
         '切込量': '切込量',
-        '突出量': '突出量',  # Corregido: BD usa '突出量'
+        '突出量': '突出量',  # Fixed: DB uses '突出量'
         '載せ率': '載せ率',
         '回転速度': '回転速度',
         'パス数': 'パス数'
@@ -88,10 +111,16 @@ class LinearAnalysisConfig:
     RANDOM_STATE = 42
 
 class LinearAnalysisPipeline:
-    """Pipeline de análisis lineal simplificado"""
+    """ES: Pipeline de análisis lineal simplificado
+    EN: Simplified linear analysis pipeline
+    JA: 簡易線形解析パイプライン
+    """
     
     def __init__(self, output_dir: str = "output_analysis"):
-        """Inicializar el pipeline"""
+        """ES: Inicializar el pipeline
+        EN: Initialize the pipeline
+        JA: パイプラインを初期化
+        """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
         
@@ -100,11 +129,16 @@ class LinearAnalysisPipeline:
         self.results = {}
         self.transformation_info = {}
         
-        # Configurar matplotlib para japonés
+        # ES: Configurar matplotlib para japonés
+        # EN: Configure matplotlib for Japanese fonts
+        # JA: matplotlib を日本語フォント向けに設定
         self._setup_japanese_font()
     
     def _setup_japanese_font(self):
-        """Configurar fuente japonesa para matplotlib"""
+        """ES: Configurar fuente japonesa para matplotlib
+        EN: Configure Japanese font for matplotlib
+        JA: matplotlib の日本語フォント設定
+        """
         try:
             if os.name == 'nt':
                 fonts = ['MS Gothic', 'Yu Gothic', 'Meiryo']
@@ -119,31 +153,39 @@ class LinearAnalysisPipeline:
                 except:
                     continue
         except Exception as e:
-            print(f"⚠️ No se pudo configurar fuente japonesa: {e}")
+            print(f"⚠️ 日本語フォントを設定できませんでした: {e}")
     
     def prepare_data(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
-        """Preparar datos para el análisis"""
-        print("🔧 Preparando datos para análisis...")
+        """ES: Preparar datos para el análisis
+        EN: Prepare data for analysis
+        JA: 解析用データを準備"""
+        print("🔧 解析用データを準備中...")
         
-        # Mapear nombres de columnas de la BD a nombres del análisis
+        # ES: Mapear nombres de columnas de la BD a nombres del análisis
+        # EN: Map DB column names to analysis names
+        # JA: DB列名を解析名にマッピング
         column_mapping = {}
         for db_col, analysis_col in LinearAnalysisConfig.DB_TO_ANALYSIS_MAPPING.items():
             if db_col in df.columns:
                 column_mapping[db_col] = analysis_col
         
-        # Crear DataFrame con nombres mapeados
+        # ES: Crear DataFrame con nombres mapeados
+        # EN: Create a DataFrame with mapped names
+        # JP: マッピング済み名称でDataFrameを作成
         df_mapped = df.rename(columns=column_mapping)
         
-        # Seleccionar solo las columnas necesarias
+        # ES: Seleccionar solo las columnas necesarias
+        # EN: Select only the required columns
+        # JP: 必要な列のみ選択
         available_features = [col for col in LinearAnalysisConfig.FEATURE_COLUMNS 
                             if col in df_mapped.columns]
         available_targets = [col for col in LinearAnalysisConfig.TARGET_COLUMNS 
                            if col in df_mapped.columns]
         
-        print(f"🔧 Características disponibles: {available_features}")
-        print(f"🔧 Objetivos disponibles: {available_targets}")
+        print(f"🔧 利用可能な特徴量: {available_features}")
+        print(f"🔧 利用可能な目的変数: {available_targets}")
         
-        # Crear X (características) e y (objetivos)
+        # ES: Crear X (características) e y (objetivos) | EN: Build X (features) and y (targets) | JA: X（特徴量）とy（目的）を作成
         X = df_mapped[available_features].copy()
         y = df_mapped[available_targets].copy()
         
@@ -157,23 +199,23 @@ class LinearAnalysisPipeline:
     
     def train_models(self, X: pd.DataFrame, y: pd.DataFrame):
         """Entrenar modelos para cada objetivo"""
-        print("🔧 Entrenando modelos...")
+        print("🔧 モデルを学習中...")
         
         for target_col in y.columns:
             if target_col not in LinearAnalysisConfig.TARGET_TYPES:
                 continue
                 
             task_type = LinearAnalysisConfig.TARGET_TYPES[target_col]
-            print(f"🔧 Entrenando modelo para {target_col} ({task_type})")
+            print(f"🔧 {target_col} のモデルを学習中（{task_type}）")
             
             try:
-                # Obtener datos válidos para este objetivo
+                # ES: Obtener datos válidos para este objetivo | EN: Get valid data for this target | JA: この目的変数用の有効データを取得
                 valid_mask = ~y[target_col].isnull()
                 X_valid = X[valid_mask]
                 y_valid = y[target_col][valid_mask]
                 
                 if len(X_valid) < 10:
-                    print(f"⚠️ Insuficientes datos para {target_col}: {len(X_valid)} muestras")
+                    print(f"⚠️ データ不足: {target_col}（{len(X_valid)} サンプル）")
                     continue
                 
                 if task_type == 'regression':
@@ -184,11 +226,13 @@ class LinearAnalysisPipeline:
                 self.models[target_col] = model_info
                 
             except Exception as e:
-                print(f"❌ Error entrenando modelo para {target_col}: {e}")
+                print(f"❌ モデル学習中にエラー: {target_col}: {e}")
                 self.models[target_col] = {'error': str(e)}
     
     def _train_regression_model(self, X: pd.DataFrame, y: pd.Series, target_name: str) -> Dict:
-        """Entrenar modelo de regresión"""
+        """ES: Entrenar modelo de regresión
+        EN: Train regression model
+        JA: 回帰モデルを学習"""
         models = {
             'LinearRegression': LinearRegression(),
             'Ridge': Ridge(random_state=LinearAnalysisConfig.RANDOM_STATE),
@@ -199,7 +243,7 @@ class LinearAnalysisPipeline:
         best_score = -float('inf')
         best_model = None
         
-        # Validación cruzada simple
+        # ES: Validación cruzada simple | EN: Simple cross-validation | JA: 簡易交差検証
         cv = KFold(n_splits=LinearAnalysisConfig.INNER_CV_SPLITS, 
                    shuffle=True, random_state=LinearAnalysisConfig.RANDOM_STATE)
         
@@ -214,13 +258,15 @@ class LinearAnalysisPipeline:
                     best_model = model
                     
             except Exception as e:
-                print(f"⚠️ Error con {name}: {e}")
+                print(f"⚠️ {name} でエラー: {e}")
         
         if best_model is None:
             best_model = LinearRegression()
             best_model_name = 'LinearRegression'
         
-        # Entrenar el mejor modelo
+        # ES: Entrenar el mejor modelo
+        # EN: Train the best model
+        # JP: 最良モデルを学習
         best_model.fit(X, y)
         y_pred = best_model.predict(X)
         
@@ -229,7 +275,9 @@ class LinearAnalysisPipeline:
         rmse = np.sqrt(mean_squared_error(y, y_pred))
         r2 = r2_score(y, y_pred)
         
-        # Guardar modelo
+        # ES: Guardar modelo
+        # EN: Save the model
+        # JP: モデルを保存
         model_path = self.output_dir / f'model_{target_name}.pkl'
         model_data = {
             'model': best_model,
@@ -239,7 +287,7 @@ class LinearAnalysisPipeline:
         }
         joblib.dump(model_data, model_path)
         
-        # Crear gráfico
+        # ES: Crear gráfico | EN: Create chart | JA: グラフを作成
         self._plot_regression_results(y, y_pred, target_name)
         
         return {
@@ -251,8 +299,12 @@ class LinearAnalysisPipeline:
         }
     
     def _train_classification_model(self, X: pd.DataFrame, y: pd.Series, target_name: str) -> Dict:
-        """Entrenar modelo de clasificación"""
-        # Verificar que hay suficientes muestras por clase
+        """ES: Entrenar modelo de clasificación
+        EN: Train classification model
+        JA: 分類モデルを訓練"""
+        # ES: Verificar que hay suficientes muestras por clase
+        # EN: Check that there are enough samples per class
+        # JP: クラスごとのサンプル数が十分か確認する
         class_counts = y.value_counts()
         if len(class_counts) < 2 or class_counts.min() < 5:
             return {'error': 'insufficient_samples'}
@@ -261,7 +313,9 @@ class LinearAnalysisPipeline:
         le = LabelEncoder()
         y_encoded = le.fit_transform(y)
         
-        # Entrenar modelo
+        # ES: Entrenar modelo
+        # EN: Train the model
+        # JP: モデルを学習
         model = LogisticRegression(random_state=LinearAnalysisConfig.RANDOM_STATE, max_iter=2000)
         model.fit(X, y_encoded)
         
@@ -273,7 +327,9 @@ class LinearAnalysisPipeline:
         accuracy = accuracy_score(y_encoded, y_pred)
         f1 = f1_score(y_encoded, y_pred, average='weighted')
         
-        # Guardar modelo
+        # ES: Guardar modelo
+        # EN: Save the model
+        # JP: モデルを保存
         model_path = self.output_dir / f'model_{target_name}.pkl'
         model_data = {
             'model': model,
@@ -293,11 +349,13 @@ class LinearAnalysisPipeline:
         }
     
     def _plot_regression_results(self, y_true: pd.Series, y_pred: np.ndarray, target_name: str):
-        """Crear gráfico de resultados de regresión"""
+        """ES: Crear gráfico de resultados de regresión
+        EN: Create regression results plot
+        JA: 回帰結果のグラフを作成"""
         try:
             fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
             
-            # Gráfico 1: Predicción vs Real
+            # ES: Gráfico 1: Predicción vs Real | EN: Chart 1: Prediction vs Actual | JA: グラフ1：予測vs実測
             ax1.scatter(y_true, y_pred, alpha=0.6)
             ax1.plot([y_true.min(), y_true.max()], [y_true.min(), y_true.max()], 'r--', lw=2)
             ax1.set_xlabel('Valor Real')
@@ -305,7 +363,7 @@ class LinearAnalysisPipeline:
             ax1.set_title(f'{target_name}: Predicción vs Real')
             ax1.grid(True, alpha=0.3)
             
-            # Gráfico 2: Residuales
+            # ES: Gráfico 2: Residuales | EN: Chart 2: Residuals | JA: グラフ2：残差
             residuals = y_true - y_pred
             ax2.scatter(y_pred, residuals, alpha=0.6)
             ax2.axhline(y=0, color='r', linestyle='--', linewidth=2)
@@ -316,19 +374,21 @@ class LinearAnalysisPipeline:
             
             plt.tight_layout()
             
-            # Guardar gráfico
+            # ES: Guardar gráfico | EN: Save chart | JA: グラフを保存
             plot_path = self.output_dir / f'regression_{target_name}.png'
             plt.savefig(plot_path, dpi=300, bbox_inches='tight')
             plt.close()
             
-            print(f"✅ Gráfico guardado: {plot_path}")
+            print(f"✅ グラフを保存しました: {plot_path}")
             
         except Exception as e:
-            print(f"⚠️ Error creando gráfico para {target_name}: {e}")
+            print(f"⚠️ グラフ作成中にエラー: {target_name}: {e}")
     
     def save_results(self):
-        """Guardar resultados del análisis"""
-        print("🔧 Guardando resultados...")
+        """ES: Guardar resultados del análisis
+        EN: Save analysis results
+        JA: 解析結果を保存"""
+        print("🔧 結果を保存中...")
         
         # Resumen de resultados
         results_summary = []
@@ -363,13 +423,17 @@ class LinearAnalysisPipeline:
             
             results_summary.append(row)
         
-        # Guardar como Excel
+        # ES: Guardar como Excel
+        # EN: Save as Excel
+        # JP: Excelとして保存
         results_df = pd.DataFrame(results_summary)
         results_path = self.output_dir / 'analysis_results.xlsx'
         results_df.to_excel(results_path, index=False)
-        print(f"✅ Resultados guardados: {results_path}")
+        print(f"✅ 結果を保存しました: {results_path}")
         
-        # Guardar como JSON
+        # ES: Guardar como JSON
+        # EN: Save as JSON
+        # JP: JSONとして保存
         results_json = {
             'timestamp': datetime.now().isoformat(),
             'models': {k: {
@@ -384,28 +448,32 @@ class LinearAnalysisPipeline:
         json_path = self.output_dir / 'analysis_results.json'
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(results_json, f, indent=2, ensure_ascii=False)
-        print(f"✅ Resultados JSON guardados: {json_path}")
+        print(f"✅ 結果JSONを保存しました: {json_path}")
     
     def run_analysis(self, df: pd.DataFrame) -> Dict[str, Any]:
-        """Ejecutar análisis completo"""
-        print("🚀 Iniciando análisis lineal...")
+        """ES: Ejecutar análisis completo
+        EN: Run full analysis
+        JA: 解析を一通り実行"""
+        print("🚀 線形解析を開始...")
         
         try:
             # Preparar datos
             X, y = self.prepare_data(df)
             
             if X.empty or y.empty:
-                raise ValueError("No hay datos válidos para el análisis")
+                raise ValueError("解析に使用できる有効データがありません")
             
-            print(f"✅ Datos preparados: {X.shape[0]} muestras, {X.shape[1]} características")
+            print(f"✅ データ準備完了: {X.shape[0]} サンプル, {X.shape[1]} 特徴量")
             
             # Entrenar modelos
             self.train_models(X, y)
             
-            # Guardar resultados
+            # ES: Guardar resultados
+            # EN: Save results
+            # JP: 結果を保存
             self.save_results()
             
-            print("✅ Análisis lineal completado exitosamente")
+            print("✅ 線形解析が正常に完了しました")
             
             return {
                 'success': True,
@@ -415,18 +483,22 @@ class LinearAnalysisPipeline:
             }
             
         except Exception as e:
-            print(f"❌ Error en análisis lineal: {e}")
+            print(f"❌ 線形解析中にエラー: {e}")
             return {
                 'success': False,
                 'error': str(e)
             }
 
 def run_linear_analysis_from_db(db_manager, filters: Dict = None) -> Dict[str, Any]:
-    """Función principal para ejecutar análisis lineal desde la base de datos"""
+    """ES: Función principal para ejecutar análisis lineal desde la base de datos
+    EN: Main function to run linear analysis from the database
+    JA: DBから線形解析を実行するメイン関数"""
     try:
         # Obtener datos de la base de datos
         if filters:
-            # Aplicar filtros (implementar según la estructura de la BD)
+            # ES: Aplicar filtros (implementar según la estructura de la BD)
+            # EN: Apply filters (implement per DB structure)
+            # JA: フィルタを適用（DB構造に応じて実装）
             query = "SELECT * FROM main_results WHERE 1=1"
             params = []
             
@@ -437,7 +509,7 @@ def run_linear_analysis_from_db(db_manager, filters: Dict = None) -> Dict[str, A
                             query += f" AND {field} BETWEEN ? AND ?"
                             params.extend([value[0], value[1]])
                     elif field in ['A13', 'A11', 'A21', 'A32']:  # Campos de cepillos
-                        # Filtrar por cepillo específico = 1
+                        # ES: Filtrar por cepillo específico = 1 | EN: Filter by specific brush = 1 | JA: 特定ブラシ＝1でフィルタ
                         query += f" AND {field} = ?"
                         params.append(value)
                     else:  # Valor único
@@ -471,19 +543,19 @@ def run_linear_analysis_from_db(db_manager, filters: Dict = None) -> Dict[str, A
                 df = pd.DataFrame(data, columns=column_names)
                 
             except Exception as e:
-                print(f"⚠️ Error obteniendo datos de la BD: {e}")
+                print(f"⚠️ DBからデータ取得中にエラー: {e}")
                 return {'success': False, 'error': f'Error accediendo a la base de datos: {str(e)}'}
         
-        print(f"📊 Datos obtenidos: {df.shape[0]} filas, {df.shape[1]} columnas")
+        print(f"📊 取得データ: {df.shape[0]} 行, {df.shape[1]} 列")
         
-        # Crear y ejecutar pipeline de análisis
+        # ES: Crear y ejecutar pipeline de análisis | EN: Create and run analysis pipeline | JA: 解析パイプラインを作成・実行
         pipeline = LinearAnalysisPipeline()
         results = pipeline.run_analysis(df)
         
         return results
         
     except Exception as e:
-        print(f"❌ Error ejecutando análisis lineal: {e}")
+        print(f"❌ 線形解析の実行中にエラー: {e}")
         return {
             'success': False,
             'error': str(e)

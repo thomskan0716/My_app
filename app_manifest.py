@@ -1,8 +1,14 @@
 """
-Lee el manifiesto editable de la app (manifest.json) para obtener name/version.
+ES: Lee el manifiesto editable de la app (manifest.json) para obtener name/version.
+EN: Read the app's editable manifest (manifest.json) to get name/version.
+JA: 編集可能なマニフェスト（manifest.json）から name/version を取得。
 
-Regla: primero intenta rutas "editables" (CWD / junto al exe),
-y luego fallback al bundle (resource_path / carpeta del código).
+ES: Regla: primero intenta rutas "editables" (CWD / junto al exe),
+EN: Rule: first try "editable" paths (CWD / next to the exe),
+JA: ルール：まず「編集しやすい」場所（CWD / exe隣）を試す。
+ES: y luego fallback al bundle (resource_path / carpeta del código).
+EN: then fall back to the bundled resources (resource_path / code folder).
+JA: 次にバンドル側へフォールバック（resource_path / コードフォルダ）。
 """
 
 from __future__ import annotations
@@ -16,7 +22,9 @@ from typing import Any, Dict, Optional
 def _candidate_manifest_paths() -> list[Path]:
     paths: list[Path] = []
 
-    # 1) CWD (útil cuando el usuario edita manifest junto al exe y ejecuta desde ahí)
+    # ES: 1) CWD (útil cuando el usuario edita manifest junto al exe y ejecuta desde ahí)
+    # EN: 1) CWD (useful when the user edits the manifest next to the exe and runs from there)
+    # JA: 1) CWD（exe隣で編集してそこから実行する場合に有用）
     try:
         paths.append(Path.cwd() / "manifest.json")
     except Exception:
@@ -42,7 +50,7 @@ def _candidate_manifest_paths() -> list[Path]:
         except Exception:
             pass
 
-    # Dedup manteniendo orden
+    # ES: Dedup manteniendo orden | EN: De-duplicate while preserving order | JA: 順序を保って重複排除
     out: list[Path] = []
     seen = set()
     for p in paths:

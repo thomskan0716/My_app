@@ -1,6 +1,11 @@
 """
-Diálogo para mostrar resultados de análisis de Pareto
-Muestra gráficos y permite importar a base de datos
+ES: Diálogo para mostrar resultados de análisis de Pareto.
+EN: Dialog to display Pareto analysis results.
+JA: パレート解析結果を表示するダイアログ。
+
+ES: Muestra gráficos y permite importar a base de datos.
+EN: Shows plots and allows importing into the database.
+JA: グラフ表示とDBインポートが可能。
 """
 import os
 import glob
@@ -13,9 +18,14 @@ from PySide6.QtGui import QPixmap
 
 
 class ParetoResultsDialog(QDialog):
-    """Diálogo para mostrar resultados de Pareto con opción de importar a BD"""
+    """ES: Diálogo para mostrar resultados de Pareto con opción de importar a BD
+    EN: Dialog to show Pareto results with an option to import into the DB
+    JA: パレート結果表示（DBインポート機能付き）ダイアログ
+    """
     
-    # Señal emitida cuando se solicita importar a BD
+    # ES: Señal emitida cuando se solicita importar a BD
+    # EN: Signal emitted when an import-to-DB is requested
+    # JA: DBインポート要求時に発行されるシグナル
     import_requested = Signal(str)  # excel_path
     
     def __init__(self, pareto_plots_folder, prediction_output_file, parent=None):
@@ -36,13 +46,16 @@ class ParetoResultsDialog(QDialog):
         self.load_graphs()
         self.update_display()
         
-        print(f"🔍 DEBUG ParetoResultsDialog.__init__: gráficos cargados = {len(self.graph_paths)}")
+        print(f"🔍 デバッグ ParetoResultsDialog.__init__: 読み込んだグラフ数 = {len(self.graph_paths)}")
     
     def setup_ui(self):
-        """Configura la interfaz"""
+        """ES: Configura la interfaz
+        EN: Build the UI
+        JA: UIを構築
+        """
         layout = QVBoxLayout()
         
-        # Título
+        # ES: Título | EN: Title | JA: タイトル
         self.title_label = QLabel("パレート分析結果")
         self.title_label.setAlignment(Qt.AlignCenter)
         self.title_label.setStyleSheet("font-size: 18px; font-weight: bold; margin: 10px; color: #2c3e50;")
@@ -57,13 +70,13 @@ class ParetoResultsDialog(QDialog):
         image_container.addWidget(self.image_label)
         layout.addLayout(image_container)
         
-        # Información del gráfico
+        # ES: Información del gráfico | EN: Plot info | JA: グラフ情報
         self.info_label = QLabel()
         self.info_label.setAlignment(Qt.AlignCenter)
         self.info_label.setStyleSheet("font-size: 12px; color: #7f8c8d; margin: 5px;")
         layout.addWidget(self.info_label)
         
-        # Navegación
+        # ES: Navegación | EN: Navigation | JA: ナビゲーション
         nav_layout = QHBoxLayout()
         
         self.prev_button = QPushButton("← 前へ")
@@ -117,11 +130,11 @@ class ParetoResultsDialog(QDialog):
         
         layout.addLayout(nav_layout)
         
-        # Botones de acción
+        # ES: Botones de acción | EN: Action buttons | JA: 操作ボタン
         buttons_layout = QHBoxLayout()
         buttons_layout.addStretch()
         
-        # Botón 戻る (Volver)
+        # ES: Botón 戻る (Volver) | EN: Back button | JA: 戻るボタン
         self.back_button = QPushButton("戻る")
         self.back_button.setMinimumWidth(120)
         self.back_button.setStyleSheet("""
@@ -139,7 +152,7 @@ class ParetoResultsDialog(QDialog):
         self.back_button.clicked.connect(self.reject)
         buttons_layout.addWidget(self.back_button)
         
-        # Botón データベースにインポート
+        # ES: Botón データベースにインポート | EN: Import-to-DB button | JA: DBインポートボタン
         self.import_button = QPushButton("データベースにインポート")
         self.import_button.setMinimumWidth(200)
         self.import_button.setStyleSheet("""
@@ -161,31 +174,39 @@ class ParetoResultsDialog(QDialog):
         self.setLayout(layout)
     
     def load_graphs(self):
-        """Carga los gráficos de Pareto desde la carpeta"""
-        print(f"🔍 DEBUG load_graphs: carpeta = {self.pareto_plots_folder}")
+        """ES: Carga los gráficos de Pareto desde la carpeta
+        EN: Load Pareto plots from the folder
+        JA: フォルダからパレートグラフを読み込み
+        """
+        print(f"🔍 デバッグ load_graphs: フォルダー = {self.pareto_plots_folder}")
         print(f"🔍 DEBUG load_graphs: existe = {os.path.exists(self.pareto_plots_folder) if self.pareto_plots_folder else False}")
         
         if not os.path.exists(self.pareto_plots_folder):
-            print(f"⚠️ Carpeta de gráficos no encontrada: {self.pareto_plots_folder}")
+            print(f"⚠️ グラフフォルダーが見つかりません: {self.pareto_plots_folder}")
             return
         
-        # Buscar archivos PNG en la carpeta
+        # ES: Buscar archivos de imagen en la carpeta
+        # EN: Search for image files in the folder
+        # JA: フォルダ内の画像ファイルを探索
         image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.svg']
         for ext in image_extensions:
             pattern = os.path.join(self.pareto_plots_folder, ext)
             found = glob.glob(pattern)
-            print(f"🔍 DEBUG load_graphs: buscando {pattern}, encontrados = {len(found)}")
+            print(f"🔍 デバッグ load_graphs: 検索 {pattern}, 件数 = {len(found)}")
             self.graph_paths.extend(found)
         
-        # Ordenar por nombre
+        # ES: Ordenar por nombre | EN: Sort by name | JA: 名前順にソート
         self.graph_paths.sort()
         
-        print(f"📊 Encontrados {len(self.graph_paths)} gráficos de Pareto")
+        print(f"📊 Paretoグラフを {len(self.graph_paths)} 件検出")
         if self.graph_paths:
-            print(f"🔍 DEBUG load_graphs: primeros gráficos = {[os.path.basename(p) for p in self.graph_paths[:3]]}")
+            print(f"🔍 デバッグ load_graphs: 先頭のグラフ = {[os.path.basename(p) for p in self.graph_paths[:3]]}")
     
     def update_display(self):
-        """Actualiza la visualización del gráfico actual"""
+        """ES: Actualiza la visualización del gráfico actual
+        EN: Update the current plot display
+        JA: 現在のグラフ表示を更新
+        """
         if not self.graph_paths:
             self.image_label.setText("グラフが見つかりません")
             self.info_label.setText("")
@@ -194,13 +215,13 @@ class ParetoResultsDialog(QDialog):
             self.next_button.setEnabled(False)
             return
         
-        # Actualizar índice
+        # ES: Actualizar índice | EN: Update index | JA: インデックス更新
         if self.current_index < 0:
             self.current_index = 0
         elif self.current_index >= len(self.graph_paths):
             self.current_index = len(self.graph_paths) - 1
         
-        # Cargar imagen
+        # ES: Cargar imagen | EN: Load image | JA: 画像を読み込み
         current_graph = self.graph_paths[self.current_index]
         if os.path.exists(current_graph):
             pixmap = QPixmap(current_graph)
@@ -217,34 +238,43 @@ class ParetoResultsDialog(QDialog):
         else:
             self.image_label.setText(f"ファイルが見つかりません:\n{current_graph}")
         
-        # Actualizar contador
+        # ES: Actualizar contador | EN: Update counter | JA: カウンター更新
         total = len(self.graph_paths)
         current = self.current_index + 1
         self.counter_label.setText(f"{current} / {total}")
         
-        # Actualizar información
+        # ES: Actualizar información | EN: Update info | JA: 情報更新
         graph_name = os.path.basename(current_graph)
         self.info_label.setText(f"📊 {graph_name}")
         
-        # Actualizar estado de botones
+        # ES: Actualizar estado de botones | EN: Update button state | JA: ボタン状態更新
         self.prev_button.setEnabled(self.current_index > 0)
         self.next_button.setEnabled(self.current_index < len(self.graph_paths) - 1)
     
     def show_previous(self):
-        """Muestra el gráfico anterior"""
+        """ES: Muestra el gráfico anterior
+        EN: Show previous graph
+        JA: 前のグラフを表示"""
         if self.current_index > 0:
             self.current_index -= 1
             self.update_display()
     
     def show_next(self):
-        """Muestra el siguiente gráfico"""
+        """ES: Muestra el siguiente gráfico
+        EN: Show next graph
+        JA: 次のグラフを表示"""
         if self.current_index < len(self.graph_paths) - 1:
             self.current_index += 1
             self.update_display()
     
     def import_to_database(self):
-        """Solicita importar a base de datos"""
-        # Verificar que el archivo existe
+        """ES: Solicita importar a base de datos
+        EN: Request importing into the database
+        JA: DBへのインポートを要求
+        """
+        # ES: Verificar que el archivo existe
+        # EN: Verify the file exists
+        # JA: ファイルの存在確認
         if not os.path.exists(self.prediction_output_file):
             QMessageBox.warning(
                 self,
@@ -253,11 +283,16 @@ class ParetoResultsDialog(QDialog):
             )
             return
         
-        # Emitir señal para que el padre maneje la importación
+        # ES: Emitir señal para que el padre maneje la importación
+        # EN: Emit a signal so the parent can handle the import
+        # JA: 親側でインポート処理できるようシグナル送信
         self.import_requested.emit(self.prediction_output_file)
     
     def resizeEvent(self, event):
-        """Redimensionar imagen cuando se redimensiona el diálogo"""
+        """ES: Redimensionar imagen cuando se redimensiona el diálogo
+        EN: Resize image when the dialog is resized
+        JA: ダイアログのリサイズに合わせて画像をリサイズ
+        """
         super().resizeEvent(event)
         self.update_display()
 

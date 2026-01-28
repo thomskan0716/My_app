@@ -16,7 +16,7 @@ Set-Location $here
 
 $python = Join-Path $here "Scripts\python.exe"
 if (-not (Test-Path $python)) {
-  throw "No se encontró Python de la venv en: $python (ejecuta este script desde la carpeta del proyecto .venv)"
+  throw "venv の Python が見つかりません: $python（このスクリプトはプロジェクトの .venv フォルダーから実行してください）"
 }
 
 function Ensure-Dir([string]$Path) {
@@ -35,7 +35,7 @@ function Find-ISCC {
 }
 
 if (-not $NoInstall) {
-  Write-Host "Instalando/actualizando dependencias de build (PyInstaller + Pillow)..."
+  Write-Host "ビルド依存関係をインストール／更新中（PyInstaller + Pillow）..."
   & $python -m pip install --upgrade pyinstaller pillow | Out-Host
 }
 
@@ -52,7 +52,7 @@ $setupIcon = Join-Path $installerDir "setup_icon.ico"
 $dbTplDir = Join-Path $installerDir "db_templates"
 Ensure-Dir $dbTplDir
 
-Write-Host "Generando BBDD vacías para el instalador (installer\\db_templates\\)..."
+Write-Host "インストーラー用の空DBを生成中（installer\\db_templates\\）..."
 $pyTmp = Join-Path $env:TEMP ("gen_db_templates_{0}.py" -f ([Guid]::NewGuid().ToString("N")))
 $pyCode = @'
 import os, sqlite3
@@ -256,7 +256,7 @@ print("OK:", out_ico)
     Remove-Item -Force $pyTmp -ErrorAction SilentlyContinue
   }
 } else {
-  Write-Host "SkipSetupIcon activo: no se generará setup_icon.ico"
+  Write-Host "SkipSetupIcon 有効: setup_icon.ico は生成しません"
 }
 
 if (-not $SkipWizardImages) {
@@ -264,7 +264,7 @@ if (-not $SkipWizardImages) {
     throw "No se encontró el logo: $srcLogo"
   }
 
-  Write-Host "Generando imágenes del instalador (wizard_small.bmp / wizard_large.bmp)..."
+  Write-Host "インストーラー画像を生成中（wizard_small.bmp / wizard_large.bmp）..."
   $pyTmp = Join-Path $env:TEMP ("gen_wizard_images_{0}.py" -f ([Guid]::NewGuid().ToString("N")))
   $pyCode = @'
 from PIL import Image
@@ -309,7 +309,7 @@ print("OK:", out_large)
     Remove-Item -Force $pyTmp -ErrorAction SilentlyContinue
   }
 } else {
-  Write-Host "SkipWizardImages activo: no se generarán wizard_small.bmp / wizard_large.bmp"
+  Write-Host "SkipWizardImages 有効: wizard_small.bmp / wizard_large.bmp は生成しません"
 }
 
 # 2) Descargar VC++ Redist (si no existe)
@@ -323,21 +323,23 @@ if (-not $SkipVCRedistDownload) {
     Write-Host "VC++ Redistributable ya existe: $vcredist"
   }
 } else {
-  Write-Host "SkipVCRedistDownload activo: no se descargará vc_redist.x64.exe"
+  Write-Host "SkipVCRedistDownload 有効: vc_redist.x64.exe はダウンロードしません"
 }
 
 if (-not $InstallerOnly) {
-  # 3) Limpiar build/dist para evitar artefactos stale (opcional)
+  # ES: 3) Limpiar build/dist para evitar artefactos obsoletos (opcional)
+  # EN: 3) Clean build/dist to avoid stale artifacts (optional)
+  # JP: 3) 古い生成物を避けるためbuild/distをクリーン（任意）
   if (-not $SkipClean) {
     foreach ($d in @("build", "dist")) {
       $p = Join-Path $here $d
       if (Test-Path $p) {
-        Write-Host "Limpiando $p ..."
+        Write-Host "$p をクリーン中..."
         Remove-Item -Recurse -Force $p
       }
     }
   } else {
-    Write-Host "SkipClean activo: no se borrarán build/dist"
+    Write-Host "SkipClean 有効: build/dist は削除しません"
   }
 
   # 4) Build PyInstaller
@@ -350,7 +352,9 @@ if (-not $InstallerOnly) {
   }
   if ($LASTEXITCODE -ne 0) { throw "PyInstaller falló (exit code $LASTEXITCODE)" }
 } else {
-  # Validar que exista el artefacto esperado en dist/, si no, forzar build.
+  # ES: Validar que exista el artefacto esperado en dist/; si no, forzar build.
+  # EN: Validate the expected artifact exists in dist/; otherwise, force a build.
+  # JP: dist/に期待する成果物があるか確認し、無ければビルドを強制する
   $expectedOk = $false
   if ($Mode -eq "onefile") {
     $expectedOk = Test-Path (Join-Path $here "dist\0_00sec.exe")
@@ -359,19 +363,19 @@ if (-not $InstallerOnly) {
   }
 
   if (-not $expectedOk) {
-    Write-Host "InstallerOnly activo pero NO existe el build en dist/. Se ejecutará PyInstaller primero..."
+    Write-Host "InstallerOnly 有効ですが dist/ にビルドがありません。先に PyInstaller を実行します..."
     $InstallerOnly = $false
 
     if (-not $SkipClean) {
       foreach ($d in @("build", "dist")) {
         $p = Join-Path $here $d
         if (Test-Path $p) {
-          Write-Host "Limpiando $p ..."
+          Write-Host "$p をクリーン中..."
           Remove-Item -Recurse -Force $p
         }
       }
     } else {
-      Write-Host "SkipClean activo: no se borrarán build/dist"
+      Write-Host "SkipClean 有効: build/dist は削除しません"
     }
 
     if ($Mode -eq "onefile") {
@@ -383,7 +387,7 @@ if (-not $InstallerOnly) {
     }
     if ($LASTEXITCODE -ne 0) { throw "PyInstaller falló (exit code $LASTEXITCODE)" }
   } else {
-    Write-Host "InstallerOnly activo: se omite PyInstaller (se usará el dist existente)."
+    Write-Host "InstallerOnly 有効: PyInstaller をスキップします（既存の dist を使用）"
   }
 }
 
@@ -403,6 +407,6 @@ if ($SkipSetupIcon) { $defs += "/DIncludeSetupIcon=0" }
 if ($LASTEXITCODE -ne 0) { throw "Inno Setup falló (exit code $LASTEXITCODE)" }
 
 Write-Host ""
-Write-Host "✅ Instalador generado en: installer\ (archivo: 0_00sec_Setup_x64_*.exe)"
+Write-Host "✅ インストーラーを生成しました: installer\\（ファイル: 0_00sec_Setup_x64_*.exe）"
 
 

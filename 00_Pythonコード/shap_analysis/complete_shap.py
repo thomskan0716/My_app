@@ -8,8 +8,12 @@ import os
 import warnings
 warnings.filterwarnings('ignore')
 
-# SHAP se importa de forma lazy (solo cuando se necesita) para evitar conflictos
-# con matplotlib después de crear muchos gráficos
+# ES: SHAP se importa de forma lazy (solo cuando se necesita) para evitar conflictos
+# EN: SHAP is imported lazily (only when needed) to avoid conflicts
+# JP: 競合を避けるためSHAPは遅延インポート（必要時のみ）する
+# ES: con matplotlib después de crear muchos gráficos
+# EN: with matplotlib after creating many plots
+# JP: 多数のグラフ生成後にmatplotlibと競合するのを防ぐため
 SHAP_AVAILABLE = None
 _shap_module = None
 

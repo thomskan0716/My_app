@@ -15,11 +15,18 @@ class EnhancedPreprocessor(BaseEstimator, TransformerMixin):
         self._fitted = False
 
     def __getstate__(self):
-        """Asegurar que _fitted se guarde explícitamente en el estado serializado"""
+        """ES: Asegurar que _fitted se guarde explícitamente en el estado serializado
+        EN: Ensure _fitted is explicitly stored in the serialized state
+        JA: シリアライズ状態に _fitted を明示的に保存する
+        """
         state = self.__dict__.copy()
-        # Asegurar que _fitted esté en el estado (puede que no esté si se accedió vía __getattr__)
+        # ES: Asegurar que _fitted esté en el estado (puede que no esté si se accedió vía __getattr__)
+        # EN: Ensure _fitted is present in the state (it may be missing if accessed via __getattr__)
+        # JA: _fitted が state に存在することを保証（__getattr__ 経由だと欠ける可能性）
         if '_fitted' not in state:
-            # Calcular _fitted basándose en el estado actual
+            # ES: Calcular _fitted basándose en el estado actual
+            # EN: Compute _fitted based on the current state
+            # JA: 現在の状態から _fitted を算出
             has_numeric_cols = state.get('numeric_cols_') is not None
             scaler = state.get('scaler')
             has_fitted_scaler = False
@@ -32,8 +39,13 @@ class EnhancedPreprocessor(BaseEstimator, TransformerMixin):
         return state
 
     def __setstate__(self, state):
-        """Compatibilidad con objetos guardados antiguos que no tienen _fitted o numeric_cols_"""
-        # Actualizar __dict__ primero
+        """ES: Compatibilidad con objetos guardados antiguos que no tienen _fitted o numeric_cols_
+        EN: Compatibility for older saved objects missing _fitted or numeric_cols_
+        JA: _fitted / numeric_cols_ が無い旧保存オブジェクトとの互換
+        """
+        # ES: Actualizar __dict__ primero
+        # EN: Update __dict__ first
+        # JA: まず __dict__ を更新
         if isinstance(state, dict):
             self.__dict__.update(state)
         else:
@@ -42,14 +54,22 @@ class EnhancedPreprocessor(BaseEstimator, TransformerMixin):
             else:
                 self.__dict__.update(state)
         
-        # Asegurar que numeric_cols_ exista primero
+        # ES: Asegurar que numeric_cols_ exista primero
+        # EN: Ensure numeric_cols_ exists first
+        # JA: numeric_cols_ が先に存在することを保証
         if 'numeric_cols_' not in self.__dict__:
             self.__dict__['numeric_cols_'] = None
         
-        # Asegurar que _fitted exista después de cargar (CRÍTICO: debe estar en __dict__)
-        # Inicializar INMEDIATAMENTE después de actualizar __dict__ para prevenir errores
+        # ES: Asegurar que _fitted exista después de cargar (CRÍTICO: debe estar en __dict__)
+        # EN: Ensure _fitted exists after loading (CRITICAL: must be in __dict__)
+        # JA: 読み込み後に _fitted を必ず用意（重要：__dict__ に必要）
+        # ES: Inicializar INMEDIATAMENTE después de actualizar __dict__ para prevenir errores
+        # EN: Initialize IMMEDIATELY after updating __dict__ to prevent errors
+        # JA: __dict__ 更新直後に即初期化してエラー防止
         if '_fitted' not in self.__dict__:
-            # Si tiene numeric_cols_ o los scalers están fitted, asumir que está fitted
+            # ES: Si tiene numeric_cols_ o los scalers están fitted, asumir que está fitted
+            # EN: If numeric_cols_ exists or scalers are fitted, assume the object is fitted
+            # JA: numeric_cols_ がある/スケーラがfit済みならfit済みとみなす
             has_numeric_cols = self.__dict__.get('numeric_cols_') is not None
             scaler = self.__dict__.get('scaler')
             has_fitted_scaler = False
@@ -58,35 +78,57 @@ class EnhancedPreprocessor(BaseEstimator, TransformerMixin):
                     has_fitted_scaler = hasattr(scaler, 'scale_')
                 except:
                     pass
-            # CRÍTICO: Usar __dict__ directamente para evitar cualquier problema de acceso
+            # ES: CRÍTICO: Usar __dict__ directamente para evitar cualquier problema de acceso
+            # EN: CRITICAL: Use __dict__ directly to avoid any attribute-access issues
+            # JA: 重要：属性アクセス問題回避のため __dict__ を直接使用
             self.__dict__['_fitted'] = has_numeric_cols or has_fitted_scaler
     
     def __getattr__(self, name):
-        """Compatibilidad: retorna valores por defecto para atributos faltantes"""
+        """ES: Compatibilidad: retorna valores por defecto para atributos faltantes
+        EN: Compatibility: return default values for missing attributes
+        JA: 互換：欠落属性にデフォルト値を返す
+        """
         if name == '_fitted':
-            # Si _fitted no existe, verificar si el objeto está realmente fitted
+            # ES: Si _fitted no existe, verificar si el objeto está realmente fitted
+            # EN: If _fitted does not exist, check whether the object is actually fitted
+            # JA: _fitted が無い場合、実際にfit済みか確認
             has_numeric_cols = hasattr(self, 'numeric_cols_') and self.numeric_cols_ is not None
             has_fitted_scaler = hasattr(self.scaler, 'scale_') if hasattr(self, 'scaler') else False
             fitted_value = has_numeric_cols or has_fitted_scaler
-            # Usar object.__setattr__ para evitar recursión
+            # ES: Usar object.__setattr__ para evitar recursión
+            # EN: Use object.__setattr__ to avoid recursion
+            # JA: 再帰回避のため object.__setattr__ を使用
             object.__setattr__(self, '_fitted', fitted_value)
             return fitted_value
         raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
     
     def __getattribute__(self, name):
-        """Intercepta TODOS los accesos para asegurar que _fitted siempre exista"""
-        # Si estamos accediendo a _fitted, verificar primero si existe en __dict__
+        """ES: Intercepta TODOS los accesos para asegurar que _fitted siempre exista
+        EN: Intercept ALL accesses to ensure _fitted always exists
+        JA: すべてのアクセスをフックして _fitted の存在を保証
+        """
+        # ES: Si estamos accediendo a _fitted, verificar primero si existe en __dict__
+        # EN: If accessing _fitted, first check whether it exists in __dict__
+        # JA: _fitted にアクセスする場合、まず __dict__ にあるか確認
         if name == '_fitted':
-            # Intentar acceder directamente a __dict__ sin usar super() para evitar recursión
+            # ES: Intentar acceder directamente a __dict__ sin usar super() para evitar recursión
+            # EN: Try to read __dict__ directly (avoid super()) to prevent recursion
+            # JA: 再帰回避のため super() を使わず __dict__ を直接参照
             try:
-                # Usar object.__getattribute__ para acceder a __dict__ sin recursión
+                # ES: Usar object.__getattribute__ para acceder a __dict__ sin recursión
+                # EN: Use object.__getattribute__ to access __dict__ without recursion
+                # JA: 再帰なしで __dict__ にアクセスするため object.__getattribute__ を使用
                 d = object.__getattribute__(self, '__dict__')
                 if '_fitted' in d:
                     return d['_fitted']
             except AttributeError:
                 pass
-            # Si _fitted no existe en __dict__, crearlo basándose en el estado del objeto
-            # Usar __dict__ directamente para evitar recursión
+            # ES: Si _fitted no existe en __dict__, crearlo basándose en el estado del objeto
+            # EN: If _fitted is missing in __dict__, create it based on the object's state
+            # JA: __dict__ に _fitted が無ければ状態から生成
+            # ES: Usar __dict__ directamente para evitar recursión
+            # EN: Use __dict__ directly to avoid recursion
+            # JA: 再帰回避のため __dict__ を直接使用
             try:
                 d = object.__getattribute__(self, '__dict__')
                 has_numeric_cols = d.get('numeric_cols_') is not None
@@ -101,21 +143,29 @@ class EnhancedPreprocessor(BaseEstimator, TransformerMixin):
                 d['_fitted'] = fitted_value
                 return fitted_value
             except AttributeError:
-                # Si ni siquiera __dict__ existe, retornar False como fallback
+                # ES: Si ni siquiera __dict__ existe, retornar False como fallback
+                # EN: If __dict__ does not exist, return False as a fallback
+                # JA: __dict__ 自体が無い場合はフォールバックで False
                 return False
         
-        # Para otros atributos, usar el comportamiento normal
+        # ES: Para otros atributos, usar el comportamiento normal
+        # EN: For other attributes, use the normal behavior
+        # JA: その他の属性は通常動作
         try:
             return super().__getattribute__(name)
         except AttributeError:
             if name == '_fitted':
-                # Fallback adicional si el primer intento falló
+                # ES: Fallback adicional si el primer intento falló
+                # EN: Additional fallback if the first attempt failed
+                # JA: 追加フォールバック（最初が失敗した場合）
                 return False
             raise
 
     def _extract_numeric(self, X):
         """学習時は列を確定、推論時は確定済み列で取り出す"""
-        # Asegurar que _fitted exista antes de cualquier operación
+        # ES: Asegurar que _fitted exista antes de cualquier operación
+        # EN: Ensure _fitted exists before any operation
+        # JA: どの処理よりも前に _fitted の存在を保証
         if '_fitted' not in self.__dict__:
             has_numeric_cols = hasattr(self, 'numeric_cols_') and self.numeric_cols_ is not None
             has_fitted_scaler = hasattr(self.scaler, 'scale_') if hasattr(self, 'scaler') else False
@@ -144,33 +194,47 @@ class EnhancedPreprocessor(BaseEstimator, TransformerMixin):
         return np.asarray(X_scaled, dtype=np.float32)
 
     def transform(self, X):
-        # Asegurar que _fitted exista ANTES de cualquier acceso (CRÍTICO)
+        # ES: Asegurar que _fitted exista ANTES de cualquier acceso (CRÍTICO)
+        # EN: Ensure _fitted exists BEFORE any access (CRITICAL)
+        # JA: どのアクセスよりも前に _fitted の存在を保証（重要）
         if '_fitted' not in self.__dict__:
             has_numeric_cols = self.__dict__.get('numeric_cols_') is not None
             scaler = self.__dict__.get('scaler')
             has_fitted_scaler = hasattr(scaler, 'scale_') if scaler is not None else False
             self.__dict__['_fitted'] = has_numeric_cols or has_fitted_scaler
         
-        # Compatibilidad: verificar si está fitted sin acceder directamente a _fitted
-        # Primero intentar getattr, si falla verificar otros indicadores
+        # ES: Compatibilidad: verificar si está fitted sin acceder directamente a _fitted
+        # EN: Compatibility: check fitted state without directly accessing _fitted
+        # JA: 互換：_fitted を直接参照せずにfit状態を確認
+        # ES: Primero intentar getattr, si falla verificar otros indicadores
+        # EN: First try getattr; if it fails, check other indicators
+        # JA: まず getattr を試し、失敗したら他の指標で確認
         try:
             is_fitted = getattr(self, '_fitted', None)
             if is_fitted is None:
-                # _fitted no existe, verificar otros indicadores
+                # ES: _fitted no existe, verificar otros indicadores
+                # EN: _fitted is missing; check other indicators
+                # JA: _fitted が無い場合は他の指標で確認
                 has_numeric_cols = hasattr(self, 'numeric_cols_') and self.numeric_cols_ is not None
                 has_fitted_scaler = hasattr(self.scaler, 'scale_')
                 is_fitted = has_numeric_cols or has_fitted_scaler
-                # Guardar para futuros accesos
+                # ES: Guardar para futuros accesos
+                # EN: Persist for future accesses
+                # JA: 次回以降のため保存
                 self.__dict__['_fitted'] = is_fitted
             elif not is_fitted:
-                # _fitted existe pero es False, verificar otros indicadores como fallback
+                # ES: _fitted existe pero es False, verificar otros indicadores como fallback
+                # EN: _fitted exists but is False; verify other indicators as a fallback
+                # JA: _fitted が False の場合、フォールバックで他指標を確認
                 has_numeric_cols = hasattr(self, 'numeric_cols_') and self.numeric_cols_ is not None
                 has_fitted_scaler = hasattr(self.scaler, 'scale_')
                 if has_numeric_cols or has_fitted_scaler:
                     is_fitted = True
                     self.__dict__['_fitted'] = True
         except AttributeError:
-            # Si getattr falla completamente, verificar otros indicadores
+            # ES: Si getattr falla completamente, verificar otros indicadores
+            # EN: If getattr fails completely, check other indicators
+            # JA: getattr が完全に失敗した場合、他指標で確認
             has_numeric_cols = hasattr(self, 'numeric_cols_') and self.numeric_cols_ is not None
             has_fitted_scaler = hasattr(self.scaler, 'scale_')
             is_fitted = has_numeric_cols or has_fitted_scaler
@@ -195,7 +259,10 @@ class AdvancedFeatureSelector(BaseEstimator, TransformerMixin):
                  use_mandatory_features=True, feature_names=None):
         self.top_k = int(top_k)
         self.corr_threshold = float(corr_threshold)
-        self.use_mutual_info = use_mutual_info  # CRÍTICO: Debe asignarse para compatibilidad
+        # ES: CRÍTICO: Debe asignarse para compatibilidad
+        # EN: CRITICAL: Must be assigned for compatibility
+        # JP: 重要: 互換性のため必ず代入する必要がある
+        self.use_mutual_info = use_mutual_info
         self.use_correlation_removal = use_correlation_removal
         self.mandatory_features = mandatory_features or []
         self.use_mandatory_features = use_mandatory_features
@@ -211,7 +278,9 @@ class AdvancedFeatureSelector(BaseEstimator, TransformerMixin):
                 super().__setstate__(state)
             else:
                 self.__dict__.update(state)
-        # Asegurar que use_mutual_info siempre exista después de cargar
+        # ES: Asegurar que use_mutual_info siempre exista después de cargar
+        # EN: Ensure use_mutual_info always exists after loading
+        # JP: 読み込み後にuse_mutual_infoが必ず存在するようにする
         if 'use_mutual_info' not in self.__dict__:
             self.__dict__['use_mutual_info'] = False
 

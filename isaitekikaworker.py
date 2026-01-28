@@ -1,5 +1,5 @@
 from PySide6.QtCore import QObject, QThread, Signal
-from isaitekika import ISaitekika  # Importación local
+from isaitekika import ISaitekika  # Local import
 import traceback
 
 class ISaitekikaWorker(QObject):

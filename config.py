@@ -13,11 +13,11 @@ class Config:
     
     # ========== 共通設定 ==========
     # ファイル設定 (con soporte dinámico)
-    _dynamic_base_folder = None  # Para paths dinámicos
+    _dynamic_base_folder = None  # For dynamic paths
     _dynamic_data_folder = None
     _dynamic_result_folder = None
     
-    # Valores por defecto
+    # ES: Valores por defecto | EN: Default values | JA: デフォルト値
     DATA_FOLDER = '01_データセット'
     INPUT_FILE = '20250925_総実験データ.xlsx'
     RESULT_FOLDER = '03_学習結果'
@@ -58,21 +58,27 @@ class Config:
     
     @classmethod
     def get_base_folder(cls):
-        """Obtiene la carpeta base (dinámica o por defecto)"""
+        """ES: Obtiene la carpeta base (dinámica o por defecto)
+        EN: Get base folder (dynamic or default)
+        JA: ベースフォルダを取得（動的またはデフォルト）"""
         if cls._dynamic_base_folder:
             return cls._dynamic_base_folder
         return os.getcwd() if 'os' in dir() else '.'
         
     @classmethod
     def get_data_folder(cls):
-        """Obtiene la carpeta de datos (dinámica o por defecto)"""
+        """ES: Obtiene la carpeta de datos (dinámica o por defecto)
+        EN: Get data folder (dynamic or default)
+        JA: データフォルダを取得（動的またはデフォルト）"""
         base = cls.get_base_folder()
         data = cls._dynamic_data_folder or cls.DATA_FOLDER
         return os.path.join(base, data)
     
     @classmethod
     def get_result_folder(cls):
-        """Obtiene la carpeta de resultados (dinámica o por defecto)"""
+        """ES: Obtiene la carpeta de resultados (dinámica o por defecto)
+        EN: Get results folder (dynamic or default)
+        JA: 結果フォルダを取得（動的またはデフォルト）"""
         base = cls.get_base_folder()
         result = cls._dynamic_result_folder or cls.RESULT_FOLDER
         return os.path.join(base, result)

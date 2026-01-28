@@ -14,18 +14,18 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 
-# ★ Asegurar que config.py se pueda importar
-# Añadir el directorio actual y el directorio del script al sys.path
+# ES: ★ Asegurar que config.py se pueda importar | EN: ★ Ensure config.py can be imported | JA: ★ config.py をインポート可能にする
+# ES: Añadir el directorio actual y el directorio del script al sys.path | EN: Add current dir and script dir to sys.path | JA: 現在/スクリプトディレクトリを sys.path に追加
 current_dir = Path(__file__).parent.absolute()
 if str(current_dir) not in sys.path:
     sys.path.insert(0, str(current_dir))
 
-# Intentar importar config
+# ES: Intentar importar config | EN: Try to import config | JA: config のインポートを試行
 try:
     import config
 except ImportError:
-    # Si no se encuentra, intentar desde el directorio raíz del proyecto
-    # Buscar config.py en el directorio padre o en el directorio actual
+    # ES: Si no se encuentra, intentar desde el directorio raíz del proyecto | EN: If not found, try from the project root | JA: 見つからなければプロジェクトルートから探索
+    # ES: Buscar config.py en el directorio padre o en el directorio actual | EN: Look for config.py in parent/current dirs | JA: 親/現在ディレクトリで config.py を探索
     config_paths = [
         current_dir / "config.py",
         current_dir.parent / "config.py",
@@ -35,7 +35,7 @@ except ImportError:
     config_found = False
     for config_path in config_paths:
         if config_path.exists():
-            # Añadir el directorio del config.py al sys.path
+            # ES: Añadir el directorio del config.py al sys.path | EN: Add config.py directory to sys.path | JA: config.py のディレクトリを sys.path に追加
             if str(config_path.parent) not in sys.path:
                 sys.path.insert(0, str(config_path.parent))
             try:
@@ -46,15 +46,17 @@ except ImportError:
                 continue
     
     if not config_found:
-        # Si aún no se encuentra, crear un módulo config dummy
+        # ES: Si aún no se encuentra, crear un módulo config dummy | EN: If still not found, create a dummy config module | JA: それでも無ければダミーconfigモジュールを作成
         import types
         config = types.ModuleType('config')
         config.Config = types.SimpleNamespace()
-        print("⚠️ Advertencia: No se pudo importar config.py, usando valores por defecto")
+        print("⚠️ Warning: config.py could not be imported; using default values")
 
 
 class NonlinearConfigDialog(QDialog):
-    """Diálogo para configurar parámetros del análisis no lineal"""
+    """ES: Diálogo para configurar parámetros del análisis no lineal
+    EN: Dialog to configure non-linear analysis parameters
+    JA: 非線形解析のパラメータ設定ダイアログ"""
     
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -66,15 +68,18 @@ class NonlinearConfigDialog(QDialog):
         self.setup_ui()
     
     def setup_ui(self):
-        """Configura la interfaz de usuario"""
+        """ES: Configura la interfaz de usuario
+        EN: Configure the user interface
+        JA: UIを構成する
+        """
         layout = QVBoxLayout()
         
-        # Título
+        # ES: Título | EN: Title | JA: タイトル
         title = QLabel("非線形解析パラメータ設定")
         title.setStyleSheet("font-size: 18px; font-weight: bold; margin: 10px;")
         layout.addWidget(title)
         
-        # Crear pestañas
+        # ES: Crear pestañas | EN: Create tabs | JA: タブを作成
         tabs = QTabWidget()
         
         # Tab 1: Modelos
@@ -89,7 +94,7 @@ class NonlinearConfigDialog(QDialog):
         features_tab = self.create_features_tab()
         tabs.addTab(features_tab, "特徴量選択")
         
-        # Tab 4: Configuración General
+        # ES: Tab 4: Configuración general | EN: Tab 4: General configuration | JA: タブ4：一般設定
         general_tab = self.create_general_tab()
         tabs.addTab(general_tab, "一般設定")
         
@@ -97,7 +102,7 @@ class NonlinearConfigDialog(QDialog):
         pareto_tab = self.create_pareto_tab()
         tabs.addTab(pareto_tab, "パレート設定")
         
-        # Tab 6: Cargar existente
+        # ES: Tab 6: Cargar existente | EN: Tab 6: Load existing | JA: タブ6：既存読み込み
         load_existing_tab = self.create_load_existing_tab()
         tabs.addTab(load_existing_tab, "既存結果読み込み")
         
@@ -120,11 +125,14 @@ class NonlinearConfigDialog(QDialog):
         self.setLayout(layout)
     
     def create_models_tab(self):
-        """Crear tab de configuración de modelos"""
+        """ES: Crear tab de configuración de modelos
+        EN: Create the model configuration tab
+        JA: モデル設定タブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
-        # Grupo: Modelos a usar
+        # ES: Grupo: Modelos a usar | EN: Group: Models to use | JA: グループ：使用するモデル
         models_group = QGroupBox("使用するモデル")
         models_layout = QVBoxLayout()
         
@@ -139,7 +147,7 @@ class NonlinearConfigDialog(QDialog):
             ('elastic_net', 'Elastic Net')
         ]
         
-        # Valores por defecto (checked)
+        # ES: Valores por defecto (checked) | EN: Default values (checked) | JA: デフォルト（チェック済み）
         default_models = ['random_forest', 'lightgbm']
         
         for model_key, model_name in models:
@@ -151,11 +159,11 @@ class NonlinearConfigDialog(QDialog):
         models_group.setLayout(models_layout)
         layout.addWidget(models_group)
         
-        # Grupo: Configuración adicional
+        # ES: Grupo: Configuración adicional | EN: Group: Additional settings | JA: グループ：追加設定
         misc_group = QGroupBox("その他の設定")
         misc_layout = QFormLayout()
         
-        # Número de trials
+        # ES: Número de trials | EN: Number of trials | JA: トライアル数
         self.n_trials = QSpinBox()
         self.n_trials.setMinimum(10)
         self.n_trials.setMaximum(200)
@@ -176,11 +184,14 @@ class NonlinearConfigDialog(QDialog):
         return tab
     
     def create_hyperparams_tab(self):
-        """Crear tab de configuración de hiperparámetros"""
+        """ES: Crear tab de configuración de hiperparámetros
+        EN: Create the hyperparameter configuration tab
+        JA: ハイパーパラメータ設定タブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
-        # Cargar configuración actual
+        # ES: Cargar configuración actual | EN: Load current configuration | JA: 現在の設定を読み込み
         try:
             current_config = config.Config.MODEL_CONFIGS
         except AttributeError:
@@ -233,7 +244,10 @@ class NonlinearConfigDialog(QDialog):
         return tab
     
     def create_features_tab(self):
-        """Crear tab de selección de características"""
+        """ES: Crear tab de selección de características
+        EN: Create the feature selection tab
+        JA: 特徴量選択タブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
@@ -273,11 +287,14 @@ class NonlinearConfigDialog(QDialog):
         return tab
     
     def create_general_tab(self):
-        """Crear tab de configuración general"""
+        """ES: Crear tab de configuración general
+        EN: Create the general configuration tab
+        JA: 一般設定タブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
-        # Grupo: Características
+        # ES: Grupo: Características | EN: Group: Features | JA: グループ：特徴量
         features_group = QGroupBox("特徴量設定")
         features_layout = QFormLayout()
         
@@ -288,7 +305,7 @@ class NonlinearConfigDialog(QDialog):
         self.top_k.setValue(20)
         features_layout.addRow("特徴選択数 (top_k):", self.top_k)
         
-        # Correlación threshold
+        # ES: Umbral de correlación | EN: Correlation threshold | JA: 相関しきい値
         from PySide6.QtWidgets import QDoubleSpinBox
         self.corr_threshold = QDoubleSpinBox()
         self.corr_threshold.setMinimum(0.5)
@@ -305,7 +322,7 @@ class NonlinearConfigDialog(QDialog):
         features_group.setLayout(features_layout)
         layout.addWidget(features_group)
         
-        # Grupo: Transformación
+        # ES: Grupo: Transformación | EN: Group: Transformation | JA: グループ：変数変換
         transform_group = QGroupBox("変数変換")
         transform_layout = QFormLayout()
         
@@ -318,7 +335,7 @@ class NonlinearConfigDialog(QDialog):
         transform_group.setLayout(transform_layout)
         layout.addWidget(transform_group)
         
-        # Grupo: CV
+        # ES: Grupo: CV | EN: Group: CV | JA: グループ：CV
         cv_group = QGroupBox("クロスバリデーション")
         cv_layout = QFormLayout()
         
@@ -337,7 +354,7 @@ class NonlinearConfigDialog(QDialog):
         cv_group.setLayout(cv_layout)
         layout.addWidget(cv_group)
         
-        # Grupo: SHAP
+        # ES: Grupo: SHAP | EN: Group: SHAP | JA: グループ：SHAP
         shap_group = QGroupBox("SHAP分析")
         shap_layout = QFormLayout()
         
@@ -360,7 +377,10 @@ class NonlinearConfigDialog(QDialog):
         return tab
     
     def create_pareto_tab(self):
-        """Crear tab de configuración de Pareto"""
+        """ES: Crear tab de configuración de Pareto
+        EN: Create the Pareto configuration tab
+        JA: パレート設定タブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
@@ -368,13 +388,15 @@ class NonlinearConfigDialog(QDialog):
         info_label.setWordWrap(True)
         layout.addWidget(info_label)
         
-        # Grupo: Objetivos Pareto
+        # ES: Grupo: Objetivos Pareto | EN: Group: Pareto objectives | JA: グループ：パレート目的変数
         objectives_group = QGroupBox("目的変数")
         objectives_layout = QVBoxLayout()
         
         self.pareto_objectives = {}
         
-        # Lista de objetivos con sus direcciones por defecto
+        # ES: Lista de objetivos con sus direcciones por defecto
+        # EN: Objective list with default directions
+        # JA: 目的変数リスト（デフォルト方向付き）
         objective_configs = [
             ('摩耗量', 'min'),
             ('切削時間', 'min'),
@@ -407,7 +429,10 @@ class NonlinearConfigDialog(QDialog):
         return tab
     
     def create_load_existing_tab(self):
-        """Crear tab para cargar análisis existente"""
+        """ES: Crear tab para cargar análisis existente
+        EN: Create the tab for loading an existing analysis
+        JA: 既存解析読み込みタブを作成
+        """
         tab = QWidget()
         layout = QVBoxLayout()
         
@@ -439,7 +464,7 @@ class NonlinearConfigDialog(QDialog):
         info_label.setStyleSheet("font-size: 12px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;")
         layout.addWidget(info_label)
         
-        # Botón para seleccionar carpeta
+        # ES: Botón para seleccionar carpeta | EN: Button to select folder | JA: フォルダ選択ボタン
         select_button = QPushButton("📁 フォルダを選択")
         select_button.setStyleSheet("""
             QPushButton {
@@ -457,7 +482,7 @@ class NonlinearConfigDialog(QDialog):
         select_button.clicked.connect(self.on_select_folder_clicked)
         layout.addWidget(select_button)
         
-        # Label para mostrar la ruta seleccionada
+        # ES: Label para mostrar la ruta seleccionada | EN: Label to show the selected path | JA: 選択パス表示ラベル
         self.selected_folder_label = QLabel("選択されていません")
         self.selected_folder_label.setStyleSheet("""
             QLabel {
@@ -472,12 +497,12 @@ class NonlinearConfigDialog(QDialog):
         self.selected_folder_label.setWordWrap(True)
         layout.addWidget(self.selected_folder_label)
         
-        # Label para mostrar estado de validación
+        # ES: Label para mostrar estado de validación | EN: Label to show validation status | JA: 検証状態表示ラベル
         self.validation_status_label = QLabel("")
         self.validation_status_label.setWordWrap(True)
         layout.addWidget(self.validation_status_label)
         
-        # Variables para almacenar la validación
+        # ES: Variables para almacenar la validación | EN: Variables to store validation results | JA: 検証結果保持用変数
         self.validated_folder_path = None
         self.project_folder_path = None
         self.is_folder_valid = False
@@ -487,7 +512,10 @@ class NonlinearConfigDialog(QDialog):
         return tab
     
     def on_select_folder_clicked(self):
-        """Maneja el clic en el botón de seleccionar carpeta"""
+        """ES: Maneja el clic en el botón de seleccionar carpeta
+        EN: Handle the click on the folder selection button
+        JA: フォルダ選択ボタンのクリックを処理
+        """
         folder = QFileDialog.getExistingDirectory(
             self,
             "既存結果フォルダを選択",
@@ -498,7 +526,7 @@ class NonlinearConfigDialog(QDialog):
         if not folder:
             return
         
-        # Validar estructura
+        # ES: Validar estructura | EN: Validate folder structure | JA: 構造を検証
         validation_result = self.validate_folder_structure(folder)
         
         if validation_result['is_valid']:
@@ -539,8 +567,13 @@ class NonlinearConfigDialog(QDialog):
     
     def validate_folder_structure(self, folder_path):
         """
-        Valida la estructura de carpetas del análisis no lineal existente
-        Basado en la nueva estructura:
+        ES: Valida la estructura de carpetas del análisis no lineal existente.
+        EN: Validate the folder structure of an existing non-linear analysis.
+        JA: 既存の非線形解析フォルダ構造を検証する。
+
+        ES: Basado en la nueva estructura:
+        EN: Based on the new structure:
+        JA: 新しい構造に基づく:
         - 02_学習モデル: debe tener final_model_*.pkl
         - 03_学習結果: debe tener dcv_results.pkl, analysis_results.json, y PNGs
         - 03_学習結果/data_analysis: debe tener archivos de análisis
@@ -556,18 +589,18 @@ class NonlinearConfigDialog(QDialog):
         import re
         
         current_path = Path(folder_path)
-        analysis_folder = None  # Carpeta NUM_YYYYMMDD_HHMMSS
+        analysis_folder = None  # Analysis folder: NUM_YYYYMMDD_HHMMSS
         project_folder = None
         pattern = re.compile(r'^\d+_\d{8}_\d{6}$')
         
-        # Archivos requeridos en 02_学習モデル
+        # ES: Archivos requeridos en 02_学習モデル | EN: Required files in 02_学習モデル | JA: 02_学習モデル の必須ファイル
         required_model_files = [
             'final_model_上面ダレ量.pkl',
             'final_model_側面ダレ量.pkl',
             'final_model_摩耗量.pkl'
         ]
         
-        # Archivos requeridos en 03_学習結果
+        # ES: Archivos requeridos en 03_学習結果 | EN: Required files in 03_学習結果 | JA: 03_学習結果 の必須ファイル
         required_result_files = [
             'dcv_results.pkl',
             'analysis_results.json',
@@ -576,7 +609,7 @@ class NonlinearConfigDialog(QDialog):
             '摩耗量_results.png'
         ]
         
-        # Archivos requeridos en 03_学習結果/data_analysis
+        # ES: Archivos requeridos en 03_学習結果/data_analysis | EN: Required files in 03_学習結果/data_analysis | JA: 03_学習結果/data_analysis の必須ファイル
         required_data_analysis_files = [
             'analysis_report.json',
             'correlation_heatmap.png',  # Nota: sin guión bajo (heatmap, no heat_map)
@@ -588,35 +621,43 @@ class NonlinearConfigDialog(QDialog):
             'target_摩耗量.png'
         ]
         
-        # Caso 1: El usuario seleccionó directamente la carpeta NUM_YYYYMMDD_HHMMSS
+        # ES: Caso 1: El usuario seleccionó directamente la carpeta NUM_YYYYMMDD_HHMMSS
+        # EN: Case 1: User selected the NUM_YYYYMMDD_HHMMSS folder directly
+        # JA: ケース1：ユーザーが NUM_YYYYMMDD_HHMMSS フォルダを直接選択
         if pattern.match(current_path.name):
             analysis_folder = current_path
-            # Buscar hacia arriba para encontrar 04_非線形回帰 y el proyecto
+            # ES: Buscar hacia arriba para encontrar 04_非線形回帰 y el proyecto
+            # EN: Walk upwards to find 04_非線形回帰 and the project folder
+            # JA: 上位へ辿って 04_非線形回帰 とプロジェクトフォルダを探索
             for parent in current_path.parents:
                 if parent.name == "04_非線形回帰":
                     project_folder = parent.parent
                     break
         
-        # Caso 2: El usuario seleccionó 02_学習モデル o 03_学習結果
+        # ES: Caso 2: El usuario seleccionó 02_学習モデル o 03_学習結果
+        # EN: Case 2: User selected 02_学習モデル or 03_学習結果
+        # JA: ケース2：ユーザーが 02_学習モデル / 03_学習結果 を選択
         elif current_path.name in ["02_学習モデル", "03_学習結果"]:
-            # La carpeta del análisis es el padre
+            # ES: La carpeta del análisis es el padre | EN: The analysis folder is the parent | JA: 解析フォルダは親ディレクトリ
             analysis_folder = current_path.parent
-            # Verificar que el nombre del padre coincida con el patrón
+            # ES: Verificar que el nombre del padre coincida con el patrón | EN: Verify parent name matches the pattern | JA: 親フォルダ名がパターン一致するか確認
             if not pattern.match(analysis_folder.name):
                 analysis_folder = None
             else:
-                # Buscar hacia arriba para encontrar 04_非線形回帰
+                # ES: Buscar hacia arriba para encontrar 04_非線形回帰 | EN: Walk upwards to find 04_非線形回帰 | JA: 上位へ辿って 04_非線形回帰 を探索
                 for parent in analysis_folder.parents:
                     if parent.name == "04_非線形回帰":
                         project_folder = parent.parent
                         break
         
-        # Caso 3: El usuario seleccionó 04_非線形回帰 o carpeta del proyecto
+        # ES: Caso 3: El usuario seleccionó 04_非線形回帰 o carpeta del proyecto
+        # EN: Case 3: User selected 04_非線形回帰 or the project folder
+        # JA: ケース3：ユーザーが 04_非線形回帰 またはプロジェクトフォルダを選択
         else:
-            # Buscar 04_非線形回帰 desde cualquier nivel
+            # ES: Buscar 04_非線形回帰 desde cualquier nivel | EN: Search for 04_非線形回帰 at any level | JA: どの階層からでも 04_非線形回帰 を探索
             nonlinear_folder = None
             
-            # Buscar hacia arriba
+            # ES: Buscar hacia arriba | EN: Search upwards | JA: 上位へ探索
             for parent in [current_path] + list(current_path.parents):
                 nonlinear_candidate = parent / "04_非線形回帰"
                 if nonlinear_candidate.exists() and nonlinear_candidate.is_dir():
@@ -624,7 +665,9 @@ class NonlinearConfigDialog(QDialog):
                     project_folder = parent
                     break
             
-            # Si no se encuentra hacia arriba, buscar en el folder seleccionado
+            # ES: Si no se encuentra hacia arriba, buscar en el folder seleccionado
+            # EN: If not found upwards, search inside the selected folder
+            # JA: 上位で見つからなければ選択フォルダ内を探索
             if nonlinear_folder is None:
                 if current_path.name == "04_非線形回帰":
                     nonlinear_folder = current_path
@@ -641,7 +684,7 @@ class NonlinearConfigDialog(QDialog):
                     'project_folder': None
                 }
             
-            # Buscar carpeta con patrón NUM_YYYYMMDD_HHMMSS
+            # ES: Buscar carpeta con patrón NUM_YYYYMMDD_HHMMSS | EN: Find folder matching NUM_YYYYMMDD_HHMMSS | JA: NUM_YYYYMMDD_HHMMSS パターンのフォルダを探索
             for item in nonlinear_folder.iterdir():
                 if item.is_dir() and pattern.match(item.name):
                     analysis_folder = item
@@ -655,7 +698,7 @@ class NonlinearConfigDialog(QDialog):
                     'project_folder': str(project_folder) if project_folder else None
                 }
         
-        # Verificar que se encontró la carpeta del análisis
+        # ES: Verificar que se encontró la carpeta del análisis | EN: Verify analysis folder was found | JA: 解析フォルダが見つかったか確認
         if analysis_folder is None or not analysis_folder.exists():
             return {
                 'is_valid': False,
@@ -664,7 +707,7 @@ class NonlinearConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Verificar carpeta 02_学習モデル
+        # ES: Verificar carpeta 02_学習モデル | EN: Verify 02_学習モデル folder | JA: 02_学習モデル フォルダを確認
         model_folder = analysis_folder / "02_学習モデル"
         if not model_folder.exists() or not model_folder.is_dir():
             return {
@@ -674,7 +717,7 @@ class NonlinearConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Verificar archivos en 02_学習モデル
+        # ES: Verificar archivos en 02_学習モデル | EN: Verify files in 02_学習モデル | JA: 02_学習モデル 内ファイルを確認
         missing_model_files = []
         for file_name in required_model_files:
             file_path = model_folder / file_name
@@ -689,7 +732,7 @@ class NonlinearConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Verificar carpeta 03_学習結果
+        # ES: Verificar carpeta 03_学習結果 | EN: Verify 03_学習結果 folder | JA: 03_学習結果 フォルダを確認
         result_folder = analysis_folder / "03_学習結果"
         if not result_folder.exists() or not result_folder.is_dir():
             return {
@@ -699,7 +742,7 @@ class NonlinearConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Verificar archivos en 03_学習結果
+        # ES: Verificar archivos en 03_学習結果 | EN: Verify files in 03_学習結果 | JA: 03_学習結果 内ファイルを確認
         missing_result_files = []
         for file_name in required_result_files:
             file_path = result_folder / file_name
@@ -714,7 +757,7 @@ class NonlinearConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Verificar carpeta data_analysis dentro de 03_学習結果
+        # ES: Verificar carpeta data_analysis dentro de 03_学習結果 | EN: Verify data_analysis under 03_学習結果 | JA: 03_学習結果 配下の data_analysis を確認
         data_analysis_folder = result_folder / "data_analysis"
         if not data_analysis_folder.exists() or not data_analysis_folder.is_dir():
             return {
@@ -724,7 +767,7 @@ class NonlinearConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Verificar archivos en data_analysis
+        # ES: Verificar archivos en data_analysis | EN: Verify files in data_analysis | JA: data_analysis 内ファイルを確認
         missing_data_analysis_files = []
         for file_name in required_data_analysis_files:
             file_path = data_analysis_folder / file_name
@@ -739,14 +782,16 @@ class NonlinearConfigDialog(QDialog):
                 'project_folder': str(project_folder) if project_folder else None
             }
         
-        # Si no se encontró project_folder, intentar buscarlo desde analysis_folder
+        # ES: Si no se encontró project_folder, intentar buscarlo desde analysis_folder
+        # EN: If project_folder wasn't found, try searching from analysis_folder
+        # JA: project_folder が未確定なら analysis_folder から探索
         if project_folder is None:
             for parent in analysis_folder.parents:
                 if parent.name == "04_非線形回帰":
                     project_folder = parent.parent
                     break
         
-        # Todo está correcto
+        # ES: Todo está correcto | EN: Everything is OK | JA: すべてOK
         return {
             'is_valid': True,
             'error_message': '',
@@ -755,10 +800,13 @@ class NonlinearConfigDialog(QDialog):
         }
     
     def get_config_values(self):
-        """Obtiene los valores configurados"""
+        """ES: Obtiene los valores configurados
+        EN: Get configured values
+        JA: 設定値を取得
+        """
         config_vals = {}
         
-        # Modelos seleccionados
+        # ES: Modelos seleccionados | EN: Selected models | JA: 選択モデル
         config_vals['models_to_use'] = [
             model for model, checkbox in self.model_checkboxes.items()
             if checkbox.isChecked()
@@ -767,9 +815,11 @@ class NonlinearConfigDialog(QDialog):
         if not config_vals['models_to_use']:
             config_vals['models_to_use'] = ['random_forest']  # Default
         
-        # Configuración adicional (usar N_TRIALS en mayúsculas para consistencia)
+        # ES: Configuración adicional (usar N_TRIALS en mayúsculas para consistencia)
+        # EN: Additional config (use uppercase N_TRIALS for consistency)
+        # JA: 追加設定（整合性のため N_TRIALS を大文字で使用）
         config_vals['N_TRIALS'] = self.n_trials.value()
-        config_vals['n_trials'] = self.n_trials.value()  # Mantener también en minúsculas para compatibilidad
+        config_vals['n_trials'] = self.n_trials.value()  # Keep lowercase too for compatibility
         config_vals['fallback_model'] = self.fallback_combo.currentText()
         
         # Default model and logging settings
@@ -832,7 +882,9 @@ class NonlinearConfigDialog(QDialog):
             if checkbox and checkbox.isChecked():
                 config_vals['pareto_objectives'][obj_name] = direction.currentText()
         
-        # Cargar existente
+        # ES: Cargar existente
+        # EN: Load existing
+        # JP: 既存を読み込む
         config_vals['load_existing'] = self.is_folder_valid
         config_vals['selected_folder_path'] = self.validated_folder_path
         config_vals['project_folder'] = self.project_folder_path

@@ -9,11 +9,11 @@ Set-Location $here
 
 $python = Join-Path $here "Scripts\\python.exe"
 if (-not (Test-Path $python)) {
-  throw "No se encontró Python de la venv en: $python (ejecuta este script desde la carpeta del proyecto .venv)"
+  throw "venv の Python が見つかりません: $python（このスクリプトはプロジェクトの .venv フォルダーから実行してください）"
 }
 
 if (-not $NoInstall) {
-  Write-Host "Instalando/actualizando PyInstaller en la venv..."
+  Write-Host "venv に PyInstaller をインストール／更新中..."
   & $python -m pip install --upgrade pyinstaller
 }
 
@@ -57,7 +57,7 @@ foreach ($item in $optionalData) {
   if (Test-Path $item.src) {
     $args += @("--add-data", "$($item.src);$($item.dest)")
   } else {
-    Write-Host "WARN: no existe asset opcional: $($item.src) (se omitirá)"
+    Write-Host "警告: オプションアセットが存在しません: $($item.src)（スキップします）"
   }
 }
 
@@ -66,19 +66,19 @@ $kiwiPyd = Join-Path $here "Lib\\site-packages\\kiwisolver\\_cext.cp313-win_amd6
 if (Test-Path $kiwiPyd) {
   $args += @("--add-binary", "$kiwiPyd;kiwisolver")
 } else {
-  Write-Host "WARN: no se encontró kiwisolver _cext .pyd en $kiwiPyd"
+  Write-Host "警告: kiwisolver _cext .pyd が見つかりません: $kiwiPyd"
 }
 
 $args += @("bootstrap.py")
 
-Write-Host "Ejecutando PyInstaller (onedir)..."
+Write-Host "PyInstaller を実行中（onedir）..."
 Write-Host "$python -m PyInstaller $($args -join ' ')"
 & $python -m PyInstaller @args
 if ($LASTEXITCODE -ne 0) {
-  throw "PyInstaller falló con exit code $LASTEXITCODE"
+  throw "PyInstaller が失敗しました（終了コード: $LASTEXITCODE）"
 }
 
 Write-Host ""
-Write-Host "✅ Build terminado. Revisa: dist\\$name\\$name.exe"
+Write-Host "✅ ビルド完了。確認: dist\\$name\\$name.exe"
 
 

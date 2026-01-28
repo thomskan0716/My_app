@@ -1,5 +1,5 @@
 from PySide6.QtCore import QObject, QThread, Signal
-from dsaitekika import Dsaitekika  # Importación local
+from dsaitekika import Dsaitekika  # Local import
 
 class DsaitekikaWorker(QObject):
     finished = Signal(dict)

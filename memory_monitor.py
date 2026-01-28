@@ -1,6 +1,11 @@
 """
-Sistema de monitoreo de memoria y fragmentación del heap
-Detecta qué está fragmentando el heap y visualiza en tiempo real
+ES: Sistema de monitoreo de memoria y fragmentación del heap.
+EN: Memory and heap-fragmentation monitoring system.
+JA: メモリとヒープ断片化のモニタリングシステム。
+
+ES: Detecta qué está fragmentando el heap y visualiza en tiempo real.
+EN: Detects what is fragmenting the heap and visualizes it in real time.
+JA: 断片化要因を検出し、リアルタイムで可視化。
 """
 import os
 import sys
@@ -34,41 +39,50 @@ except ImportError:
 
 
 class MemoryMonitor:
-    """Monitor de memoria y fragmentación del heap"""
+    """ES: Monitor de memoria y fragmentación del heap
+    EN: Memory and heap-fragmentation monitor
+    JA: メモリとヒープ断片化のモニター
+    """
     
     def __init__(self, pid: Optional[int] = None, log_file: Optional[str] = None):
         """
-        Inicializa el monitor de memoria
+        ES: Inicializa el monitor de memoria
+        EN: Initialize the memory monitor
+        JA: メモリモニターを初期化
         
         Parameters
         ----------
         pid : int, optional
-            PID del proceso a monitorear (None = proceso actual)
+            ES: PID del proceso a monitorear (None = proceso actual)
+            EN: PID of the process to monitor (None = current process)
+            JA: 監視対象プロセスのPID（Noneなら現在プロセス）
         log_file : str, optional
-            Archivo para guardar logs de memoria
+            ES: Archivo para guardar logs de memoria
+            EN: File to write memory logs
+            JA: メモリログの保存先ファイル
         """
         self.pid = pid or os.getpid()
         self.log_file = log_file
         self.monitoring = False
         self.monitor_thread = None
         
-        # Historial de métricas
+        # ES: Historial de métricas | EN: Metrics history | JA: メトリクス履歴
         self.memory_history = deque(maxlen=5000)  # ~2.5 horas a 2 segundos
         self.fragmentation_history = deque(maxlen=5000)
         self.object_counts = deque(maxlen=5000)
         self.gc_stats_history = deque(maxlen=5000)
         
-        # Tracking de objetos grandes
+        # ES: Tracking de objetos grandes | EN: Large-object tracking | JA: 大きいオブジェクトの追跡
         self.large_objects = []  # Lista de objetos > 10MB
         self.object_type_counts = defaultdict(int)
-        self.allocation_events = []  # Eventos de asignación grandes
+        self.allocation_events = []  # Large allocation events
         
-        # Métricas de fragmentación proxy
+        # ES: Métricas de fragmentación proxy | EN: Proxy fragmentation metrics | JA: 代理の断片化指標
         self.fragmentation_score = 0.0
         self.last_gc_time = 0.0
         self.gc_frequency = 0.0
         
-        # Estadísticas acumuladas
+        # ES: Estadísticas acumuladas | EN: Accumulated stats | JA: 累積統計
         self.stats = {
             'peak_memory': 0,
             'current_memory': 0,
@@ -80,12 +94,16 @@ class MemoryMonitor:
         
     def start_monitoring(self, interval: float = 2.0):
         """
-        Inicia monitoreo en background
+        ES: Inicia monitoreo en background
+        EN: Start monitoring in the background
+        JA: バックグラウンドで監視開始
         
         Parameters
         ----------
         interval : float
-            Intervalo de muestreo en segundos
+            ES: Intervalo de muestreo en segundos
+            EN: Sampling interval in seconds
+            JA: サンプリング間隔（秒）
         """
         if self.monitoring:
             return
@@ -100,14 +118,20 @@ class MemoryMonitor:
         print(f"📊 Monitoreo de memoria iniciado (PID: {self.pid}, intervalo: {interval}s)")
     
     def stop_monitoring(self):
-        """Detiene el monitoreo"""
+        """ES: Detiene el monitoreo
+        EN: Stop monitoring
+        JA: 監視を停止
+        """
         self.monitoring = False
         if self.monitor_thread:
             self.monitor_thread.join(timeout=5)
         print("📊 Monitoreo de memoria detenido")
     
     def _monitor_loop(self, interval: float):
-        """Loop principal de monitoreo"""
+        """ES: Loop principal de monitoreo
+        EN: Main monitoring loop
+        JA: 監視のメインループ
+        """
         while self.monitoring:
             try:
                 self._collect_metrics()
@@ -117,7 +141,10 @@ class MemoryMonitor:
                 time.sleep(interval)
     
     def _collect_metrics(self):
-        """Recolecta métricas de memoria"""
+        """ES: Recolecta métricas de memoria
+        EN: Collect memory metrics
+        JA: メモリメトリクスを収集
+        """
         timestamp = time.time()
         
         # Memoria del proceso
@@ -140,15 +167,21 @@ class MemoryMonitor:
             except:
                 self.stats['current_memory'] = 0
         
-        # Estadísticas de GC
+        # ES: Estadísticas de GC | EN: GC stats | JA: GC統計
         gc_counts = gc.get_count()
         
-        # ★ SEGURIDAD: Evitar gc.get_objects() durante inicialización
-        # Solo contar objetos después de algunas muestras
+        # ES: ★ SEGURIDAD: Evitar gc.get_objects() durante inicialización
+        # EN: ★ SAFETY: Avoid gc.get_objects() during initialization
+        # JA: ★ 安全：初期化中は gc.get_objects() を避ける
+        # ES: Solo contar objetos después de algunas muestras
+        # EN: Only count objects after a few samples
+        # JA: 数回サンプル後にのみオブジェクト数をカウント
         num_objects = 0
         if len(self.memory_history) >= 3 and hasattr(gc, 'get_objects'):
             try:
-                # Solo contar, no analizar (más rápido y seguro)
+                # ES: Solo contar, no analizar (más rápido y seguro)
+                # EN: Only count; do not analyze (faster and safer)
+                # JA: カウントのみ（解析しない、より高速で安全）
                 num_objects = len(gc.get_objects())
             except:
                 num_objects = 0
@@ -181,7 +214,9 @@ class MemoryMonitor:
             gc_stats['gen2']
         )
         
-        # Guardar en historial
+        # ES: Guardar en historial
+        # EN: Save to history
+        # JP: 履歴に保存
         self.memory_history.append({
             'timestamp': timestamp,
             'memory_mb': self.stats['current_memory'],
@@ -207,7 +242,9 @@ class MemoryMonitor:
             **gc_stats
         })
         
-        # Guardar en log si está configurado
+        # ES: Guardar en log si está configurado
+        # EN: Save to log if configured
+        # JP: 設定されていればログに保存
         if self.log_file:
             self._write_log_entry(timestamp, self.stats['current_memory'], fragmentation, gc_stats, type_counts)
     
@@ -228,7 +265,9 @@ class MemoryMonitor:
             if not hasattr(gc, 'get_objects'):
                 return large_objs, type_counts
             
-            # ★ SEGURIDAD: Evitar análisis durante inicialización
+            # ES: ★ SEGURIDAD: Evitar análisis durante inicialización
+            # EN: ★ SAFETY: Avoid analysis during initialization
+            # JP: ★ 安全: 初期化中は解析を避ける
             # Si el proceso acaba de empezar, esperar antes de analizar objetos
             if len(self.memory_history) < 3:  # Esperar al menos 3 muestras (15 segundos con intervalo 5s)
                 return large_objs, type_counts
@@ -278,7 +317,9 @@ class MemoryMonitor:
             large_objs = large_objs[:20]  # Top 20 objetos más grandes
             
         except Exception as e:
-            # Análisis de objetos puede fallar, continuar sin él
+            # ES: El análisis de objetos puede fallar; continuar sin él
+            # EN: Object analysis may fail; continue without it
+            # JP: オブジェクト解析が失敗する可能性があるため、失敗しても続行する
             pass
         
         return large_objs, type_counts
@@ -379,7 +420,9 @@ class MemoryMonitor:
             print(f"⚠️ Error escribiendo log: {e}")
     
     def get_current_stats(self) -> Dict:
-        """Obtiene estadísticas actuales"""
+        """ES: Obtiene estadísticas actuales
+        EN: Get current statistics
+        JA: 現在の統計を取得"""
         fragmentation = {}
         if len(self.fragmentation_history) > 0:
             fragmentation = self.fragmentation_history[-1]
@@ -502,5 +545,5 @@ class MemoryMonitor:
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, default=str)
         
-        print(f"✅ Datos exportados a: {filepath}")
+        print(f"✅ データをエクスポートしました: {filepath}")
 

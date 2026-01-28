@@ -37,13 +37,15 @@ def resource_path(relative_path: str) -> str:
     if base:
         return str(Path(base) / relative_path)
 
-    # Fallback: carpeta del código
+    # ES: Fallback: carpeta del código | EN: Fallback: code folder | JA: フォールバック：コードのあるフォルダ
     here = Path(__file__).resolve().parent
     candidate = here / relative_path
     if candidate.exists():
         return str(candidate)
 
-    # Último fallback: CWD (por si se lanza desde otro entrypoint)
+    # ES: Último fallback: CWD (por si se lanza desde otro entrypoint)
+    # EN: Last fallback: CWD (in case it's launched from another entrypoint)
+    # JA: 最終フォールバック：CWD（別エントリポイント起動時など）
     return str(Path(os.getcwd()) / relative_path)
 
 

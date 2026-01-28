@@ -1,42 +1,64 @@
 """
-Módulo de debug para detectar DLLs cargadas, especialmente OpenMP runtimes
-Útil para diagnosticar conflictos de DLLs en Windows
+ES: Módulo de debug para detectar DLLs cargadas, especialmente OpenMP runtimes.
+EN: Debug module to detect loaded DLLs, especially OpenMP runtimes.
+JA: 読み込まれたDLL（特にOpenMPランタイム）を検出するデバッグモジュール。
+
+ES: Útil para diagnosticar conflictos de DLLs en Windows.
+EN: Useful for diagnosing DLL conflicts on Windows.
+JA: WindowsでのDLL競合の診断に有用。
 """
 import sys
 import os
 
 def get_loaded_dlls():
     """
-    Obtiene lista de DLLs cargadas en el proceso actual (Windows)
-    Usa múltiples métodos para asegurar que funcione
+    ES: Obtiene lista de DLLs cargadas en el proceso actual (Windows).
+    EN: Get the list of DLLs loaded in the current process (Windows).
+    JA: 現在のプロセスで読み込まれているDLL一覧を取得（Windows）。
+
+    ES: Usa múltiples métodos para asegurar que funcione.
+    EN: Uses multiple methods to improve reliability.
+    JA: 動作保証のため複数の手法を使用。
     
     Returns
     -------
     list
-        Lista de nombres de DLLs cargadas
+        ES: Lista de nombres de DLLs cargadas
+        EN: List of loaded DLL names
+        JA: 読み込まれたDLL名のリスト
     """
     if sys.platform != 'win32':
         return []
     
     dll_names = []
     
-    # Método 1: EnumProcessModules (más completo)
+    # ES: Método 1: EnumProcessModules (más completo)
+    # EN: Method 1: EnumProcessModules (most complete)
+    # JA: 方法1：EnumProcessModules（最も網羅的）
     try:
         import ctypes
         from ctypes import wintypes
         
-        # EnumProcessModules requiere psapi.dll
+        # ES: EnumProcessModules requiere psapi.dll
+        # EN: EnumProcessModules requires psapi.dll
+        # JA: EnumProcessModules は psapi.dll が必要
         psapi = ctypes.windll.psapi
         kernel32 = ctypes.windll.kernel32
         
-        # Obtener handle del proceso actual
+        # ES: Obtener handle del proceso actual
+        # EN: Get current process handle
+        # JA: 現在プロセスのハンドルを取得
         h_process = kernel32.GetCurrentProcess()
         
-        # Buffer para módulos (aumentado a 2048 para procesos con muchas DLLs)
+        # ES: Buffer para módulos (aumentado a 2048 para procesos con muchas DLLs)
+        # EN: Module buffer (increased to 2048 for processes with many DLLs)
+        # JA: モジュールバッファ（DLLが多いプロセス向けに2048へ拡大）
         module_handles = (wintypes.HMODULE * 2048)()
         cb_needed = wintypes.DWORD()
         
-        # Enumerar módulos
+        # ES: Enumerar módulos
+        # EN: Enumerate modules
+        # JA: モジュールを列挙
         if psapi.EnumProcessModules(
             h_process,
             ctypes.byref(module_handles),
@@ -55,24 +77,28 @@ def get_loaded_dlls():
                         260
                     ):
                         dll_path = module_name.value
-                        if dll_path:  # Verificar que no esté vacío
+                        if dll_path:  # Ensure not empty
                             dll_name = os.path.basename(dll_path).lower()
                             if dll_name:
                                 dll_names.append(dll_name)
                 except:
-                    continue  # Continuar con el siguiente módulo si falla
+                    continue  # Continue with next module on failure
             
             if dll_names:
-                return sorted(set(dll_names))  # Eliminar duplicados y ordenar
+                return sorted(set(dll_names))  # De-duplicate and sort
     except Exception as e:
-        pass  # Intentar método alternativo
+        pass  # Try fallback method
     
-    # Método 2: Usar ctypes.util.find_library y sys.modules (fallback)
+    # ES: Método 2: Usar ctypes.util.find_library y sys.modules (fallback)
+    # EN: Method 2: Use ctypes.util.find_library and sys.modules (fallback)
+    # JA: 方法2：ctypes.util.find_library と sys.modules を使用（フォールバック）
     try:
         import ctypes.util
-        # sys ya está importado al inicio del archivo, no reimportar
+        # sys is already imported at the top; do not re-import
         
-        # Buscar DLLs conocidas en sys.modules
+        # ES: Buscar DLLs conocidas en sys.modules
+        # EN: Look for known DLLs in sys.modules
+        # JA: sys.modules から既知DLLを探索
         known_dlls = []
         for module_name, module_obj in sys.modules.items():
             if hasattr(module_obj, '__file__'):
@@ -89,13 +115,17 @@ def get_loaded_dlls():
     except Exception as e:
         pass
     
-    # Si aún no tenemos DLLs, retornar lista vacía (pero no None)
+    # ES: Si aún no tenemos DLLs, retornar lista vacía (pero no None)
+    # EN: If still no DLLs, return an empty list (not None)
+    # JA: それでもDLLが無ければ空リストを返す（Noneではない）
     return sorted(set(dll_names)) if dll_names else []
 
 
 def detect_openmp_runtimes(dll_list=None):
     """
-    Detecta qué runtimes de OpenMP están cargados
+    ES: Detecta qué runtimes de OpenMP están cargados.
+    EN: Detect which OpenMP runtimes are loaded.
+    JA: 読み込まれているOpenMPランタイムを検出。
     
     Parameters
     ----------
@@ -110,7 +140,9 @@ def detect_openmp_runtimes(dll_list=None):
     if dll_list is None:
         dll_list = get_loaded_dlls()
     
-    # Patrones de nombres de DLLs OpenMP
+    # ES: Patrones de nombres de DLLs OpenMP
+    # EN: OpenMP DLL name patterns
+    # JP: OpenMP DLL名のパターン
     omp_patterns = {
         'intel': ['libiomp5md.dll', 'libiomp5.dll', 'iomp5md.dll'],
         'msvc': ['vcomp140.dll', 'vcomp120.dll', 'vcomp110.dll', 'vcomp100.dll'],
@@ -129,7 +161,9 @@ def detect_openmp_runtimes(dll_list=None):
     for dll in dll_list:
         dll_lower = dll.lower()
         
-        # Buscar en cada categoría
+        # ES: Buscar en cada categoría
+        # EN: Search in each category
+        # JP: 各カテゴリで検索
         found = False
         for category, patterns in omp_patterns.items():
             for pattern in patterns:
@@ -141,7 +175,9 @@ def detect_openmp_runtimes(dll_list=None):
             if found:
                 break
         
-        # Si no está en ninguna categoría conocida pero contiene "omp"
+        # ES: Si no está en ninguna categoría conocida pero contiene "omp"
+        # EN: If it's not in any known category but contains "omp"
+        # JP: 既知カテゴリに該当しないが「omp」を含む場合
         if not found and 'omp' in dll_lower:
             detected['other'].append(dll)
             detected['all_omp_dlls'].append(dll)
@@ -151,7 +187,9 @@ def detect_openmp_runtimes(dll_list=None):
 
 def detect_blas_libraries(dll_list=None):
     """
-    Detecta qué librerías BLAS/LAPACK están cargadas
+    ES: Detecta qué librerías BLAS/LAPACK están cargadas.
+    EN: Detect which BLAS/LAPACK libraries are loaded.
+    JA: 読み込まれているBLAS/LAPACKライブラリを検出。
     
     Parameters
     ----------
@@ -196,7 +234,9 @@ def detect_blas_libraries(dll_list=None):
 
 def detect_gui_dlls(dll_list=None):
     """
-    Detecta DLLs relacionadas con GUI (Qt, Tkinter, etc.)
+    ES: Detecta DLLs relacionadas con GUI (Qt, Tkinter, etc.).
+    EN: Detect GUI-related DLLs (Qt, Tkinter, etc.).
+    JA: GUI関連DLL（Qt/Tkinter等）を検出。
     
     Parameters
     ----------
@@ -249,14 +289,14 @@ def print_dll_report(stage="Unknown"):
         Etapa del proceso donde se genera el reporte (para debug)
     """
     print("\n" + "="*80, flush=True)
-    print(f"[DLL] REPORTE DE DLLs - Etapa: {stage}", flush=True)
+    print(f"[DLL] DLLレポート - ステージ: {stage}", flush=True)
     print("="*80, flush=True)
     
     try:
         dll_list = get_loaded_dlls()
         
         if not dll_list:
-            print("[WARN] No se pudieron obtener las DLLs cargadas (puede requerir permisos)", flush=True)
+            print("[警告] 読み込まれたDLLを取得できませんでした（権限が必要な場合があります）", flush=True)
             print("="*80, flush=True)
             return
         
@@ -266,35 +306,37 @@ def print_dll_report(stage="Unknown"):
         relevant_dlls = [dll for dll in dll_list if any(keyword in dll for keyword in 
             ['omp', 'mkl', 'blas', 'openblas', 'qt', 'tk', 'python', 'numpy', 'sklearn'])]
         if relevant_dlls:
-            print(f"\n[INFO] DLLs relevantes detectadas ({len(relevant_dlls)}):", flush=True)
+            print(f"\n[情報] 関連DLLを検出しました（{len(relevant_dlls)}件）:", flush=True)
             for dll in relevant_dlls[:20]:  # Mostrar máximo 20
                 print(f"     - {dll}", flush=True)
             if len(relevant_dlls) > 20:
-                print(f"     ... y {len(relevant_dlls) - 20} mas", flush=True)
+                print(f"     ... ほか {len(relevant_dlls) - 20} 件", flush=True)
         
         # Detectar OpenMP
         omp_info = detect_openmp_runtimes(dll_list)
-        print(f"\n[OMP] RUNTIMES OPENMP DETECTADOS:", flush=True)
+        print(f"\n[OMP] OpenMPランタイム検出結果:", flush=True)
         if omp_info['all_omp_dlls']:
-            print(f"  [WARN] MULTIPLES RUNTIMES OPENMP: {len(omp_info['all_omp_dlls'])} DLLs encontradas", flush=True)
+            print(f"  [警告] 複数のOpenMPランタイム: {len(omp_info['all_omp_dlls'])}個のDLLを検出", flush=True)
             if omp_info['intel']:
                 print(f"     - Intel OpenMP: {', '.join(omp_info['intel'][:5])}", flush=True)
                 if len(omp_info['intel']) > 5:
-                    print(f"       ... y {len(omp_info['intel']) - 5} mas", flush=True)
+                    print(f"       ... ほか {len(omp_info['intel']) - 5} 件", flush=True)
             if omp_info['msvc']:
                 print(f"     - MSVC OpenMP: {', '.join(omp_info['msvc'][:5])}", flush=True)
                 if len(omp_info['msvc']) > 5:
-                    print(f"       ... y {len(omp_info['msvc']) - 5} mas", flush=True)
+                    print(f"       ... ほか {len(omp_info['msvc']) - 5} 件", flush=True)
             if omp_info['gcc']:
                 print(f"     - GCC OpenMP: {', '.join(omp_info['gcc'][:5])}", flush=True)
                 if len(omp_info['gcc']) > 5:
-                    print(f"       ... y {len(omp_info['gcc']) - 5} mas", flush=True)
+                    print(f"       ... ほか {len(omp_info['gcc']) - 5} 件", flush=True)
             if omp_info['other']:
-                print(f"     - Otros OpenMP: {', '.join(omp_info['other'][:5])}", flush=True)
+                print(f"     - その他のOpenMP: {', '.join(omp_info['other'][:5])}", flush=True)
                 if len(omp_info['other']) > 5:
-                    print(f"       ... y {len(omp_info['other']) - 5} mas", flush=True)
+                    print(f"       ... ほか {len(omp_info['other']) - 5} 件", flush=True)
             
-            # ADVERTENCIA si hay múltiples runtimes
+            # ES: ADVERTENCIA si hay múltiples runtimes
+            # EN: WARNING if there are multiple runtimes
+            # JP: 警告: 複数のランタイムがある場合
             total_runtimes = sum([
                 len(omp_info['intel']) > 0,
                 len(omp_info['msvc']) > 0,
@@ -302,34 +344,34 @@ def print_dll_report(stage="Unknown"):
                 len(omp_info['other']) > 0
             ])
             if total_runtimes > 1:
-                print(f"\n  [ERROR] CONFLICTO DETECTADO: Multiples runtimes OpenMP cargados simultaneamente!", flush=True)
-                print(f"     Esto puede causar heap corruption (0xC0000374)", flush=True)
+                print(f"\n  [エラー] 競合を検出: 複数のOpenMPランタイムが同時に読み込まれています！", flush=True)
+                print(f"     これはヒープ破損 (0xC0000374) を引き起こす可能性があります", flush=True)
             else:
-                print(f"  [OK] Solo un runtime OpenMP detectado (sin conflicto)", flush=True)
+                print(f"  [OK] OpenMPランタイムは1つのみ（競合なし）", flush=True)
         else:
-            print("  [OK] No se detectaron DLLs OpenMP", flush=True)
+            print("  [OK] OpenMP DLLは検出されませんでした", flush=True)
         
         # Detectar BLAS
         blas_info = detect_blas_libraries(dll_list)
-        print(f"\n[BLAS] LIBRERIAS BLAS/LAPACK DETECTADAS:", flush=True)
+        print(f"\n[BLAS] BLAS/LAPACKライブラリ検出結果:", flush=True)
         if blas_info['all_blas_dlls']:
             if blas_info['mkl']:
                 print(f"  - Intel MKL: {len(blas_info['mkl'])} DLLs", flush=True)
             if blas_info['openblas']:
                 print(f"  - OpenBLAS: {', '.join(blas_info['openblas'][:5])}", flush=True)
             if blas_info['blas']:
-                print(f"  - BLAS generico: {', '.join(blas_info['blas'][:5])}", flush=True)
+                print(f"  - 汎用BLAS: {', '.join(blas_info['blas'][:5])}", flush=True)
             if blas_info['lapack']:
                 print(f"  - LAPACK: {', '.join(blas_info['lapack'][:5])}", flush=True)
         else:
-            print("  [OK] No se detectaron DLLs BLAS/LAPACK", flush=True)
+            print("  [OK] BLAS/LAPACK DLLは検出されませんでした", flush=True)
         
         # Detectar GUI
         gui_info = detect_gui_dlls(dll_list)
-        print(f"\n[GUI] DLLs GUI/COM DETECTADAS:", flush=True)
+        print(f"\n[GUI] GUI/COM DLL検出結果:", flush=True)
         if gui_info['all_gui_dlls']:
             if gui_info['qt']:
-                print(f"  [WARN] Qt: {len(gui_info['qt'])} DLLs (pueden traer OpenMP)", flush=True)
+                print(f"  [警告] Qt: {len(gui_info['qt'])} DLL（OpenMPを含む可能性があります）", flush=True)
             if gui_info['tkinter']:
                 print(f"  [WARN] Tkinter: {', '.join(gui_info['tkinter'][:5])}", flush=True)
             if gui_info['matplotlib']:
@@ -337,10 +379,10 @@ def print_dll_report(stage="Unknown"):
             if gui_info['com']:
                 print(f"  [WARN] COM: {', '.join(gui_info['com'][:5])}", flush=True)
         else:
-            print("  [OK] No se detectaron DLLs GUI/COM", flush=True)
+            print("  [OK] GUI/COM DLLは検出されませんでした", flush=True)
         
         # Variables de entorno relevantes
-        print(f"\n[ENV] VARIABLES DE ENTORNO RELEVANTES:", flush=True)
+        print(f"\n[ENV] 関連環境変数:", flush=True)
         env_vars = [
             'OMP_NUM_THREADS',
             'MKL_NUM_THREADS',
@@ -354,11 +396,11 @@ def print_dll_report(stage="Unknown"):
             'PYTHONIOENCODING'
         ]
         for var in env_vars:
-            value = os.environ.get(var, 'NO DEFINIDA')
+            value = os.environ.get(var, '未設定')
             print(f"  {var} = {value}", flush=True)
         
     except Exception as e:
-        print(f"\n[ERROR] ERROR al generar reporte de DLLs: {e}", flush=True)
+        print(f"\n[エラー] DLLレポート生成中にエラー: {e}", flush=True)
         import traceback
         print(f"   Traceback: {traceback.format_exc()}", flush=True)
     
@@ -384,7 +426,9 @@ def check_dll_conflicts():
             'details': []
         }
         
-        # Verificar múltiples runtimes OpenMP
+        # ES: Verificar múltiples runtimes OpenMP
+        # EN: Check for multiple OpenMP runtimes
+        # JP: 複数のOpenMPランタイムを確認する
         total_omp_runtimes = sum([
             len(omp_info['intel']) > 0,
             len(omp_info['msvc']) > 0,
@@ -396,17 +440,17 @@ def check_dll_conflicts():
             conflicts['has_conflict'] = True
             conflicts['conflict_type'] = 'multiple_openmp_runtimes'
             conflicts['details'].append(
-                f"Multiples runtimes OpenMP detectados: "
+                f"複数のOpenMPランタイムを検出: "
                 f"Intel={len(omp_info['intel'])}, "
                 f"MSVC={len(omp_info['msvc'])}, "
                 f"GCC={len(omp_info['gcc'])}, "
-                f"Otros={len(omp_info['other'])}"
+                f"その他={len(omp_info['other'])}"
             )
-            print(f"[ERROR] CONFLICTO DETECTADO: {conflicts['details'][0]}", flush=True)
+            print(f"[エラー] 競合を検出: {conflicts['details'][0]}", flush=True)
         else:
-            print(f"[OK] No se detectaron conflictos de DLLs", flush=True)
+            print(f"[OK] DLLの競合は検出されませんでした", flush=True)
         
         return conflicts
     except Exception as e:
-        print(f"[ERROR] Error al verificar conflictos de DLLs: {e}", flush=True)
+        print(f"[エラー] DLL競合の確認中にエラー: {e}", flush=True)
         return {'has_conflict': False, 'conflict_type': None, 'details': []}

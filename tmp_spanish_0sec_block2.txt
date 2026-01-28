@@ -1,0 +1,105 @@
+L5584 [print] ✅ Datos filtrados:
+L5596 [print] 📊 Iniciando análisis lineal...
+L5597 [print] Datos filtrados: {...} registros
+L5610 [print] 📈 Iniciando análisis no lineal...
+L5611 [print] Datos filtrados: {...} registros
+L5624 [print] 🏷️ Iniciando análisis de clasificación...
+L5625 [print] Datos filtrados: {...} registros
+L5666 [print] ⚙️ Analizando datos filtrados...
+L5672 [print] ⚠️ No hay datos filtrados.
+L5713 [print] ✅ Ningún cepillo específico seleccionado - 'すべて' seleccionado por defecto
+L5830 [print] ✅ Usando archivo existente en 99_Temp: {...}
+L6114 [print] ✅ Usando archivo existente en 99_Temp: {...}
+L6303 [print] 🔍 DEBUG: Iniciando on_dsaitekika_clicked
+L6415 [print] 🔍 DEBUG: Llegando al código de actualización del archivo de entrada
+L6486 [print] ℹ️ CSV→Excel export ya en ejecución, se omite nueva solicitud
+L6515 [print] ℹ️ done_experiments ya en ejecución, se reutiliza el que salga
+L6816 [print] 🔍 DEBUG: Iniciando create_experiment_data_folder
+L6825 [print] 🔍 DEBUG: Procesando carpeta: '{...}'
+L6826 [print] 🔍 DEBUG: Tipo de optimización: '{...}'
+L6827 [print] 🔍 DEBUG: Longitud del nombre de carpeta: {...}
+L6847 [print] 🔍 DEBUG: Patrón {...}: {...}
+L6853 [print] ✅ DEBUG: Coincidencia encontrada con patrón '{...}'
+L6854 [print] ✅ DEBUG: Número extraído: '{...}'
+L6855 [print] ✅ DEBUG: Número rellenado: '{...}'
+L6858 [print] ❌ DEBUG: No coincidencia con patrón '{...}'
+L6861 [print] 🔍 DEBUG: Resumen de extracción:
+L6862 [print] - Nombre de carpeta original: '{...}'
+L6863 [print] - Patrón usado: '{...}'
+L6864 [print] - Número final extraído: '{...}'
+L6865 [print] - Tipo de optimización: '{...}'
+L6874 [print] 🔍 DEBUG: Nombre de carpeta final generado: '{...}'
+L6882 [print] ⚠️ DEBUG: La carpeta ya existe: {...}
+L6888 [print] 🔍 DEBUG: Intentando crear carpeta alternativa: {...}
+L6893 [print] 🔍 DEBUG: Carpeta final a crear: {...}
+L6901 [print] ❌ DEBUG: Error creando carpeta de experimento: {...}
+L6926 [print] 🔍 Detectando carpeta del proyecto para: {...}
+L6932 [print] 🔍 Directorio del archivo: {...}
+L6959 [print] ✅ Encontrada carpeta de proyecto: {...}
+L6964 [print] ✅ Carpeta del proyecto detectada: {...}
+L6975 [print] ✅ Estructura de proyecto detectada con {...} carpetas
+L6984 [print] ❌ No se pudo detectar automáticamente la carpeta del proyecto
+L6988 [print] ❌ Error detectando carpeta del proyecto: {...}
+L7015 [print] ✅ Carpeta del proyecto detectada automáticamente: {...}
+L7018 [print] ❌ No se pudo detectar automáticamente la carpeta del proyecto
+L7029 [print] ✅ Carpeta del proyecto guardada: {...}
+L7032 [print] 🔍 DEBUG: Iniciando búsqueda de archivo de experimento...
+L7035 [print] ✅ DEBUG: Archivo de experimento encontrado: {...}
+L7038 [print] ✅ DEBUG: Información de experimento guardada para procesamiento posterior
+L7040 [print] ⚠️ DEBUG: No se encontró archivo de experimento correspondiente
+L7043 [print] ✅ DEBUG: No se creará carpeta por defecto prematuramente
+L7062 [print] 🔧 Loading se posicionará por encima de la consola
+L7065 [print] 🔧 Frame central geometría: {...}
+L7066 [print] 🔧 Loading overlay geometría: {...}
+L7069 [print] 🔍 Debug - Creando ShowResultsWorker con:
+L7080 [print] 🔍 Debug - Archivo de resultados contiene {...} filas
+L7081 [print] 🔍 Debug - Columnas del archivo: {...}
+L7082 [print] 🔍 Debug - Primera fila de datos:
+L7093 [print] 🔍 Debug - Error leyendo archivo de resultados: {...}
+L7100 [print] ❌ Error importando ShowResultsWorker: {...}
+L7106 [print] ❌ self.processor no existe
+L7119 [print] 🔍 Debug - Ruta de la base de datos: {...}
+L7120 [print] 🔍 Debug - ¿Existe la base de datos?: {...}
+L7135 [print] 🔍 Debug - Verificando estructura de la base de datos...
+L7138 [print] 🔍 Debug - Columnas en la base de datos:
+L7153 [print] 🔍 Debug - Registros en la base de datos antes de importar: {...}
+L7158 [print] 🔍 Debug - ¿Existe base de datos en el proyecto?: {...}
+L7160 [print] 🔍 Debug - Ruta de BD del proyecto: {...}
+L7167 [print] 🔍 Debug - Registros en BD del proyecto: {...}
+L7169 [print] 🔍 Debug - Error verificando BD del proyecto: {...}
+L7171 [print] 🔍 Debug - Error verificando base de datos antes: {...}
+L7196 [print] 🔍 Debug - Iniciando thread para importación...
+L7224 [print] 🔍 Debug - Registros en la base de datos después de importar: {...}
+L7247 [print] 🔍 Debug - Contenido completo de la base de datos:
+L7268 [print] 🔍 Debug - La base de datos está vacía
+L7272 [print] 🔍 Debug - Error verificando base de datos: {...}
+L7696 [print] ⚠️ Error recalculando D基準値 (referencia) desde candidato/índices: {...}
+L8098 [print] 📋 Mostrando tabla D-óptimo
+L8101 [print] 📋 Mostrando tabla I-óptimo
+L8266 [print] 📊 Configurando navegación de gráficos:
+L8267 [print] - Total de gráficos: {...}
+L8268 [print] - Gráficos disponibles: {...}
+L8278 [print] ✅ Sistema de navegación configurado:
+L8279 [print] - Gráfico actual: {...}/{...}
+L8280 [print] - Botón anterior: {...}
+L8281 [print] - Botón siguiente: {...}
+L8284 [print] 📋 Añadiendo tabla D-óptimo con {...} filas
+L8288 [print] 📋 Añadiendo tabla I-óptimo con {...} filas
+L8747 [print] 📋 Creando backup: {...}
+L8760 [print] 📊 Leyendo archivo de resultados: {...}
+L8790 [print] 📊 Leyendo archivo de muestreo: {...}
+L8794 [print] 📊 Archivo de muestreo original: {...} filas
+L8817 [print] 🔍 Columnas disponibles en archivo de resultados: {...}
+L8818 [print] 🔍 Columnas disponibles en archivo de muestreo: {...}
+L8834 [print] ⚠️ El archivo de muestreo no contiene '{...}'. Se eliminará la primera coincidencia por clave estricta.
+L8945 [print] ⚠️ Coincidencias no encontradas para {...}/{...} filas de resultados. (Revisa tipos/columnas/valores)
+L8954 [print] 📊 Archivo de muestreo actualizado: {...} filas
+L8972 [print] ✅ Archivo de muestreo actualizado guardado: {...}
+L9023 [print] 🔄 Iniciando proceso de backup y actualización del archivo de muestreo...
+L9072 [print] 🛑 Cerrando aplicación...
+L9079 [print] 🛑 Cancelando análisis no lineal antes de cerrar...
+L9086 [print] ⚠️ El worker no terminó en 5 segundos, forzando cierre...
+L9090 [print] ✅ Worker de análisis no lineal cancelado
+L9098 [print] ✅ Aplicación cerrada correctamente
+L9335 [print] 🔄 Archivo de muestreo detectado en pantalla de filtros. Volviendo a pantalla principal...
+L9756 [print] ❌ Error iniciando exportación: {...}

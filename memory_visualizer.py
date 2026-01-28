@@ -1,6 +1,11 @@
 """
-Visualizador de memoria y fragmentación del heap
-Genera gráficos a partir de los datos exportados por MemoryMonitor
+ES: Visualizador de memoria y fragmentación del heap.
+EN: Memory and heap-fragmentation visualizer.
+JA: メモリとヒープ断片化の可視化ツール。
+
+ES: Genera gráficos a partir de los datos exportados por MemoryMonitor.
+EN: Generates plots from data exported by MemoryMonitor.
+JA: MemoryMonitor が出力したデータからグラフを生成。
 """
 import json
 import matplotlib.pyplot as plt
@@ -17,34 +22,44 @@ except ImportError:
 
 
 def load_memory_data(json_path: str) -> dict:
-    """Carga datos de memoria desde JSON"""
+    """ES: Carga datos de memoria desde JSON
+    EN: Load memory data from JSON
+    JA: JSONからメモリデータを読み込み
+    """
     with open(json_path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 
 def plot_memory_timeline(data: dict, output_path: str):
-    """Grafica memoria y fragmentación en el tiempo"""
+    """ES: Grafica memoria y fragmentación en el tiempo
+    EN: Plot memory and fragmentation over time
+    JA: 時系列でメモリと断片化をプロット
+    """
     memory_history = data.get('memory_history', [])
     fragmentation_history = data.get('fragmentation_history', [])
     
     if not memory_history:
-        print("⚠️ No hay datos de memoria para graficar")
+        print("⚠️ グラフ化できるメモリデータがありません")
         return
     
-    # Extraer datos
+    # ES: Extraer datos | EN: Extract data | JA: データ抽出
     timestamps = [m['timestamp'] for m in memory_history]
     memory_mb = [m['memory_mb'] for m in memory_history]
     frag_scores = [f.get('fragmentation_score', 0) for f in fragmentation_history]
     
-    # Normalizar timestamps (empezar desde 0)
+    # ES: Normalizar timestamps (empezar desde 0)
+    # EN: Normalize timestamps (start at 0)
+    # JA: タイムスタンプを正規化（0開始）
     start_time = timestamps[0] if timestamps else 0
     time_elapsed = [(t - start_time) / 60 for t in timestamps]  # Convertir a minutos
     
-    # Crear figura con subplots
+    # ES: Crear figura con subplots
+    # EN: Create figure with subplots
+    # JA: サブプロット付きの図を作成
     fig, axes = plt.subplots(3, 1, figsize=(14, 10))
     fig.suptitle('Monitoreo de Memoria y Fragmentación del Heap', fontsize=16, fontweight='bold')
     
-    # Gráfico 1: Memoria RSS
+    # ES: Gráfico 1: Memoria RSS | EN: Plot 1: RSS memory | JA: グラフ1：RSSメモリ
     ax1 = axes[0]
     ax1.plot(time_elapsed, memory_mb, 'b-', linewidth=2, label='Memoria RSS')
     ax1.fill_between(time_elapsed, memory_mb, alpha=0.3)
@@ -54,7 +69,7 @@ def plot_memory_timeline(data: dict, output_path: str):
     ax1.grid(True, alpha=0.3)
     ax1.legend()
     
-    # Añadir línea de pico
+    # ES: Añadir línea de pico | EN: Add peak line | JA: ピーク線を追加
     peak_memory = max(memory_mb)
     peak_idx = memory_mb.index(peak_memory)
     ax1.axhline(y=peak_memory, color='r', linestyle='--', alpha=0.5, label=f'Pico: {peak_memory:.1f}MB')
@@ -64,13 +79,13 @@ def plot_memory_timeline(data: dict, output_path: str):
                 bbox=dict(boxstyle='round', fc='yellow', alpha=0.7),
                 arrowprops=dict(arrowstyle='->'))
     
-    # Gráfico 2: Fragmentación
+    # ES: Gráfico 2: Fragmentación | EN: Plot 2: Fragmentation | JA: グラフ2：断片化
     ax2 = axes[1]
     if len(frag_scores) == len(time_elapsed):
         ax2.plot(time_elapsed, frag_scores, 'r-', linewidth=2, label='Score de Fragmentación')
         ax2.fill_between(time_elapsed, frag_scores, alpha=0.3, color='red')
         
-        # Zonas de riesgo
+        # ES: Zonas de riesgo | EN: Risk zones | JA: リスクゾーン
         ax2.axhspan(0, 30, alpha=0.1, color='green', label='Baja')
         ax2.axhspan(30, 50, alpha=0.1, color='yellow', label='Moderada')
         ax2.axhspan(50, 100, alpha=0.1, color='red', label='Alta')
@@ -82,7 +97,7 @@ def plot_memory_timeline(data: dict, output_path: str):
         ax2.grid(True, alpha=0.3)
         ax2.legend()
     
-    # Gráfico 3: Número de objetos
+    # ES: Gráfico 3: Número de objetos | EN: Plot 3: Object count | JA: グラフ3：オブジェクト数
     object_counts = data.get('object_counts', [])
     if object_counts:
         num_objects = [oc.get('total_objects', 0) for oc in object_counts]
@@ -97,42 +112,45 @@ def plot_memory_timeline(data: dict, output_path: str):
     
     plt.tight_layout()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    print(f"✅ Gráfico guardado: {output_path}")
+    print(f"✅ グラフを保存しました: {output_path}")
     plt.close()
 
 
 def plot_fragmentation_causes(data: dict, output_path: str):
-    """Grafica análisis de causas de fragmentación"""
+    """ES: Grafica análisis de causas de fragmentación
+    EN: Plot fragmentation-cause analysis
+    JA: 断片化原因の分析をプロット
+    """
     analysis = data.get('analysis', {})
     
     if 'causes' not in analysis or not analysis['causes']:
-        print("⚠️ No hay causas de fragmentación identificadas")
+        print("⚠️ 断片化の原因が特定できませんでした")
         return
     
     causes = analysis['causes']
     
     fig, ax = plt.subplots(figsize=(12, 6))
     
-    # Preparar datos
+    # ES: Preparar datos | EN: Prepare data | JA: データ準備
     cause_types = [c['type'] for c in causes]
     severities = [c['severity'] for c in causes]
     
-    # Colores según severidad
+    # ES: Colores según severidad | EN: Colors by severity | JA: 深刻度ごとの色
     colors = {'high': 'red', 'moderate': 'orange', 'low': 'yellow'}
     bar_colors = [colors.get(s, 'gray') for s in severities]
     
-    # Crear gráfico de barras
+    # ES: Crear gráfico de barras | EN: Create bar chart | JA: 棒グラフを作成
     y_pos = np.arange(len(cause_types))
     bars = ax.barh(y_pos, [1] * len(cause_types), color=bar_colors, alpha=0.7)
     
-    # Añadir descripciones
+    # ES: Añadir descripciones | EN: Add descriptions | JA: 説明を追加
     descriptions = [c['description'] for c in causes]
     ax.set_yticks(y_pos)
     ax.set_yticklabels([f"{t}\n{d}" for t, d in zip(cause_types, descriptions)], fontsize=9)
     ax.set_xlabel('Severidad')
     ax.set_title('Causas Identificadas de Fragmentación del Heap', fontsize=14, fontweight='bold')
     
-    # Leyenda de severidad
+    # ES: Leyenda de severidad | EN: Severity legend | JA: 深刻度の凡例
     from matplotlib.patches import Patch
     legend_elements = [
         Patch(facecolor='red', alpha=0.7, label='Alta'),
@@ -143,19 +161,22 @@ def plot_fragmentation_causes(data: dict, output_path: str):
     
     plt.tight_layout()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    print(f"✅ Gráfico de causas guardado: {output_path}")
+    print(f"✅ 原因グラフを保存しました: {output_path}")
     plt.close()
 
 
 def plot_object_types(data: dict, output_path: str):
-    """Grafica distribución de tipos de objetos"""
+    """ES: Grafica distribución de tipos de objetos
+    EN: Plot object-type distribution
+    JA: オブジェクト種別の分布をプロット
+    """
     object_counts = data.get('object_counts', [])
     
     if not object_counts:
-        print("⚠️ No hay datos de tipos de objetos")
+        print("⚠️ オブジェクト種別のデータがありません")
         return
     
-    # Acumular tipos de objetos
+    # ES: Acumular tipos de objetos | EN: Accumulate object types | JA: オブジェクト種別を集計
     type_totals = {}
     for oc in object_counts:
         type_counts = oc.get('type_counts', {})
@@ -163,10 +184,10 @@ def plot_object_types(data: dict, output_path: str):
             type_totals[obj_type] = type_totals.get(obj_type, 0) + count
     
     if not type_totals:
-        print("⚠️ No hay tipos de objetos registrados")
+        print("⚠️ オブジェクト種別が記録されていません")
         return
     
-    # Top 15 tipos
+    # ES: Top 15 tipos | EN: Top 15 types | JA: 上位15種類
     sorted_types = sorted(type_totals.items(), key=lambda x: x[1], reverse=True)[:15]
     types, counts = zip(*sorted_types) if sorted_types else ([], [])
     
@@ -181,7 +202,7 @@ def plot_object_types(data: dict, output_path: str):
     ax.set_title('Tipos de Objetos Más Comunes en Memoria', fontsize=14, fontweight='bold')
     ax.grid(True, alpha=0.3, axis='x')
     
-    # Añadir valores en las barras
+    # ES: Añadir valores en las barras | EN: Add values on bars | JA: 棒に値を表示
     for i, (bar, count) in enumerate(zip(bars, counts)):
         width = bar.get_width()
         ax.text(width, bar.get_y() + bar.get_height()/2, 
@@ -189,24 +210,30 @@ def plot_object_types(data: dict, output_path: str):
     
     plt.tight_layout()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    print(f"✅ Gráfico de tipos guardado: {output_path}")
+    print(f"✅ 種別グラフを保存しました: {output_path}")
     plt.close()
 
 
 def generate_report(json_path: str, output_dir: str = None):
     """
-    Genera reporte completo de memoria y fragmentación
+    ES: Genera reporte completo de memoria y fragmentación.
+    EN: Generate a full memory/fragmentation report.
+    JA: メモリ/断片化の完全レポートを生成。
     
     Parameters
     ----------
     json_path : str
-        Ruta al archivo JSON con datos de memoria
+        ES: Ruta al archivo JSON con datos de memoria
+        EN: Path to the JSON file containing memory data
+        JA: メモリデータJSONファイルへのパス
     output_dir : str, optional
-        Directorio de salida (por defecto, mismo que JSON)
+        ES: Directorio de salida (por defecto, mismo que JSON)
+        EN: Output directory (defaults to the JSON's directory)
+        JA: 出力ディレクトリ（デフォルトはJSONと同じ場所）
     """
     json_path = Path(json_path)
     if not json_path.exists():
-        print(f"❌ Archivo no encontrado: {json_path}")
+        print(f"❌ ファイルが見つかりません: {json_path}")
         return
     
     if output_dir is None:
@@ -215,12 +242,12 @@ def generate_report(json_path: str, output_dir: str = None):
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
     
-    print(f"\n📊 Generando reporte de memoria desde: {json_path}")
+    print(f"\n📊 メモリレポートを生成中: {json_path}")
     
-    # Cargar datos
+    # ES: Cargar datos | EN: Load data | JA: データ読み込み
     data = load_memory_data(str(json_path))
     
-    # Generar gráficos
+    # ES: Generar gráficos | EN: Generate plots | JA: グラフ生成
     plot_memory_timeline(data, str(output_dir / 'memory_timeline.png'))
     plot_fragmentation_causes(data, str(output_dir / 'fragmentation_causes.png'))
     plot_object_types(data, str(output_dir / 'object_types.png'))
@@ -262,16 +289,16 @@ def generate_report(json_path: str, output_dir: str = None):
             for obj_type, count in list(analysis['top_object_types'].items())[:10]:
                 f.write(f"  {obj_type}: {count:,}\n")
     
-    print(f"✅ Reporte de texto guardado: {report_path}")
-    print(f"\n✅ Reporte completo generado en: {output_dir}")
+    print(f"✅ テキストレポートを保存しました: {report_path}")
+    print(f"\n✅ 完全レポートを生成しました: {output_dir}")
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Uso: python memory_visualizer.py <ruta_al_json> [directorio_salida]")
-        print("\nEjemplo:")
+        print("使い方: python memory_visualizer.py <jsonのパス> [出力ディレクトリ]")
+        print("\n例:")
         print("  python memory_visualizer.py memory_analysis.json")
-        print("  python memory_visualizer.py memory_analysis.json ./reportes")
+        print("  python memory_visualizer.py memory_analysis.json ./reports")
         sys.exit(1)
     
     json_path = sys.argv[1]

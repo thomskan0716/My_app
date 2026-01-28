@@ -15,28 +15,35 @@ import shutil
 from datetime import datetime
 warnings.filterwarnings('ignore')
 
-# ✅ NUEVO: Configuración de joblib para evitar errores de subprocess en Windows
+# ES: ✅ NUEVO: Configuración de joblib para evitar errores de subprocess en Windows | EN: ✅ NEW: joblib configuration to avoid subprocess errors on Windows | JA: ✅ 新規: Windowsでのsubprocessエラー回避のためjoblibを設定
 try:
     import joblib
-    # Configurar joblib para usar un número fijo de workers y evitar detección automática de CPU
+    # ES: Configurar joblib para usar un número fijo de workers y evitar detección automática de CPU
+    # EN: Configure joblib to use a fixed number of workers and avoid automatic CPU detection
+    # JA: joblibのワーカー数を固定し、CPU自動検出を回避
     joblib.parallel.BACKENDS['threading'].n_jobs = 1
     joblib.parallel.BACKENDS['multiprocessing'].n_jobs = 1
-    print("✅ Joblib configurado para evitar errores de subprocess")
+    print("✅ subprocess エラー回避のため joblib を設定しました")
 except ImportError:
-    print("⚠️ Joblib no disponible, continuando sin configuración específica")
+    print("⚠️ joblib が利用できないため、個別設定なしで続行します")
 
-# === Configuración de fuentes ===
+# ES: === Configuración de fuentes === | EN: === Font configuration === | JA: === フォント設定 ===
 FONT_NAME = "Meiryo"
 rcParams['font.family'] = FONT_NAME
 
-# === Configuración de optimización ===
+# ES: Configuración de optimización
+# EN: Optimization configuration
+# JA: 最適化設定
 USE_NUMERICAL_STABLE_METHOD = True
 CANDIDATE_REDUCTION_THRESHOLD = 10000
 MAX_REDUCED_CANDIDATES = 5000
 VERBOSE = True
 
 def load_and_validate_existing_data(existing_file, design_df, verbose=True):
-    """Carga y valida datos experimentales existentes"""
+    """ES: Carga y valida datos experimentales existentes
+    EN: Load and validate existing experimental data
+    JA: 既存の実験データを読み込み・検証
+    """
     try:
         ext = os.path.splitext(str(existing_file))[1].lower()
         existing_df = pd.read_csv(existing_file, encoding="utf-8-sig") if ext == ".csv" else pd.read_excel(existing_file)
@@ -44,8 +51,12 @@ def load_and_validate_existing_data(existing_file, design_df, verbose=True):
             print(f"実験データ既存ファイル読み込み完了: {len(existing_df)} 行 × {len(existing_df.columns)} 列")
             print(f"ℹ️ 既存列: {list(existing_df.columns)}")
 
-        # Obtener nombres de variables explicativas
-        # `design_df` puede venir en formato "tabla de diseño" con columna '説明変数名'
+        # ES: Obtener nombres de variables explicativas
+        # EN: Get explanatory variable names
+        # JA: 説明変数名を取得
+        # ES: `design_df` puede venir en formato "tabla de diseño" con columna '説明変数名'
+        # EN: `design_df` may come as a "design table" with a '説明変数名' column
+        # JA: `design_df` は「設計表」形式で '説明変数名' 列を含む場合がある
         if isinstance(design_df, pd.DataFrame) and "説明変数名" in design_df.columns:
             variable_names = design_df["説明変数名"].astype(str).tolist()
         else:
@@ -53,7 +64,9 @@ def load_and_validate_existing_data(existing_file, design_df, verbose=True):
         if verbose:
             print(f"🎯 目的変数: {variable_names}")
 
-        # Extraer solo variables explicativas de datos existentes
+        # ES: Extraer solo variables explicativas de datos existentes
+        # EN: Extract only explanatory variables from existing data
+        # JA: 既存データから説明変数のみ抽出
         missing_vars = []
         available_vars = []
 
@@ -71,7 +84,9 @@ def load_and_validate_existing_data(existing_file, design_df, verbose=True):
             else:
                 print(f"✅ 利用可能な変数 ({len(available_vars)}/{len(variable_names)}) - 続行")
 
-        # Extraer solo variables explicativas
+        # ES: Extraer solo variables explicativas
+        # EN: Extract only explanatory variables
+        # JA: 説明変数のみ抽出
         existing_explanatory = existing_df[available_vars]
 
         if verbose:
@@ -81,15 +96,21 @@ def load_and_validate_existing_data(existing_file, design_df, verbose=True):
             print(f"📈 データ統計:")
             print(existing_explanatory.describe())
 
-        # Verificaciones de calidad específicas para procesos químicos
-        # 1. Verificación de valores faltantes
+        # ES: Verificaciones de calidad específicas para procesos químicos
+        # EN: Quality checks tailored for chemical processes
+        # JA: 化学プロセス向けの品質チェック
+        # ES: 1. Verificación de valores faltantes
+        # EN: 1) Missing-value check
+        # JA: 1) 欠損値チェック
         missing_count = existing_explanatory.isnull().sum().sum()
         if missing_count > 0:
             print(f"⚠️ 欠損値検出: {missing_count}")
             existing_explanatory = existing_explanatory.dropna()
             print(f"🔧 欠損値削除後: {len(existing_explanatory)} 行")
 
-        # 2. Verificación de puntos experimentales duplicados
+        # ES: 2. Verificación de puntos experimentales duplicados
+        # EN: 2) Duplicate-point check
+        # JA: 2) 重複点チェック
         duplicates = existing_explanatory.duplicated().sum()
         if duplicates > 0:
             print(f"⚠️ 実験データ重複検出: {duplicates}")
@@ -107,7 +128,10 @@ def load_and_validate_existing_data(existing_file, design_df, verbose=True):
 
 def match_existing_experiments_enhanced(candidate_points, existing_data, variable_names, 
                                       tolerance_relative=1e-6, tolerance_absolute=1e-8, verbose=True):
-    """Emparejamiento de alta precisión de condiciones experimentales químicas"""
+    """ES: Emparejamiento de alta precisión de condiciones experimentales químicas
+    EN: High-precision matching of chemical experimental conditions
+    JA: 化学実験条件の高精度マッチング
+    """
     if existing_data is None or len(existing_data) == 0:
         return []
 
@@ -117,27 +141,29 @@ def match_existing_experiments_enhanced(candidate_points, existing_data, variabl
     print(f"  - 相対許容誤差: {tolerance_relative}")
     print(f"  - 絶対許容誤差: {tolerance_absolute}")
 
-    # Convertir puntos candidatos a DataFrame
+    # ES: Convertir puntos candidatos a DataFrame | EN: Convert candidate points to a DataFrame | JA: 候補点をDataFrameに変換
     candidate_df = pd.DataFrame(candidate_points, columns=variable_names)
 
-    # Estandarizar ambos conjuntos de datos
+    # ES: Estandarizar ambos conjuntos de datos | EN: Standardize both datasets | JA: 両データセットを標準化
     scaler = StandardScaler()
     candidate_scaled = scaler.fit_transform(candidate_df)
 
-    # Alinear datos existentes en el mismo orden de variables
+    # ES: Alinear datos existentes al mismo orden de variables | EN: Align existing data to the same variable order | JA: 既存データを変数順に合わせる
     existing_aligned = existing_data[variable_names]
     existing_scaled = scaler.transform(existing_aligned)
 
     matched_indices = []
     match_details = []
 
-    # Para cada punto experimental existente, buscar el candidato más cercano
+    # ES: Para cada punto experimental existente, buscar el candidato más cercano
+    # EN: For each existing experimental point, find the nearest candidate
+    # JA: 各既存実験点に対して最も近い候補点を探索
     for exist_idx, exist_row in enumerate(existing_aligned.values):
         min_distance = float('inf')
         best_candidate_idx = None
 
         for cand_idx, cand_row in enumerate(candidate_df.values):
-            # Comparación basada en error relativo
+            # ES: Comparación basada en error relativo | EN: Comparison based on relative error | JA: 相対誤差に基づく比較
             relative_errors = []
             absolute_ok = True
 
@@ -145,10 +171,10 @@ def match_existing_experiments_enhanced(candidate_points, existing_data, variabl
                 exist_val = exist_row[var_idx]
                 cand_val = cand_row[var_idx]
 
-                # Verificación de error absoluto
+                # ES: Verificación de error absoluto | EN: Absolute-error check | JA: 絶対誤差チェック
                 abs_error = abs(exist_val - cand_val)
                 if abs_error > tolerance_absolute:
-                    # También verificar error relativo
+                    # ES: También verificar error relativo | EN: Also check relative error | JA: 相対誤差も確認
                     if exist_val != 0:
                         rel_error = abs_error / abs(exist_val)
                         if rel_error > tolerance_relative:
@@ -171,7 +197,7 @@ def match_existing_experiments_enhanced(candidate_points, existing_data, variabl
         if best_candidate_idx is not None:
             matched_indices.append(best_candidate_idx)
 
-            # Registrar detalles del emparejamiento
+            # ES: Registrar detalles del emparejamiento | EN: Record matching details | JA: マッチング詳細を記録
             match_detail = {
                 'Número_experimento_existente': exist_idx,
                 'Número_punto_candidato': best_candidate_idx,
@@ -184,7 +210,9 @@ def match_existing_experiments_enhanced(candidate_points, existing_data, variabl
             if verbose and len(matched_indices) <= 5:
                 print(f"✅ マッチング {len(matched_indices)}: Existente#{exist_idx} → Candidato#{best_candidate_idx} (distancia: {min_distance:.4f})")
 
-    # Eliminar duplicados
+    # ES: Eliminar duplicados
+    # EN: Remove duplicates
+    # JA: 重複を除去
     unique_matched = list(set(matched_indices))
 
     print(f"📊 マッチング結果:")
@@ -199,7 +227,9 @@ def match_existing_experiments_enhanced(candidate_points, existing_data, variabl
         print("  2. ステップ設定既存データに一致しない")
         print("  3. 許容誤差設定厳しすぎ")
 
-        # Proporcionar información de diagnóstico
+        # ES: Proporcionar información de diagnóstico
+        # EN: Provide diagnostic information
+        # JA: 診断情報を出力
         print("\n🔍 診断情報:")
         for var in variable_names:
             exist_range = (existing_aligned[var].min(), existing_aligned[var].max())
@@ -209,7 +239,9 @@ def match_existing_experiments_enhanced(candidate_points, existing_data, variabl
     return unique_matched
 
 def hierarchical_candidate_reduction(candidate_points, max_candidates=5000, existing_indices=None):
-    """Reducción de candidatos mediante muestreo jerárquico"""
+    """ES: Reducción de candidatos mediante muestreo jerárquico
+    EN: Reduce candidates via hierarchical sampling
+    JA: 階層的サンプリングによる候補の削減"""
     n_original = len(candidate_points)
 
     if n_original <= max_candidates:
@@ -218,7 +250,7 @@ def hierarchical_candidate_reduction(candidate_points, max_candidates=5000, exis
 
     print(f"🔄 ✅ 階層的サンプリング実行: {n_original:,} → {max_candidates:,} 点")
 
-    # Proteger puntos experimentales existentes
+    # ES: Proteger puntos experimentales existentes | EN: Preserve existing experimental points | JA: 既存実験点を保護
     if existing_indices:
         existing_set = set(existing_indices)
         available_indices = [i for i in range(n_original) if i not in existing_set]
@@ -252,14 +284,20 @@ def hierarchical_candidate_reduction(candidate_points, max_candidates=5000, exis
         )
 
         start_time = time.time()
-        # ⚠️ scikit-learn reciente ya no soporta `n_jobs` en MiniBatchKMeans.
-        # Para replicar "n_jobs=1" (control de paralelismo) limitamos threads SOLO durante el fit.
-        # Además, en algunos entornos Windows recientes `joblib/loky` intenta usar `wmic` para contar cores
-        # y puede fallar. Para evitarlo, forzamos backend "threading" SOLO en este fit.
+        # ES: scikit-learn reciente ya no soporta n_jobs en MiniBatchKMeans. Para replicar n_jobs=1 limitamos threads SOLO durante el fit.
+        # EN: Recent scikit-learn no longer supports n_jobs in MiniBatchKMeans. To mimic n_jobs=1 we limit threads ONLY during fit.
+        # JA: 最近のscikit-learnはMiniBatchKMeansでn_jobsをサポートしない。n_jobs=1相当のためfit中のみスレッドを制限。
+        # ES: Además, en algunos entornos Windows recientes `joblib/loky` intenta usar `wmic` para contar cores y puede fallar.
+        # EN: Also, on some recent Windows environments `joblib/loky` tries to use `wmic` to count cores and can fail.
+        # JA: さらに、最近のWindows環境では `joblib/loky` がコア数取得に `wmic` を使おうとして失敗することがあります。
+        # ES: Para evitarlo, forzamos backend "threading" SOLO en este fit.
+        # EN: To avoid that, we force the "threading" backend ONLY for this fit.
+        # JA: 回避のため、このfitの間だけ "threading" バックエンドを強制します。
         try:
             from threadpoolctl import threadpool_limits
-            # Silenciar/evitar detección de cores físicos vía `wmic` en loky (Windows).
-            # Mantiene el algoritmo igual; solo evita subprocess y limita a 1 core durante este bloque.
+            # ES: Silenciar/evitar detección de cores físicos vía wmic en loky (Windows). Mantiene el algoritmo; limita a 1 core en este bloque.
+            # EN: Suppress physical-core detection via wmic in loky (Windows). Keeps algorithm; limits to 1 core in this block.
+            # JA: loky（Windows）でのwmicによる物理コア検出を抑制。アルゴリズムは維持し、このブロック内は1コアに制限。
             _prev_loky_max_cpu = os.environ.get("LOKY_MAX_CPU_COUNT")
             os.environ["LOKY_MAX_CPU_COUNT"] = "1"
             try:
@@ -276,12 +314,14 @@ def hierarchical_candidate_reduction(candidate_points, max_candidates=5000, exis
                 else:
                     os.environ["LOKY_MAX_CPU_COUNT"] = _prev_loky_max_cpu
         except Exception:
-            # Si threadpoolctl no está disponible u ocurre cualquier problema, continuar sin limitar threads
+            # ES: Si threadpoolctl no está disponible u ocurre cualquier problema, continuar sin limitar threads
+            # EN: If threadpoolctl is unavailable or anything fails, proceed without limiting threads
+            # JA: threadpoolctlが無い/失敗した場合はスレッド制限なしで続行
             clusters = kmeans.fit_predict(available_points)
         clustering_time = time.time() - start_time
         print(f"⏱️ クラスタリング時間: {clustering_time:.2f} 秒")
 
-        # Seleccionar punto representativo de cada cluster
+        # ES: Seleccionar punto representativo de cada cluster | EN: Pick one representative point per cluster | JA: クラスタごとに代表点を選択
         selected_indices = list(existing_indices)
 
         for i in range(n_clusters):
@@ -290,7 +330,7 @@ def hierarchical_candidate_reduction(candidate_points, max_candidates=5000, exis
                 cluster_indices_in_available = np.where(cluster_mask)[0]
                 cluster_original_indices = [available_indices[j] for j in cluster_indices_in_available]
 
-                # Seleccionar punto más cercano al centro del cluster
+                # ES: Seleccionar punto más cercano al centro del cluster | EN: Pick the point closest to the cluster center | JA: クラスタ中心に最も近い点を選択
                 cluster_points = available_points[cluster_mask]
                 center = kmeans.cluster_centers_[i]
                 distances = np.linalg.norm(cluster_points - center, axis=1)
@@ -312,7 +352,9 @@ def hierarchical_candidate_reduction(candidate_points, max_candidates=5000, exis
         return candidate_points, list(range(len(candidate_points)))
 
 def calculate_d_criterion_stable(X, method='auto'):
-    """Cálculo numéricamente estable del criterio D"""
+    """ES: Cálculo numéricamente estable del criterio D
+    EN: Numerically stable computation of the D criterion
+    JA: D基準の数値的に安定した計算"""
     try:
         condition_number = np.linalg.cond(X)
 
@@ -341,7 +383,9 @@ def calculate_d_criterion_stable(X, method='auto'):
         return -np.inf, np.inf
 
 def select_d_optimal_design_enhanced(X_all, existing_indices, new_experiments, verbose=True):
-    """Selección de diseño D-óptimo (puntos experimentales existentes + nuevos)"""
+    """ES: Selección de diseño D-óptimo (puntos experimentales existentes + nuevos)
+    EN: D-optimal design selection (existing experimental points + new ones)
+    JA: D最適設計の選択（既存実験点＋新規）"""
     base = list(existing_indices) if existing_indices else []
     remaining = [i for i in range(len(X_all)) if i not in base]
     total_select = len(base) + new_experiments
@@ -394,7 +438,9 @@ def select_d_optimal_design_enhanced(X_all, existing_indices, new_experiments, v
     return selected, final_score
 
 def select_i_optimal_design(X_all, new_experiments, existing_indices=None):
-    """Selección de diseño I-óptimo (puntos experimentales existentes + nuevos)"""
+    """ES: Selección de diseño I-óptimo (puntos experimentales existentes + nuevos)
+    EN: I-optimal design selection (existing experimental points + new ones)
+    JA: I最適設計の選択（既存実験点＋新規）"""
     if existing_indices:
         selected_indices = list(existing_indices)
         print(f"  - 既存実験点数: {len(existing_indices)} 点")
@@ -410,14 +456,18 @@ def select_i_optimal_design(X_all, new_experiments, existing_indices=None):
     step = 0
     while len(selected_indices) < target_total and remaining_indices:
         if len(selected_indices) == 0:
-            # Si no hay puntos seleccionados, elegir el primer punto disponible
+            # ES: Si no hay puntos seleccionados, elegir el primer punto disponible
+            # EN: If no points selected yet, pick the first available point
+            # JA: 選択点が無い場合は最初の利用可能点を選ぶ
             next_index = remaining_indices[0]
             selected_indices.append(next_index)
             remaining_indices.remove(next_index)
             step += 1
             print(f"  ✅ 新選択 {step}/{new_experiments}: 点{next_index} (最初の点)")
         else:
-            # Calcular distancias solo si hay puntos seleccionados
+            # ES: Calcular distancias solo si hay puntos seleccionados
+            # EN: Compute distances only when there are selected points
+            # JA: 選択点がある場合のみ距離を計算
             dists = cdist(X_all[remaining_indices], X_all[selected_indices])
             min_dists = dists.min(axis=1)
             next_idx_in_remaining = np.argmax(min_dists)
@@ -430,7 +480,9 @@ def select_i_optimal_design(X_all, new_experiments, existing_indices=None):
     return selected_indices
 
 def visualize_feature_histograms(candidate_df, d_indices, i_indices, existing_indices, variable_names, output_folder, optimization_type="both"):
-    """📊 Histogramas de características con colores diferenciados (uno por variable)"""
+    """ES: 📊 Histogramas de características con colores diferenciados (uno por variable)
+    EN: 📊 Feature histograms with distinct colors (one per variable)
+    JA: 📊 特徴量ヒストグラム（変数ごとに色分け）"""
     print(f"\n📊 特徴量分布の可視化開始... (最適化タイプ: {optimization_type})")
 
     image_paths = []
@@ -441,29 +493,29 @@ def visualize_feature_histograms(candidate_df, d_indices, i_indices, existing_in
         plt.hist(candidate_df[var_name], bins=30, alpha=0.3, color='lightgray', 
                 label=f'全候補点 ({len(candidate_df)})', density=True)
 
-        # Puntos experimentales existentes
+        # ES: Puntos experimentales existentes | EN: Existing experimental points | JA: 既存実験点
         if existing_indices:
             existing_values = candidate_df.iloc[existing_indices][var_name]
             plt.hist(existing_values, bins=15, alpha=0.8, color='blue', 
                     label=f'既存点 ({len(existing_indices)})', density=True)
 
-        # Mostrar solo los datos relevantes según el tipo de optimización
+        # ES: Mostrar solo los datos relevantes según el tipo de optimización | EN: Show only data relevant to the optimization type | JA: 最適化タイプに関連するデータのみ表示
         if optimization_type in ["d", "D", "d_optimal"]:
-            # Solo mostrar datos D-óptimo
+            # ES: Solo mostrar datos D-óptimo | EN: Show only D-optimal data | JA: D最適データのみ表示
             d_new_indices = [idx for idx in d_indices if idx not in existing_indices]
             if d_new_indices:
                 d_values = candidate_df.iloc[d_new_indices][var_name]
                 plt.hist(d_values, bins=10, alpha=0.8, color='red', 
                         label=f'D-最適新規点 ({len(d_new_indices)})', density=True)
         elif optimization_type in ["i", "I", "i_optimal"]:
-            # Solo mostrar datos I-óptimo
+            # ES: Solo mostrar datos I-óptimo | EN: Show only I-optimal data | JA: I最適データのみ表示
             i_new_indices = [idx for idx in i_indices if idx not in existing_indices]
             if i_new_indices:
                 i_values = candidate_df.iloc[i_new_indices][var_name]
                 plt.hist(i_values, bins=10, alpha=0.8, color='green', 
                         label=f'I-最適新規点 ({len(i_new_indices)})', density=True)
         else:
-            # Mostrar ambos (comportamiento original)
+            # ES: Mostrar ambos (comportamiento original) | EN: Show both (original behavior) | JA: 両方表示（元の挙動）
             d_new_indices = [idx for idx in d_indices if idx not in existing_indices]
             if d_new_indices:
                 d_values = candidate_df.iloc[d_new_indices][var_name]
@@ -476,7 +528,7 @@ def visualize_feature_histograms(candidate_df, d_indices, i_indices, existing_in
                 plt.hist(i_values, bins=10, alpha=0.8, color='green', 
                         label=f'I-最適新規点 ({len(i_new_indices)})', density=True)
 
-        # Ajustar título según el tipo de optimización
+        # ES: Ajustar título según el tipo de optimización | EN: Adjust title based on optimization type | JA: 最適化タイプに応じてタイトル調整
         if optimization_type in ["d", "D", "d_optimal"]:
             plt.title(f'{var_name}の分布 (D最適化)', fontsize=12, weight='bold')
         elif optimization_type in ["i", "I", "i_optimal"]:
@@ -490,7 +542,9 @@ def visualize_feature_histograms(candidate_df, d_indices, i_indices, existing_in
         plt.grid(True, alpha=0.3)
         plt.tight_layout()
         
-        # Guardar imagen individual con sufijo según el tipo de optimización
+        # ES: Guardar imagen individual con sufijo según el tipo de optimización
+        # EN: Save per-feature histogram with suffix based on optimization type
+        # JA: 最適化タイプに応じた接尾辞でヒストグラムを保存
         safe_var_name = str(var_name).replace('/', '_').replace(' ', '_')
         if optimization_type in ["d", "D", "d_optimal"]:
             hist_path = os.path.join(output_folder, f"hist_D_{safe_var_name}.png")
@@ -507,7 +561,10 @@ def visualize_feature_histograms(candidate_df, d_indices, i_indices, existing_in
     return image_paths
 
 def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, existing_indices, variable_names, output_folder, optimization_type="both", selected_d_df=None, selected_i_df=None):
-    """📈 Visualización de reducción de dimensionalidad separada (PCA y UMAP individuales) con números de muestra"""
+    """ES: 📈 Visualización de reducción de dimensionalidad separada (PCA y UMAP individuales) con números de muestra
+    EN: 📈 Separate dimensionality-reduction visualization (individual PCA and UMAP) with sample numbers
+    JA: 📈 次元削減可視化（PCA/UMAPを個別）サンプル番号付き
+    """
     print(f"\n📈 次元削減可視化開始... (最適化タイプ: {optimization_type})")
     
     image_paths = []
@@ -515,10 +572,10 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
     try:
         import umap
         
-        # Parámetros UMAP optimizados
+        # ES: Parámetros UMAP optimizados | EN: Tuned UMAP parameters | JA: 最適化済みUMAPパラメータ
         best_params = {"n_neighbors": 15, "min_dist": 0.1}
         
-        # Ejecutar UMAP
+        # ES: Ejecutar UMAP | EN: Run UMAP | JA: UMAPを実行
         print(f"🔧 UMAP実行中...")
         reducer = umap.UMAP(
             n_neighbors=best_params["n_neighbors"], 
@@ -533,17 +590,17 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
         umap_time = time.time() - start_time
         print(f"⏱️ UMAP実行時間: {umap_time:.2f} 秒")
         
-        # Ejecutar PCA
+        # ES: Ejecutar PCA | EN: Run PCA | JA: PCAを実行
         pca = PCA(n_components=2, random_state=42)
         reduced_pca = pca.fit_transform(X_scaled)
         
-        # === GRÁFICO PCA SEPARADO ===
+        # ES: === GRÁFICO PCA SEPARADO === | EN: === Separate PCA plot === | JA: === PCAグラフ（個別） ===
         plt.figure(figsize=(12, 8))
         
-        # Todos los candidatos (fondo)
+        # ES: Todos los candidatos (fondo) | EN: All candidates (background) | JA: 全候補（背景）
         plt.scatter(reduced_pca[:, 0], reduced_pca[:, 1], alpha=0.2, s=8, color='lightgray', label='候補点')
         
-        # Puntos experimentales existentes
+        # ES: Puntos experimentales existentes | EN: Existing experimental points | JA: 既存実験点
         if existing_indices:
             existing_pca = reduced_pca[existing_indices]
             plt.scatter(existing_pca[:, 0], existing_pca[:, 1], 
@@ -551,9 +608,9 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                        edgecolors='navy', linewidth=2, zorder=10,
                        label=f'既存点 ({len(existing_indices)})')
         
-        # Mostrar solo los datos relevantes según el tipo de optimización
+        # ES: Mostrar solo los datos relevantes según el tipo de optimización | EN: Show only data relevant to the optimization type | JA: 最適化タイプに関連するデータのみ表示
         if optimization_type in ["d", "D", "d_optimal"]:
-            # Solo mostrar datos D-óptimo
+            # ES: Solo mostrar datos D-óptimo | EN: Show only D-optimal data | JA: D最適データのみ表示
             d_new = [idx for idx in d_indices if idx not in existing_indices]
             if d_new:
                 d_pca = reduced_pca[d_new]
@@ -561,7 +618,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                            s=100, marker='x', color='red', linewidth=3, 
                            zorder=8, label=f'D-最適新規点 ({len(d_new)})')
                 
-                # Añadir números de muestra en puntos D-óptimo
+                # ES: Añadir números de muestra en puntos D-óptimo | EN: Add sample numbers on D-optimal points | JA: D最適点にサンプル番号を付与
                 if selected_d_df is not None and 'No.' in selected_d_df.columns:
                     for i, (x, y) in enumerate(d_pca):
                         sample_num = selected_d_df.iloc[i]['No.']
@@ -569,7 +626,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                                    textcoords='offset points', fontsize=10, 
                                    color='red', weight='bold', zorder=12)
         elif optimization_type in ["i", "I", "i_optimal"]:
-            # Solo mostrar datos I-óptimo
+            # ES: Solo mostrar datos I-óptimo | EN: Show only I-optimal data | JA: I最適データのみ表示
             i_new = [idx for idx in i_indices if idx not in existing_indices]
             if i_new:
                 i_pca = reduced_pca[i_new]
@@ -577,7 +634,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                            s=100, marker='^', color='green', 
                            zorder=8, label=f'I-最適新規点 ({len(i_new)})')
                 
-                # Añadir números de muestra en puntos I-óptimo
+                # ES: Añadir números de muestra en puntos I-óptimo | EN: Add sample numbers on I-optimal points | JA: I最適点にサンプル番号を付与
                 if selected_i_df is not None and 'No.' in selected_i_df.columns:
                     for i, (x, y) in enumerate(i_pca):
                         sample_num = selected_i_df.iloc[i]['No.']
@@ -585,7 +642,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                                    textcoords='offset points', fontsize=10, 
                                    color='green', weight='bold', zorder=12)
         else:
-            # Mostrar ambos (comportamiento original)
+            # ES: Mostrar ambos (comportamiento original) | EN: Show both (original behavior) | JA: 両方表示（元の挙動）
             d_new = [idx for idx in d_indices if idx not in existing_indices]
             if d_new:
                 d_pca = reduced_pca[d_new]
@@ -593,7 +650,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                            s=100, marker='x', color='red', linewidth=3, 
                            zorder=8, label=f'D-最適新規点 ({len(d_new)})')
                 
-                # Añadir números de muestra en puntos D-óptimo
+                # ES: Añadir números de muestra en puntos D-óptimo | EN: Add sample numbers on D-optimal points | JA: D最適点にサンプル番号を付与
                 if selected_d_df is not None and 'No.' in selected_d_df.columns:
                     for i, (x, y) in enumerate(d_pca):
                         sample_num = selected_d_df.iloc[i]['No.']
@@ -608,7 +665,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                            s=100, marker='^', color='green', 
                            zorder=8, label=f'I-最適新規点 ({len(i_new)})')
                 
-                # Añadir números de muestra en puntos I-óptimo
+                # ES: Añadir números de muestra en puntos I-óptimo | EN: Add sample numbers on I-optimal points | JA: I最適点にサンプル番号を付与
                 if selected_i_df is not None and 'No.' in selected_i_df.columns:
                     for i, (x, y) in enumerate(i_pca):
                         sample_num = selected_i_df.iloc[i]['No.']
@@ -616,7 +673,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                                    textcoords='offset points', fontsize=10, 
                                    color='green', weight='bold', zorder=12)
         
-        # Ajustar título según el tipo de optimización
+        # ES: Ajustar título según el tipo de optimización | EN: Adjust title based on optimization type | JA: 最適化タイプに応じてタイトル調整
         if optimization_type in ["d", "D", "d_optimal"]:
             plt.title('主成分分析 (PCA) 次元削減 - D最適化', fontsize=16, weight='bold')
         elif optimization_type in ["i", "I", "i_optimal"]:
@@ -630,7 +687,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
         plt.grid(True, alpha=0.3)
         plt.tight_layout()
         
-        # Guardar PCA con sufijo según el tipo de optimización
+        # ES: Guardar PCA con sufijo según el tipo de optimización | EN: Save PCA with suffix based on optimization type | JA: 最適化タイプに応じた接尾辞でPCAを保存
         if optimization_type in ["d", "D", "d_optimal"]:
             pca_path = os.path.join(output_folder, "reduccion_dimensionalidad_pca_D.png")
         elif optimization_type in ["i", "I", "i_optimal"]:
@@ -643,13 +700,13 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
         image_paths.append(pca_path)
         print(f"✅ PCA保存完了: {pca_path}")
         
-        # === GRÁFICO UMAP SEPARADO ===
+        # ES: === GRÁFICO UMAP SEPARADO === | EN: === Separate UMAP plot === | JA: === UMAPグラフ（個別） ===
         plt.figure(figsize=(12, 8))
         
-        # Todos los candidatos (fondo)
+        # ES: Todos los candidatos (fondo) | EN: All candidates (background) | JA: 全候補（背景）
         plt.scatter(reduced_umap[:, 0], reduced_umap[:, 1], alpha=0.2, s=8, color='lightgray', label='候補点')
         
-        # Puntos experimentales existentes
+        # ES: Puntos experimentales existentes | EN: Existing experimental points | JA: 既存実験点
         if existing_indices:
             existing_umap = reduced_umap[existing_indices]
             plt.scatter(existing_umap[:, 0], existing_umap[:, 1], 
@@ -657,15 +714,15 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                        edgecolors='navy', linewidth=2, zorder=10,
                        label=f'既存点 ({len(existing_indices)})')
             
-            # Mostrar números en puntos existentes (primeros 10)
+            # ES: Mostrar números en puntos existentes (primeros 10) | EN: Show numbers on existing points (first 10) | JA: 既存点に番号表示（先頭10点）
             for i, (x, y) in enumerate(existing_umap[:min(10, len(existing_umap))]):
                 plt.annotate(f'{i+1}', (x, y), xytext=(3, 3), 
                            textcoords='offset points', fontsize=8, 
                            color='darkblue', weight='bold', zorder=11)
         
-        # Mostrar solo los datos relevantes según el tipo de optimización
+        # ES: Mostrar solo los datos relevantes según el tipo de optimización | EN: Show only data relevant to the optimization type | JA: 最適化タイプに関連するデータのみ表示
         if optimization_type in ["d", "D", "d_optimal"]:
-            # Solo mostrar datos D-óptimo
+            # ES: Solo mostrar datos D-óptimo | EN: Show only D-optimal data | JA: D最適データのみ表示
             d_new = [idx for idx in d_indices if idx not in existing_indices]
             if d_new:
                 d_umap = reduced_umap[d_new]
@@ -673,7 +730,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                            s=100, marker='x', color='red', linewidth=3, 
                            zorder=8, label=f'D-最適新規点 ({len(d_new)})')
                 
-                # Añadir números de muestra en puntos D-óptimo
+                # ES: Añadir números de muestra en puntos D-óptimo | EN: Add sample numbers on D-optimal points | JA: D最適点にサンプル番号を付与
                 if selected_d_df is not None and 'No.' in selected_d_df.columns:
                     for i, (x, y) in enumerate(d_umap):
                         sample_num = selected_d_df.iloc[i]['No.']
@@ -681,7 +738,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                                    textcoords='offset points', fontsize=10, 
                                    color='red', weight='bold', zorder=12)
         elif optimization_type in ["i", "I", "i_optimal"]:
-            # Solo mostrar datos I-óptimo
+            # ES: Solo mostrar datos I-óptimo | EN: Show only I-optimal data | JA: I最適データのみ表示
             i_new = [idx for idx in i_indices if idx not in existing_indices]
             if i_new:
                 i_umap = reduced_umap[i_new]
@@ -689,7 +746,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                            s=100, marker='^', color='green', 
                            zorder=8, label=f'I-最適新規点 ({len(i_new)})')
                 
-                # Añadir números de muestra en puntos I-óptimo
+                # ES: Añadir números de muestra en puntos I-óptimo | EN: Add sample numbers on I-optimal points | JA: I最適点にサンプル番号を付与
                 if selected_i_df is not None and 'No.' in selected_i_df.columns:
                     for i, (x, y) in enumerate(i_umap):
                         sample_num = selected_i_df.iloc[i]['No.']
@@ -697,7 +754,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                                    textcoords='offset points', fontsize=10, 
                                    color='green', weight='bold', zorder=12)
         else:
-            # Mostrar ambos (comportamiento original)
+            # ES: Mostrar ambos (comportamiento original) | EN: Show both (original behavior) | JA: 両方表示（元の挙動）
             d_new = [idx for idx in d_indices if idx not in existing_indices]
             if d_new:
                 d_umap = reduced_umap[d_new]
@@ -705,7 +762,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                            s=100, marker='x', color='red', linewidth=3, 
                            zorder=8, label=f'D-最適新規点 ({len(d_new)})')
                 
-                # Añadir números de muestra en puntos D-óptimo
+                # ES: Añadir números de muestra en puntos D-óptimo | EN: Add sample numbers on D-optimal points | JA: D最適点にサンプル番号を付与
                 if selected_d_df is not None and 'No.' in selected_d_df.columns:
                     for i, (x, y) in enumerate(d_umap):
                         sample_num = selected_d_df.iloc[i]['No.']
@@ -720,7 +777,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                            s=100, marker='^', color='green', 
                            zorder=8, label=f'I-最適新規点 ({len(i_new)})')
                 
-                # Añadir números de muestra en puntos I-óptimo
+                # ES: Añadir números de muestra en puntos I-óptimo | EN: Add sample numbers on I-optimal points | JA: I最適点にサンプル番号を付与
                 if selected_i_df is not None and 'No.' in selected_i_df.columns:
                     for i, (x, y) in enumerate(i_umap):
                         sample_num = selected_i_df.iloc[i]['No.']
@@ -728,7 +785,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                                    textcoords='offset points', fontsize=10, 
                                    color='green', weight='bold', zorder=12)
         
-        # Ajustar título según el tipo de optimización
+        # ES: Ajustar título según el tipo de optimización | EN: Adjust title based on optimization type | JA: 最適化タイプに応じてタイトル調整
         if optimization_type in ["d", "D", "d_optimal"]:
             plt.title('UMAP 次元削減 - D最適化', fontsize=16, weight='bold')
         elif optimization_type in ["i", "I", "i_optimal"]:
@@ -742,7 +799,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
         plt.grid(True, alpha=0.3)
         plt.tight_layout()
         
-        # Guardar UMAP con sufijo según el tipo de optimización
+        # ES: Guardar UMAP con sufijo según el tipo de optimización | EN: Save UMAP with suffix based on optimization type | JA: 最適化タイプに応じた接尾辞でUMAPを保存
         if optimization_type in ["d", "D", "d_optimal"]:
             umap_path = os.path.join(output_folder, "reduccion_dimensionalidad_umap_D.png")
         elif optimization_type in ["i", "I", "i_optimal"]:
@@ -760,7 +817,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
         
     except ImportError:
         print("❌ UMAP未インストール - PCAのみ表示")
-        # Solo PCA como respaldo
+        # ES: Solo PCA como respaldo | EN: Fallback to PCA only | JA: 代替としてPCAのみ実行
         pca = PCA(n_components=2, random_state=42)
         reduced_pca = pca.fit_transform(X_scaled)
         
@@ -774,7 +831,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                        edgecolors='navy', linewidth=2, zorder=10,
                        label=f'既存点 ({len(existing_indices)})')
         
-        # Mostrar solo los datos relevantes según el tipo de optimización
+        # ES: Mostrar solo los datos relevantes según el tipo de optimización | EN: Show only data relevant to the optimization type | JA: 最適化タイプに関連するデータのみ表示
         if optimization_type in ["d", "D", "d_optimal"]:
             d_new = [idx for idx in d_indices if idx not in existing_indices]
             if d_new:
@@ -783,7 +840,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                            s=100, marker='x', color='red', linewidth=3, 
                            zorder=8, label=f'D-最適新規点 ({len(d_new)})')
                 
-                # Añadir números de muestra en puntos D-óptimo
+                # ES: Añadir números de muestra en puntos D-óptimo | EN: Add sample numbers on D-optimal points | JA: D最適点にサンプル番号を付与
                 if selected_d_df is not None and 'No.' in selected_d_df.columns:
                     for i, (x, y) in enumerate(d_pca):
                         sample_num = selected_d_df.iloc[i]['No.']
@@ -798,7 +855,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                            s=100, marker='^', color='green', 
                            zorder=8, label=f'I-最適新規点 ({len(i_new)})')
                 
-                # Añadir números de muestra en puntos I-óptimo
+                # ES: Añadir números de muestra en puntos I-óptimo | EN: Add sample numbers on I-optimal points | JA: I最適点にサンプル番号を付与
                 if selected_i_df is not None and 'No.' in selected_i_df.columns:
                     for i, (x, y) in enumerate(i_pca):
                         sample_num = selected_i_df.iloc[i]['No.']
@@ -806,7 +863,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
                                    textcoords='offset points', fontsize=10, 
                                    color='green', weight='bold', zorder=12)
         
-        # Ajustar título según el tipo de optimización
+        # ES: Ajustar título según el tipo de optimización | EN: Adjust title based on optimization type | JA: 最適化タイプに応じてタイトル調整
         if optimization_type in ["d", "D", "d_optimal"]:
             plt.title('主成分分析 (PCA) 次元削減 - D最適化', fontsize=16, weight='bold')
         elif optimization_type in ["i", "I", "i_optimal"]:
@@ -820,7 +877,7 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
         plt.grid(True, alpha=0.3)
         plt.tight_layout()
         
-        # Guardar PCA con sufijo según el tipo de optimización
+        # ES: Guardar PCA con sufijo según el tipo de optimización | EN: Save PCA with suffix based on optimization type | JA: 最適化タイプに応じた接尾辞でPCAを保存
         if optimization_type in ["d", "D", "d_optimal"]:
             pca_path = os.path.join(output_folder, "reduccion_dimensionalidad_pca_D.png")
         elif optimization_type in ["i", "I", "i_optimal"]:
@@ -834,8 +891,11 @@ def visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, exist
         return [pca_path]
 
 def visualize_umap_enhanced(X_scaled, d_indices, i_indices, existing_indices, variable_names, output_folder, optimization_type="both", selected_d_df=None, selected_i_df=None):
-    """📈 Visualización de reducción de dimensionalidad UMAP mejorada (mantiene compatibilidad)"""
-    # Usar la nueva función separada
+    """ES: 📈 Visualización UMAP mejorada (mantiene compatibilidad)
+    EN: 📈 Enhanced UMAP visualization (keeps backward compatibility)
+    JA: 📈 改良版UMAP可視化（互換性維持）
+    """
+    # ES: Usar la nueva función separada | EN: Use the new separated function | JA: 新しい分離関数を使用
     return visualize_separate_dimension_reduction(X_scaled, d_indices, i_indices, existing_indices, variable_names, output_folder, optimization_type, selected_d_df, selected_i_df)
 
 def get_project_name(sample_file):
@@ -853,17 +913,46 @@ def get_incremental_folder(base_dir, prefix):
 def run_integrated_optimizer(sample_file, existing_data_file=None, output_folder=".", num_experiments=15, 
                            sample_size=None, enable_hyperparameter_tuning=True, force_reoptimization=False, optimization_type="both"):
     """
-    Ejecuta el optimizador integrado D-óptimo + I-óptimo
-    
-    Parámetros:
-    - sample_file: Excelファイルにサンプル組合せ (sample_combinations.xlsx)
-    - existing_data_file: Excelファイルに既存実験データ (オプション)
-    - output_folder: 結果出力用フォルダ
-    - num_experiments: 選択実験数
-    - sample_size: 削減用サンプルサイズ (オプション)
-    - enable_hyperparameter_tuning: UMAPハイパーパラメータ最適化を有効にする
-    - force_reoptimization: UMAPハイパーパラメータ再最適化を強制する
-    - optimization_type: "d", "i", o "both" - 最適化タイプを指定
+    ES: Ejecuta el optimizador integrado D-óptimo + I-óptimo.
+    EN: Run the integrated D-optimal + I-optimal optimizer.
+    JA: D最適 + I最適 の統合オプティマイザを実行。
+
+    ES: Parámetros:
+    EN: Parameters:
+    JA: 引数:
+
+    - sample_file:
+      ES: Excel con combinaciones de muestras (sample_combinations.xlsx)
+      EN: Excel file with sample combinations (sample_combinations.xlsx)
+      JA: サンプル組合せのExcel（sample_combinations.xlsx）
+    - existing_data_file:
+      ES: Excel con datos experimentales existentes (opcional)
+      EN: Excel file with existing experimental data (optional)
+      JA: 既存実験データのExcel（任意）
+    - output_folder:
+      ES: Carpeta de salida de resultados
+      EN: Results output folder
+      JA: 結果出力フォルダ
+    - num_experiments:
+      ES: Número de experimentos a seleccionar
+      EN: Number of experiments to select
+      JA: 選択実験数
+    - sample_size:
+      ES: Tamaño de muestreo para reducción (opcional)
+      EN: Sample size for candidate reduction (optional)
+      JA: 削減用サンプルサイズ（任意）
+    - enable_hyperparameter_tuning:
+      ES: Habilitar optimización de hiperparámetros de UMAP
+      EN: Enable UMAP hyperparameter tuning
+      JA: UMAPハイパーパラメータ最適化を有効化
+    - force_reoptimization:
+      ES: Forzar re-optimización de hiperparámetros de UMAP
+      EN: Force UMAP hyperparameter re-optimization
+      JA: UMAPハイパーパラメータ再最適化を強制
+    - optimization_type:
+      ES: "d", "i" o "both" (tipo de optimización)
+      EN: "d", "i", or "both" (optimization type)
+      JA: "d" / "i" / "both"（最適化タイプ）
     """
     print("🚀 化学実験計画システム - 統合バージョン")
     print("="*60)
@@ -876,17 +965,23 @@ def run_integrated_optimizer(sample_file, existing_data_file=None, output_folder
         print("📈 次元削減UMAPの可視化（強化版）")
     print("="*60)
 
-    # Crear carpeta de salida directamente en output_folder
+    # ES: Crear carpeta de salida directamente en output_folder
+    # EN: Create the output folder directly under output_folder
+    # JA: output_folder 直下に出力フォルダを作成
     project_name = get_project_name(sample_file)
-    di_folder = output_folder  # Usar directamente output_folder sin carpeta intermedia
+    di_folder = output_folder  # Use output_folder directly (no intermediate folder)
     os.makedirs(di_folder, exist_ok=True)
 
-    # === Leer archivo de combinaciones de muestras ===
+    # ES: Leer archivo de combinaciones de muestras
+    # EN: Read sample combination file
+    # JA: サンプル組合せファイルを読み込み
     print(f"\n📊 サンプル組合せファイルを読み込み中...")
     sample_ext = os.path.splitext(str(sample_file))[1].lower()
     full_df = pd.read_csv(sample_file, encoding="utf-8-sig") if sample_ext == ".csv" else pd.read_excel(sample_file)
 
-    # ✅ Usar SOLO 7 variables core para optimización/visualización (no incluir ブラシ one-hot ni 線材長)
+    # ES: Usar SOLO 7 variables core para optimización/visualización (no incluir ブラシ one-hot ni 線材長)
+    # EN: Use only 7 core variables for optimization/visualization (exclude ブラシ one-hot and 線材長)
+    # JA: 最適化/可視化にはコア7変数のみ使用（ブラシ one-hot・線材長は含めない）
     dir_col = "UPカット" if "UPカット" in full_df.columns else ("回転方向" if "回転方向" in full_df.columns else None)
     if dir_col is None:
         raise ValueError("❌ Falta columna de dirección: 'UPカット' o '回転方向'")
@@ -904,12 +999,16 @@ def run_integrated_optimizer(sample_file, existing_data_file=None, output_folder
     print(f"  - 候補点数: {len(candidate_points):,}")
     print(f"  - 説明変数: {variable_names}")
 
-    # === Procesar datos experimentales existentes ===
+    # ES: Procesar datos experimentales existentes
+    # EN: Process existing experimental data
+    # JA: 既存実験データを処理
     existing_indices = []
     if existing_data_file and os.path.exists(existing_data_file):
         print(f"\n🔍 既存実験データ処理中...")
         
-        # Crear DataFrame de設計用一時的互換性
+        # ES: Crear DataFrame de compatibilidad temporal para diseño
+        # EN: Create a temporary compatibility DataFrame for the design table
+        # JA: 設計表との一時互換DataFrameを作成
         design_df = pd.DataFrame({
             "説明変数名": variable_names,
             "最小値": [candidate_df[var].min() for var in variable_names],
@@ -948,7 +1047,9 @@ def run_integrated_optimizer(sample_file, existing_data_file=None, output_folder
             existing_indices = [reduced_mapping.index(idx) for idx in existing_indices if idx in reduced_mapping]
             print(f"✅ 既存実験点マッピング更新完了: {len(existing_indices)} 保持")
 
-        # Reducir también el DF completo para que índices coincidan
+        # ES: Reducir también el DF completo para que índices coincidan
+        # EN: Also reduce the full DF so indices match
+        # JA: インデックスが一致するようフルDFも削減
         try:
             full_df = full_df.iloc[reduced_mapping].reset_index(drop=True)
         except Exception:
@@ -1031,7 +1132,7 @@ def run_integrated_optimizer(sample_file, existing_data_file=None, output_folder
     print("💾 ExcelファイルはOKボタンを押した時に保存されます")
     print("="*60)
 
-    # Añadir D基準値 solo si d_score está definido
+    # ES: Añadir D基準値 solo si d_score está definido | EN: Add D基準値 only if d_score is defined | JA: d_score が定義されている場合のみ D基準値 を追加
     if not selected_d_df.empty and 'd_score' in locals():
         selected_d_df['No.'] = range(1, len(selected_d_df) + 1)
         if 'パス数' in selected_d_df.columns:
@@ -1041,7 +1142,7 @@ def run_integrated_optimizer(sample_file, existing_data_file=None, output_folder
         selected_d_df.insert(insert_at, 'D基準値', d_score)
         cols = ['No.'] + [c for c in selected_d_df.columns if c != 'No.']
         selected_d_df = selected_d_df[cols]
-    # Añadir I基準値 (placeholder)
+    # ES: Añadir I基準値 (placeholder) | EN: Add I基準値 (placeholder) | JA: I基準値 を追加（プレースホルダ）
     if not selected_i_df.empty:
         selected_i_df['No.'] = range(1, len(selected_i_df) + 1)
         if 'パス数' in selected_i_df.columns:
@@ -1077,9 +1178,21 @@ def run_integrated_optimizer(sample_file, existing_data_file=None, output_folder
         "output_folders": {"images": di_folder},
     }
 
-# 新関数 PCAとUMAPを個別に保存, サンプルラベル付き
-# En el archivo D_and_I最適化_Greedy法_ver3.py, sí se calcula tanto el I基準値 (I-criterion) como el D基準値 (D-criterion).
-# Normalmente, el cálculo del D基準値 se realiza usando el determinante del submatriz de diseño seleccionada (por ejemplo, log(det(X_selected.T @ X_selected)) o similar),
-# y el I基準値 se calcula como la mínima distancia entre puntos seleccionados (por ejemplo, usando cdist y np.min).
-# Busca funciones o bloques de código con nombres como "calculate_d_criterion", "calculate_i_criterion", o donde se utilicen np.linalg.det, np.linalg.qr, o cdist.
-# En la mayoría de implementaciones, ambos valores se calculan para cada subconjunto candidato y se almacenan o se usan para seleccionar el mejor conjunto.
+# ES: Nueva función: guardar PCA y UMAP por separado, con etiquetas de muestra. Referencia: D_and_I最適化_Greedy法_ver3.py
+# EN: New function: save PCA and UMAP separately, with sample labels. Reference: D_and_I最適化_Greedy法_ver3.py
+# JA: 新関数: PCAとUMAPを個別に保存、サンプルラベル付き
+# ES: En el archivo D_and_I最適化_Greedy法_ver3.py, sí se calcula tanto el I基準値 (I-criterion) como el D基準値 (D-criterion).
+# EN: In D_and_I最適化_Greedy法_ver3.py, both I基準値 (I-criterion) and D基準値 (D-criterion) are computed.
+# JA: D_and_I最適化_Greedy法_ver3.py では I基準値 と D基準値 の両方を計算しています。
+# ES: Normalmente, el cálculo del D基準値 se realiza usando el determinante del submatriz de diseño seleccionada (...)
+# EN: Typically, D基準値 is computed from the determinant of the selected design submatrix (...)
+# JA: 通常、D基準値 は選択設計行列の部分行列の行列式などから計算します（例: log(det(XᵀX))）。
+# ES: y el I基準値 se calcula como la mínima distancia entre puntos seleccionados (...)
+# EN: and I基準値 is computed as the minimum distance between selected points (...)
+# JA: I基準値 は選択点間の最小距離などで計算します（例: cdist と最小値）。
+# ES: Busca funciones o bloques de código con nombres como \"calculate_d_criterion\", \"calculate_i_criterion\" (...)
+# EN: Look for code blocks named \"calculate_d_criterion\" / \"calculate_i_criterion\" or using np.linalg.det / np.linalg.qr / cdist.
+# JA: \"calculate_d_criterion\" / \"calculate_i_criterion\"、または np.linalg.det / np.linalg.qr / cdist を使う箇所を探してください。
+# ES: En la mayoría de implementaciones, ambos valores se calculan para cada subconjunto candidato y se almacenan o se usan para seleccionar el mejor conjunto.
+# EN: In most implementations, both metrics are computed per candidate subset and stored/used to pick the best subset.
+# JA: 多くの実装では、候補サブセットごとに両指標を計算し、保存/選択に利用します。

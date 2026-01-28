@@ -1,0 +1,60 @@
+---
+description: Enforce comment style (ES/EN/JP blocks; inline English only).
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Reglas de comentarios (obligatorio)
+
+### 1) Comentarios en bloque: siempre en 3 líneas (ES/EN/JP)
+
+- Aplica a:
+  - Comentarios multi-línea / “bloque”
+  - Docstrings (p. ej. Python)
+  - Comentarios de cabecera de función, clase, módulo, secciones, TODOs, etc.
+
+- Formato obligatorio: **3 líneas**, en este orden, cada una con marcador de idioma:
+  - `ES:` (español)
+  - `EN:` (inglés)
+  - `JP:` (japonés)
+
+- Ejemplos (Python):
+
+```python
+# ES: Normaliza la columna y elimina outliers.
+# EN: Normalize the column and remove outliers.
+# JP: 列を正規化し、外れ値を除去します。
+```
+
+```python
+def foo(x: float) -> float:
+    """
+    ES: Convierte grados a radianes.
+    EN: Convert degrees to radians.
+    JP: 度をラジアンに変換します。
+    """
+    return x
+```
+
+- Ejemplos (lenguajes con `//`):
+
+```text
+// ES: Carga el CSV y valida el esquema.
+// EN: Load the CSV and validate the schema.
+// JP: CSVを読み込み、スキーマを検証します。
+```
+
+### 2) Comentarios inline (al final de una línea de código): siempre en inglés
+
+- Definición: comentario al final de una línea con código (p. ej. `x = 1  # ...` o `x = 1 // ...`).
+- Regla: **inline comments deben estar SOLO en inglés** (sin ES/JP y sin marcadores `ES:`/`JP:`).
+
+- Ejemplos (Python):
+
+```python
+x = x / 100.0  # Convert percent to fraction
+```
+
+### 3) Si hay conflicto, prioriza estas reglas
+
+- Si el código existente usa otro estilo, al tocar esa zona **migra** los comentarios al formato de este documento.

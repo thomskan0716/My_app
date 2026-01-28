@@ -8,11 +8,16 @@ from app_paths import resource_path
 
 
 def create_logo_widget(logo_path: str = "xebec.jpg"):
-    """Crea un widget QLabel para mostrar el logo escalado manteniendo el aspecto."""
+    """ES: Crea un widget QLabel para mostrar el logo escalado manteniendo el aspecto.
+    EN: Create a QLabel widget to show the logo scaled while keeping aspect ratio.
+    JA: アスペクト比を維持してロゴをスケール表示するQLabelを作成。
+    """
     logo_label = QLabel()
     pixmap = QPixmap(resource_path(logo_path))
 
-    # Escalar la imagen a un tamaño máximo, manteniendo la relación de aspecto
+    # ES: Escalar la imagen a un tamaño máximo, manteniendo la relación de aspecto
+    # EN: Scale the image to a max size while keeping aspect ratio
+    # JA: アスペクト比を維持しつつ最大サイズにスケール
     max_width = 220
     max_height = 220
     scaled_pixmap = pixmap.scaled(
@@ -26,31 +31,46 @@ def create_logo_widget(logo_path: str = "xebec.jpg"):
     return logo_label
 
 def create_load_sample_button():
-    """Botón para cargar archivo de muestreo."""
+    """ES: Botón para cargar archivo de muestreo.
+    EN: Button to load a sample file.
+    JA: サンプルファイル読込ボタン。
+    """
     button = QPushButton("Load Sample File")
     return button
 
 def create_load_results_button():
-    """Botón para cargar archivo de resultados."""
+    """ES: Botón para cargar archivo de resultados.
+    EN: Button to load a results file.
+    JA: 結果ファイル読込ボタン。
+    """
     button = QPushButton("Load Results File")
     return button
 
 def create_dsaitekika_button():
-    """Botón para ejecutar Dsaitekika."""
+    """ES: Botón para ejecutar Dsaitekika.
+    EN: Button to run Dsaitekika.
+    JA: Dsaitekika実行ボタン。
+    """
     button = QPushButton("Run Dsaitekika")
-    button.setEnabled(False)  # Inicialmente desactivado
+    button.setEnabled(False)  # Initially disabled
     return button
 
 def create_isaitekika_button():
-    """Botón para ejecutar iSaitekika."""
+    """ES: Botón para ejecutar iSaitekika.
+    EN: Button to run iSaitekika.
+    JA: iSaitekika実行ボタン。
+    """
     button = QPushButton("Run iSaitekika")
-    button.setEnabled(False)  # Inicialmente desactivado
+    button.setEnabled(False)  # Initially disabled
     return button
 
 def create_show_results_button():
-    """Botón para mostrar resultados de regresión."""
+    """ES: Botón para mostrar resultados de regresión.
+    EN: Button to show regression results.
+    JA: 回帰結果表示ボタン。
+    """
     button = QPushButton("Show Regression Results")
-    button.setEnabled(False)  # Inicialmente desactivado
+    button.setEnabled(False)  # Initially disabled
     return button
 
 def create_regression_labels():
@@ -83,7 +103,9 @@ def create_ok_ng_buttons():
     return frame, ok_button, ng_button
 
 def create_load_sample_block():
-    """Crea un bloque con botón de cargar sample + etiqueta de archivo."""
+    """ES: Crea un bloque con botón de cargar sample + etiqueta de archivo.
+    EN: Create a block with load-sample button and file label.
+    JA: サンプル読み込みボタン＋ファイルラベル付きブロックを作成。"""
     frame = QFrame()
     layout = QVBoxLayout()
     frame.setLayout(layout)
@@ -99,7 +121,9 @@ def create_load_sample_block():
     return frame, button, label
 
 def create_load_results_block():
-    """Crea un bloque con botón de cargar resultados + etiqueta de archivo."""
+    """ES: Crea un bloque con botón de cargar resultados + etiqueta de archivo.
+    EN: Create a block with load-results button and file label.
+    JA: 結果読み込みボタン＋ファイルラベル付きブロックを作成。"""
     frame = QFrame()
     layout = QVBoxLayout()
     frame.setLayout(layout)

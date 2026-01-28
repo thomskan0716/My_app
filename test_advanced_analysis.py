@@ -2,52 +2,59 @@
 # coding: utf-8
 
 """
-Script de prueba para el módulo de análisis lineal avanzado
+ES: Script de prueba para el módulo de análisis lineal avanzado.
+EN: Test script for the advanced linear analysis module.
+JA: 高度線形解析モジュールのテストスクリプト。
 """
 
 import sys
 import os
 from pathlib import Path
 
-# Agregar el directorio actual al path
+# ES: Agregar el directorio actual al path
+# EN: Add current directory to sys.path
+# JA: 現在ディレクトリを sys.path に追加
 sys.path.append(str(Path(__file__).parent))
 
 try:
     from linear_analysis_advanced import run_advanced_linear_analysis_from_db
     from db_manager import DBManager
-    print("✅ Módulos importados correctamente")
+    print("✅ モジュールのインポートが完了しました")
 except ImportError as e:
-    print(f"❌ Error importando módulos: {e}")
+    print(f"❌ モジュールのインポート中にエラー: {e}")
     sys.exit(1)
 
 def test_advanced_analysis():
-    """Prueba del análisis lineal avanzado"""
-    print("🔧 Iniciando prueba del análisis lineal avanzado...")
+    """ES: Prueba del análisis lineal avanzado
+    EN: Test advanced linear analysis
+    JA: 高度線形解析のテスト
+    """
+    print("🔧 高度線形解析のテストを開始...")
     
     try:
-        # Crear DBManager
+        # ES: Crear DBManager | EN: Create DBManager | JA: DBManager を作成
         db_manager = DBManager()
-        print("✅ DBManager creado correctamente")
+        print("✅ DBManager を作成しました")
         
-        # Verificar conexión
+        # ES: Verificar conexión | EN: Check connection | JA: 接続確認
         if not db_manager.conn:
-            print("❌ No hay conexión a la base de datos")
+            print("❌ データベースに接続できません")
             return False
         
-        # Ejecutar análisis sin filtros
-        print("🔧 Ejecutando análisis sin filtros...")
+        # ES: Ejecutar análisis sin filtros | EN: Run analysis without filters | JA: フィルタなしで解析実行
+        print("🔧 フィルタなしで解析を実行中...")
         results = run_advanced_linear_analysis_from_db(db_manager)
         
         if results.get('success', False):
-            print("✅ Análisis ejecutado exitosamente")
-            print(f"📁 Directorio de salida: {results.get('output_directory', 'N/A')}")
-            print(f"📊 Forma de datos: {results.get('data_shape', 'N/A')}")
-            print(f"📈 Calculadora Excel: {results.get('excel_calculator', 'N/A')}")
+            print("✅ 解析が成功しました")
+            print(f"📁 出力ディレクトリ: {results.get('output_directory', 'N/A')}")
+            print(f"📊 データ形状: {results.get('data_shape', 'N/A')}")
+            print(f"📈 Excel計算機: {results.get('excel_calculator', 'N/A')}")
             
-            # Verificar estructura de carpetas
+            # ES: Verificar estructura de carpetas | EN: Check folder structure | JA: フォルダ構造を確認
             output_dir = Path(results.get('output_directory', ''))
             if output_dir.exists():
-                print("\n📁 Estructura de carpetas generada:")
+                print("\n📁 生成されたフォルダー構造:")
                 for item in output_dir.rglob('*'):
                     if item.is_file():
                         print(f"  📄 {item.relative_to(output_dir)}")
@@ -56,22 +63,22 @@ def test_advanced_analysis():
             
             return True
         else:
-            print(f"❌ Error en el análisis: {results.get('error', 'Error desconocido')}")
+            print(f"❌ 解析中にエラー: {results.get('error', '不明なエラー')}")
             return False
             
     except Exception as e:
-        print(f"❌ Error durante la prueba: {e}")
+        print(f"❌ テスト中にエラー: {e}")
         import traceback
         traceback.print_exc()
         return False
 
 if __name__ == "__main__":
-    print("🚀 Iniciando prueba del análisis lineal avanzado...")
+    print("🚀 高度線形解析のテストを開始...")
     success = test_advanced_analysis()
     
     if success:
-        print("\n✅ PRUEBA EXITOSA: El análisis lineal avanzado funciona correctamente")
+        print("\n✅ テスト成功: 高度線形解析は正常に動作しています")
     else:
-        print("\n❌ PRUEBA FALLIDA: Hay problemas con el análisis lineal avanzado")
+        print("\n❌ テスト失敗: 高度線形解析に問題があります")
     
-    print("\nPrueba completada.")
+    print("\nテスト完了。")

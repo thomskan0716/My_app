@@ -1,6 +1,11 @@
 """
-Worker para ejecutar análisis de clasificación (bunrui kaiseki) en un thread separado
-Ejecuta Run_pipeline_ver3.3_20250914.py
+ES: Worker para ejecutar análisis de clasificación (bunrui kaiseki) en un thread separado.
+EN: Worker to run classification analysis (bunrui kaiseki) in a separate thread.
+JA: 分類解析（bunrui kaiseki）を別スレッドで実行するワーカー。
+
+ES: Ejecuta Run_pipeline_ver3.3_20250914.py.
+EN: Runs Run_pipeline_ver3.3_20250914.py.
+JA: Run_pipeline_ver3.3_20250914.py を実行する。
 """
 import sys
 import os
@@ -16,53 +21,72 @@ from PySide6.QtCore import QThread, Signal, QMetaObject, Qt
 
 
 class ClassificationWorker(QThread):
-    """Worker que ejecuta el análisis de clasificación en un thread separado"""
+    """ES: Worker que ejecuta el análisis de clasificación en un thread separado
+    EN: Worker that runs the classification analysis in a separate thread
+    JA: 分類解析を別スレッドで実行するワーカー
+    """
     
-    # Señales para comunicación con la GUI
+    # ES: Señales para comunicación con la GUI | EN: Signals for GUI communication | JA: GUI通信用シグナル
     progress_updated = Signal(int, str)  # (value, message)
     status_updated = Signal(str)  # message
     finished = Signal(dict)  # results dict
     error = Signal(str)  # error message
-    console_output = Signal(str)  # mensaje de consola
-    file_selection_requested = Signal(str)  # (initial_path) - solicita selección de archivo
+    console_output = Signal(str)  # console output (for IDE/terminal)
+    file_selection_requested = Signal(str)  # (initial_path) - request file selection
     
     def __init__(self, filtered_df, project_folder, parent=None, config_values=None, selected_brush=None, selected_material=None, selected_wire_length=None):
         """
-        Inicializa el worker
+        ES: Inicializa el worker.
+        EN: Initialize the worker.
+        JA: ワーカーを初期化する。
         
         Parameters
         ----------
         filtered_df : pd.DataFrame
-            DataFrame con los datos filtrados
+            ES: DataFrame con los datos filtrados
+            EN: DataFrame containing filtered data
+            JA: フィルタ済みデータのDataFrame
         project_folder : str
-            Carpeta base del proyecto
+            ES: Carpeta base del proyecto
+            EN: Project base folder
+            JA: プロジェクトのベースフォルダ
         parent : QWidget, optional
-            Widget padre
+            ES: Widget padre
+            EN: Parent widget
+            JA: 親ウィジェット
         config_values : dict, optional
-            Valores de configuración del diálogo
+            ES: Valores de configuración del diálogo
+            EN: Configuration values from the dialog
+            JA: ダイアログからの設定値
         selected_brush : str, optional
-            Tipo de cepillo seleccionado (A11, A21, o A32) para Prediction_input.xlsx
+            ES: Tipo de cepillo seleccionado (A11, A21, o A32) para Prediction_input.xlsx
+            EN: Selected brush type (A11, A21, or A32) for Prediction_input.xlsx
+            JA: Prediction_input.xlsx 用に選択したブラシタイプ（A11/A21/A32）
         selected_material : str, optional
-            Material seleccionado (Steel, Alum) para Prediction_input.xlsx
+            ES: Material seleccionado (Steel, Alum) para Prediction_input.xlsx
+            EN: Selected material (Steel, Alum) for Prediction_input.xlsx
+            JA: Prediction_input.xlsx 用に選択した材料（Steel/Alum）
         selected_wire_length : int, optional
-            Longitud de alambre seleccionada (30-75mm) para Prediction_input.xlsx
+            ES: Longitud de alambre seleccionada (30-75mm) para Prediction_input.xlsx
+            EN: Selected wire length (30–75mm) for Prediction_input.xlsx
+            JA: Prediction_input.xlsx 用に選択した線材長（30–75mm）
         """
         super().__init__(parent)
         self.filtered_df = filtered_df
         self.project_folder = project_folder
         self.config_values = config_values or {}
-        self.selected_brush = selected_brush or "A13"  # Por defecto A13
-        self.selected_material = selected_material or "Steel"  # Por defecto Steel
-        self.selected_wire_length = selected_wire_length or 75  # Por defecto 75
+        self.selected_brush = selected_brush or "A13"  # Default: A13
+        self.selected_material = selected_material or "Steel"  # Default: Steel
+        self.selected_wire_length = selected_wire_length or 75  # Default: 75
         self.output_folder = None
         self._cancelled = False
         self._current_process = None
         self._json_reader_stop = threading.Event()
         self._stop_reading = None
-        self._selected_file_path = None  # Para almacenar el archivo seleccionado por el usuario
-        self._file_selection_event = threading.Event()  # Evento para sincronizar selección de archivo
+        self._selected_file_path = None  # Selected file path (set by the user)
+        self._file_selection_event = threading.Event()  # File-selection synchronization event
         
-        # Estado del progreso para parsing (similar a nonlinear_worker)
+        # ES: Estado del progreso para parsing (similar a nonlinear_worker) | EN: Parsing progress state (similar to nonlinear_worker) | JA: パース進捗状態（nonlinear_workerと同様）
         self.current_fold = 0
         self.total_folds = self.config_values.get('OUTER_SPLITS', 10)
         self.current_trial = 0
@@ -70,7 +94,7 @@ class ClassificationWorker(QThread):
         self.current_model = 0
         self.total_models = len(self.config_values.get('MODELS_TO_USE', ['lightgbm']))
         
-        # Estados de tareas
+        # ES: Estados de tareas | EN: Task states | JA: タスク状態
         self.model_comparison_completed = False
         self.multiobjective_completed = False
         self.dcv_training = False
@@ -79,7 +103,10 @@ class ClassificationWorker(QThread):
         self.current_task = 'initialization'  # initialization, model_comparison, multiobjective, dcv, prediction, evaluation
     
     def cancel(self):
-        """Cancela la ejecución del análisis"""
+        """ES: Cancela la ejecución del análisis
+        EN: Cancel the analysis execution
+        JA: 解析実行をキャンセル
+        """
         self._cancelled = True
         if self._current_process:
             try:
@@ -93,29 +120,32 @@ class ClassificationWorker(QThread):
         self._json_reader_stop.set()
     
     def run(self):
-        """Ejecuta el análisis de clasificación"""
+        """ES: Ejecuta el análisis de clasificación
+        EN: Run the classification analysis
+        JA: 分類解析を実行
+        """
         start_time = time.time()
         
         try:
-            # Verificar si es carga de carpeta existente
+            # ES: Verificar si es carga de carpeta existente | EN: Check if loading an existing folder | JA: 既存フォルダ読み込みか確認
             load_existing = self.config_values.get('load_existing', False)
             selected_folder_path = self.config_values.get('selected_folder_path', '')
             
             if load_existing and selected_folder_path:
-                # Cargar carpeta existente sin ejecutar análisis
+                # ES: Cargar carpeta existente sin ejecutar análisis | EN: Load existing folder without running analysis | JA: 解析せず既存フォルダを読み込み
                 self.status_updated.emit("📁 既存結果を読み込み中...")
                 self.progress_updated.emit(50, "既存結果を読み込み中...")
                 
-                # Usar la carpeta seleccionada como output_folder
+                # ES: Usar la carpeta seleccionada como output_folder | EN: Use selected folder as output_folder | JA: 選択フォルダを output_folder に設定
                 self.output_folder = selected_folder_path
                 
-                # Buscar resultados generados
+                # ES: Buscar resultados generados | EN: Find generated results | JA: 生成された結果を探索
                 results = self._find_results()
                 
-                # Emitir resultados como carga existente
+                # ES: Emitir resultados como carga existente | EN: Emit results as an existing-load run | JA: 既存読み込みとして結果を送信
                 results_existing = {
                     'output_folder': self.output_folder,
-                    'analysis_duration': 0,  # No hay duración para análisis existente
+                    'analysis_duration': 0,  # No duration for existing analysis
                     'project_folder': self.config_values.get('project_folder', self.project_folder),
                     'load_existing': True,
                     'existing_folder_path': selected_folder_path,
@@ -128,98 +158,100 @@ class ClassificationWorker(QThread):
                 self.progress_updated.emit(100, "既存結果読み込み完了")
                 self.status_updated.emit("✅ 既存結果を読み込みました。")
                 
-                # Emitir finished para que la GUI muestre los resultados existentes
+                # ES: Emitir finished para que la GUI muestre los resultados existentes | EN: Emit finished so the GUI can show existing results | JA: GUI表示のため finished を送信
                 self.finished.emit(results_existing)
                 return
             
-            # Verificar cancelación
+            # ES: Verificar cancelación | EN: Check cancellation | JA: キャンセル確認
             if self._cancelled:
                 return
             
-            # Crear carpeta de salida 05_分類
+            # ES: Crear carpeta de salida 05_分類 | EN: Create output folder 05_分類 | JA: 出力フォルダ 05_分類 を作成
             self.status_updated.emit("📁 Creando carpeta de salida...")
             classification_folder = os.path.join(self.project_folder, "05_分類")
             os.makedirs(classification_folder, exist_ok=True)
             
-            # Crear subcarpeta con timestamp - esta será la carpeta de salida directa
+            # ES: Crear subcarpeta con timestamp (carpeta de salida directa) | EN: Create timestamp subfolder (direct output folder) | JA: タイムスタンプ付きサブフォルダ（直接の出力先）を作成
             from datetime import datetime
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             self.output_folder = os.path.join(classification_folder, f"分類解析結果_{timestamp}")
             os.makedirs(self.output_folder, exist_ok=True)
             
-            # NO copiar ml_modules ni Run_pipeline - usar los del .venv directamente
-            # Buscar ml_modules en C:\Users\xebec0176\Desktop\0.00sec\.venv\ml_modules
+            # ES: No copiar ml_modules ni Run_pipeline; usar los del .venv directamente | EN: Do not copy ml_modules/Run_pipeline; use the ones from .venv | JA: ml_modules/Run_pipeline はコピーせず .venv のものを使用
+            # ES: Buscar ml_modules en .venv | EN: Locate ml_modules in .venv | JA: .venv 内の ml_modules を探索
             script_dir = Path(__file__).parent.absolute()
             venv_ml_modules = script_dir / "ml_modules"
             
-            # Si no está en el directorio del script, buscar en el directorio padre (.venv)
+            # ES: Si no está en el directorio del script, buscar en el directorio padre (.venv) | EN: If not in the script dir, search parent dir (.venv) | JA: スクリプト直下になければ親ディレクトリ（.venv）を探索
             if not venv_ml_modules.exists() or not (venv_ml_modules / "models_cls.py").exists():
                 venv_ml_modules = script_dir.parent / "ml_modules"
             
-            # Verificar que ml_modules existe
+            # ES: Verificar que ml_modules existe | EN: Verify ml_modules exists | JA: ml_modules の存在確認
             if not venv_ml_modules.exists() or not (venv_ml_modules / "models_cls.py").exists():
-                self.error.emit(f"❌ ml_modules no encontrado en {venv_ml_modules}")
+                self.error.emit(f"❌ ml_modules が見つかりません: {venv_ml_modules}")
                 return
             
-            print(f"✅ ml_modules encontrado: {venv_ml_modules}")
+            print(f"✅ ml_modules を見つけました: {venv_ml_modules}")
             
-            # Buscar Run_pipeline_ver3.3_20250914.py en .venv
+            # ES: Buscar Run_pipeline_ver3.3_20250914.py en .venv | EN: Locate Run_pipeline_ver3.3_20250914.py in .venv | JA: .venv 内の Run_pipeline_ver3.3_20250914.py を探索
             venv_pipeline_script = script_dir / "Run_pipeline_ver3.3_20250914.py"
             if not venv_pipeline_script.exists():
                 venv_pipeline_script = script_dir.parent / "Run_pipeline_ver3.3_20250914.py"
             
             if not venv_pipeline_script.exists():
-                self.error.emit(f"❌ Run_pipeline_ver3.3_20250914.py no encontrado en {venv_pipeline_script}")
+                self.error.emit(f"❌ Run_pipeline_ver3.3_20250914.py が見つかりません: {venv_pipeline_script}")
                 return
             
-            print(f"✅ Pipeline script encontrado: {venv_pipeline_script}")
+            print(f"✅ パイプラインスクリプトを見つけました: {venv_pipeline_script}")
             
-            # Crear carpeta 00_データセット en la carpeta de salida
+            # ES: Crear carpeta 00_データセット en la carpeta de salida | EN: Create 00_データセット under output folder | JA: 出力先に 00_データセット を作成
             data_folder = os.path.join(self.output_folder, "00_データセット")
             os.makedirs(data_folder, exist_ok=True)
             
-            # Guardar datos filtrados en 00_データセット
+            # ES: Guardar datos filtrados en 00_データセット | EN: Save filtered data into 00_データセット | JA: フィルタ済みデータを 00_データセット に保存
             self.status_updated.emit("💾 Guardando datos filtrados...")
-            # Usar fecha actual para el nombre del archivo
+            # ES: Usar fecha actual para el nombre del archivo | EN: Use current date for the filename | JA: ファイル名に現在日付を使用
             from datetime import datetime
             date_str = datetime.now().strftime("%Y%m%d")
             input_filename = f"{date_str}_総実験データ.xlsx"
             input_file = os.path.join(data_folder, input_filename)
             self.filtered_df.to_excel(input_file, index=False)
-            print(f"✅ Datos guardados: {input_file}")
+            print(f"✅ データを保存しました: {input_file}")
             
-            # Guardar el nombre del archivo para usarlo en la configuración
+            # ES: Guardar el nombre del archivo para usarlo en la configuración | EN: Store the filename for config generation | JA: 設定生成のためファイル名を保持
             self.input_filename = input_filename
             
-            # Buscar y procesar archivo 未実験データ.xlsx del proyecto
+            # ES: Buscar y procesar archivo 未実験データ.xlsx del proyecto | EN: Find and process project's 未実験データ.xlsx | JA: プロジェクトの未実験データ.xlsxを探索・処理
             self.status_updated.emit("📋 Procesando archivo de predicción...")
             predict_input_file = self._create_prediction_input_file(data_folder)
             if not predict_input_file:
-                self.error.emit("❌ No se pudo crear Prediction_input.xlsx")
+                self.error.emit("❌ Prediction_input.xlsx を作成できませんでした")
                 return
             
-            print(f"✅ Archivo de predicción creado: {predict_input_file}")
+            print(f"✅ 予測用ファイルを作成しました: {predict_input_file}")
             
-            # Verificar cancelación
+            # ES: Verificar cancelación | EN: Check cancellation | JA: キャンセル確認
             if self._cancelled:
                 return
             
-            # Crear archivo de configuración temporal en la carpeta de salida
+            # ES: Crear archivo de configuración temporal en la carpeta de salida | EN: Create temporary config file in the output folder | JA: 出力先に一時設定ファイルを作成
             self.status_updated.emit("⚙️ Creando configuración temporal...")
-            # El archivo de configuración se guarda directamente en output_folder/config_cls.py
+            # ES: El archivo de configuración se guarda directamente en output_folder/config_cls.py
+            # EN: The config file is saved directly to output_folder/config_cls.py
+            # JP: 設定ファイルは output_folder/config_cls.py に直接保存される
             config_file = self._create_temp_config()
             
             if config_file and os.path.exists(config_file):
-                print(f"✅ Configuración creada: {config_file}")
+                print(f"✅ 設定ファイルを作成しました: {config_file}")
             
-            # Usar el script original del .venv (no copiado)
+            # ES: Usar el script original del .venv (no copiado) | EN: Use the original .venv script (not copied) | JA: .venv の元スクリプトを使用（コピーしない）
             pipeline_script = str(venv_pipeline_script)
             
-            # Verificar cancelación
+            # ES: Verificar cancelación | EN: Check cancellation | JA: キャンセル確認
             if self._cancelled:
                 return
             
-            # Ejecutar el pipeline
+            # ES: Ejecutar el pipeline | EN: Run the pipeline | JA: パイプラインを実行
             self.status_updated.emit("🔧 Ejecutando pipeline de clasificación...")
             self.progress_updated.emit(20, "Pipeline実行中...")
             
@@ -232,18 +264,18 @@ class ClassificationWorker(QThread):
                 self.error.emit("❌ Error ejecutando el pipeline de clasificación")
                 return
             
-            # Buscar resultados generados
+            # ES: Buscar resultados generados | EN: Find generated results | JA: 生成された結果を探索
             self.status_updated.emit("📊 Buscando resultados...")
             results = self._find_results()
             
-            # Calcular tiempo total
+            # ES: Calcular tiempo total | EN: Compute total time | JA: 総時間を計算
             end_time = time.time()
             analysis_duration = end_time - start_time
             
             results['output_folder'] = self.output_folder
             results['analysis_duration'] = analysis_duration
             results['project_folder'] = self.project_folder
-            results['load_existing'] = False  # No es carga existente, es análisis nuevo
+            results['load_existing'] = False  # Not an existing-load; it's a new analysis
             
             self.progress_updated.emit(100, "分析完了")
             self.status_updated.emit("✅ 分類分析が完了しました")
@@ -257,43 +289,63 @@ class ClassificationWorker(QThread):
             self.error.emit(error_msg)
     
     def _create_temp_config(self):
-        """Crea un archivo de configuración temporal basado en config_values"""
-        # El pipeline busca config_cls.py en ml_modules, así que creamos
-        # un 99_ml_modules en la carpeta de salida solo con config_cls.py
+        """ES: Crea un archivo de configuración temporal basado en config_values
+        EN: Create a temporary config file from config_values
+        JA: config_values から一時設定ファイルを作成"""
+        # ES: El pipeline busca config_cls.py en ml_modules, así que creamos
+        # EN: The pipeline looks for config_cls.py in ml_modules, so we create
+        # JP: パイプラインはml_modules内のconfig_cls.pyを探すため、作成する
+        # ES: un 99_ml_modules en la carpeta de salida solo con config_cls.py
+        # EN: a 99_ml_modules folder under the output folder containing only config_cls.py
+        # JP: 出力先にconfig_cls.pyだけ入った99_ml_modulesを作る
         ml_modules_dst = Path(self.output_folder) / "99_ml_modules"
         ml_modules_dst.mkdir(parents=True, exist_ok=True)
         
         config_file = ml_modules_dst / "config_cls.py"
         
-        # Crear carpeta 99_-----------------
+        # ES: Crear carpeta 99_-----------------
+        # EN: Create folder 99_-----------------
+        # JP: 99_----------------- フォルダを作成
         separator_folder = Path(self.output_folder) / "99_-----------------"
         separator_folder.mkdir(parents=True, exist_ok=True)
         
-        # También crear ml_modules como symlink a 99_ml_modules para compatibilidad con el pipeline
-        # El pipeline busca BASE / "ml_modules", así que necesitamos crear este symlink
+        # ES: También crear ml_modules como symlink a 99_ml_modules para compatibilidad con el pipeline
+        # EN: Also create ml_modules as a symlink to 99_ml_modules for pipeline compatibility
+        # JP: パイプライン互換のため、ml_modulesを99_ml_modulesへのシンボリックリンクとして作成する
+        # ES: El pipeline busca BASE / "ml_modules", así que necesitamos crear este symlink
+        # EN: The pipeline looks for BASE / "ml_modules", so we need this symlink
+        # JP: パイプラインはBASE / \"ml_modules\"を参照するため、このリンクが必要
         ml_modules_alias = Path(self.output_folder) / "ml_modules"
         if not ml_modules_alias.exists():
             try:
-                # En Windows, intentar crear symlink (puede requerir privilegios)
+                # ES: En Windows, intentar crear symlink (puede requerir privilegios)
+                # EN: On Windows, try to create a symlink (may require privileges)
+                # JP: Windowsではシンボリックリンク作成を試す（権限が必要な場合あり）
                 if hasattr(os, 'symlink'):
                     os.symlink("99_ml_modules", ml_modules_alias, target_is_directory=True)
-                    print(f"✅ Symlink creado: {ml_modules_alias} -> 99_ml_modules")
+                    print(f"✅ シンボリックリンクを作成しました: {ml_modules_alias} -> 99_ml_modules")
                 else:
-                    # Si no hay symlink, copiar solo config_cls.py a ml_modules también
+                    # ES: Si no hay symlink, copiar solo config_cls.py a ml_modules también
+                    # EN: If symlinks are not available, also copy only config_cls.py into ml_modules
+                    # JP: シンボリックリンク不可なら、ml_modulesにもconfig_cls.pyだけコピーする
                     ml_modules_fallback = Path(self.output_folder) / "ml_modules"
                     ml_modules_fallback.mkdir(parents=True, exist_ok=True)
                     import shutil
                     shutil.copy2(config_file, ml_modules_fallback / "config_cls.py")
-                    print(f"✅ config_cls.py copiado también a ml_modules para compatibilidad")
+                    print(f"✅ 互換性のため config_cls.py も ml_modules にコピーしました")
             except Exception as e:
-                # Si falla el symlink, copiar solo config_cls.py
+                # ES: Si falla el symlink, copiar solo config_cls.py
+                # EN: If creating the symlink fails, copy only config_cls.py
+                # JP: リンク作成に失敗した場合はconfig_cls.pyのみコピーする
                 ml_modules_fallback = Path(self.output_folder) / "ml_modules"
                 ml_modules_fallback.mkdir(parents=True, exist_ok=True)
                 import shutil
                 shutil.copy2(config_file, ml_modules_fallback / "config_cls.py")
-                print(f"⚠️ No se pudo crear symlink, copiando config_cls.py a ml_modules: {e}")
+                print(f"⚠️ シンボリックリンクを作成できません。config_cls.py を ml_modules にコピーします: {e}")
         
-        # Leer el archivo config_cls.py original como plantilla
+        # ES: Leer el archivo config_cls.py original como plantilla
+        # EN: Read the original config_cls.py as a template
+        # JP: 元のconfig_cls.pyをテンプレートとして読み込む
         config_cls_path = self._find_config_cls()
         config_content = ""
         
@@ -301,18 +353,24 @@ class ClassificationWorker(QThread):
             with open(config_cls_path, 'r', encoding='utf-8') as f:
                 config_content = f.read()
         
-        # Si no se encuentra, crear uno básico
+        # ES: Si no se encuentra, crear uno básico
+        # EN: If it's not found, create a basic one
+        # JP: 見つからない場合は基本版を作成する
         if not config_content:
             config_content = self._get_default_config_content()
         
-        # Modificar los valores según config_values
+        # ES: Modificar los valores según config_values
+        # EN: Modify values according to config_values
+        # JP: config_valuesに従って値を変更する
         modified_content = self._modify_config_content(config_content, self.config_values)
         
-        # Escribir archivo temporal
+        # ES: Escribir archivo temporal
+        # EN: Write temporary file
+        # JP: 一時ファイルを書き込む
         with open(config_file, 'w', encoding='utf-8') as f:
             f.write(modified_content)
         
-        print(f"✅ Configuración temporal creada: {config_file}")
+        print(f"✅ 一時設定ファイルを作成しました: {config_file}")
         return str(config_file)
     
     def _find_config_cls(self):
@@ -336,14 +394,22 @@ from typing import List, Tuple, Dict, Optional, Literal, Union, Set
 import numpy as np
 
 class ConfigCLS:
-    """Configuración temporal para clasificación"""
+    """ES: Configuración temporal para clasificación
+    EN: Temporary configuration for classification
+    JA: 分類用の一時設定"""
     pass
 '''
     
     def _modify_config_content(self, content, config_values):
-        """Modifica el contenido de config_cls.py según config_values"""
-        # Esta función modifica los valores en el contenido del archivo
-        # Por simplicidad, crearemos un archivo que sobrescriba los valores
+        """ES: Modifica el contenido de config_cls.py según config_values
+        EN: Modify config_cls.py content according to config_values
+        JA: config_values に従い config_cls.py の内容を変更"""
+        # ES: Esta función modifica los valores en el contenido del archivo
+        # EN: This function modifies values in the file content
+        # JP: この関数はファイル内容内の値を変更する
+        # ES: Por simplicidad, crearemos un archivo que sobrescriba los valores
+        # EN: For simplicity, we generate content that overwrites the values
+        # JP: 単純化のため、値を上書きする内容を生成する
         
         modifications = []
         
@@ -468,7 +534,9 @@ class ConfigCLS:
         
         # Actualizar rutas de salida (relativas al directorio de trabajo)
         # El pipeline espera DATA_FOLDER = "00_データセット" (carpeta que creamos)
-        # Usar el nombre del archivo con fecha actual
+        # ES: Usar el nombre del archivo con fecha actual
+        # EN: Use a filename with the current date
+        # JP: 現在日付を含むファイル名を使用する
         input_filename = getattr(self, 'input_filename', None)
         if not input_filename:
             from datetime import datetime
@@ -478,23 +546,33 @@ class ConfigCLS:
         modifications.append(f'    DATA_FOLDER: str = "00_データセット"')
         modifications.append(f'    INPUT_FILE: str = "{input_filename}"')
         modifications.append(f'    PREDICT_INPUT_FILE: str = "Prediction_input.xlsx"')
-        # Cambiar PARENT_FOLDER_TEMPLATE a "." para que no cree carpeta intermedia
+        # ES: Cambiar PARENT_FOLDER_TEMPLATE a "." para que no cree carpeta intermedia
+        # EN: Set PARENT_FOLDER_TEMPLATE to \".\" so it does not create an intermediate folder
+        # JP: 中間フォルダを作らないようPARENT_FOLDER_TEMPLATEを\".\"にする
         modifications.append(f'    PARENT_FOLDER_TEMPLATE: str = "."')
         
-        # Crear contenido final
-        # Reemplazar valores existentes en lugar de solo agregar
+        # ES: Crear contenido final
+        # EN: Build final content
+        # JP: 最終内容を生成
+        # ES: Reemplazar valores existentes en lugar de solo agregar
+        # EN: Replace existing values instead of only appending
+        # JP: 追記だけでなく既存値を置換する
         final_content = content
         
         # Reemplazar DATA_FOLDER si existe
         import re
-        # Buscar y reemplazar DATA_FOLDER
+        # ES: Buscar y reemplazar DATA_FOLDER
+        # EN: Find and replace DATA_FOLDER
+        # JP: DATA_FOLDERを検索して置換
         final_content = re.sub(
             r'(\s+DATA_FOLDER:\s*str\s*=\s*)"[^"]*"',
             r'\1"00_データセット"',
             final_content
         )
         
-        # Reemplazar INPUT_FILE si existe (usar el nombre del archivo con fecha actual)
+        # ES: Reemplazar INPUT_FILE si existe (usar el nombre del archivo con fecha actual)
+        # EN: Replace INPUT_FILE if it exists (use the current-date filename)
+        # JP: INPUT_FILEがあれば置換（現在日付のファイル名を使用）
         input_filename = getattr(self, 'input_filename', None)
         if not input_filename:
             from datetime import datetime
@@ -514,28 +592,38 @@ class ConfigCLS:
             final_content
         )
         
-        # Reemplazar PARENT_FOLDER_TEMPLATE para que no cree carpeta intermedia
+        # ES: Reemplazar PARENT_FOLDER_TEMPLATE para que no cree carpeta intermedia
+        # EN: Replace PARENT_FOLDER_TEMPLATE so it does not create an intermediate folder
+        # JP: 中間フォルダを作らないようPARENT_FOLDER_TEMPLATEを置換
         final_content = re.sub(
             r'(\s+PARENT_FOLDER_TEMPLATE:\s*str\s*=\s*)"[^"]*"',
             r'\1"."',
             final_content
         )
         
-        # Reemplazar PARENT_FOLDER_TEMPLATE para que no cree carpeta intermedia
+        # ES: Reemplazar PARENT_FOLDER_TEMPLATE para que no cree carpeta intermedia
+        # EN: Replace PARENT_FOLDER_TEMPLATE so it does not create an intermediate folder
+        # JP: 中間フォルダを作らないようPARENT_FOLDER_TEMPLATEを置換
         final_content = re.sub(
             r'(\s+PARENT_FOLDER_TEMPLATE:\s*str\s*=\s*)"[^"]*"',
             r'\1"."',
             final_content
         )
         
-        # Agregar modificaciones al final de la clase
+        # ES: Agregar modificaciones al final de la clase
+        # EN: Append modifications at the end of the class
+        # JP: クラス末尾に変更を追加
         if "class ConfigCLS:" in final_content:
             # Insertar modificaciones antes del último método o al final de la clase
-            # Buscar el último @classmethod o método y agregar antes
+            # ES: Buscar el último @classmethod o método y agregar antes
+            # EN: Find the last @classmethod or method and insert before it
+            # JP: 最後の@classmethod/メソッドを探し、その前に挿入する
             lines = final_content.split('\n')
             insert_pos = len(lines)
             
-            # Buscar el final de la clase (última línea antes de una línea vacía o fuera de la clase)
+            # ES: Buscar el final de la clase (última línea antes de una línea vacía o fuera de la clase)
+            # EN: Find the end of the class (last line before a blank line or leaving the class)
+            # JP: クラス終端を探す（空行/クラス外に出る直前の最終行）
             for i in range(len(lines) - 1, -1, -1):
                 if lines[i].strip().startswith('@classmethod') or lines[i].strip().startswith('def '):
                     # Encontrar el final de este método
@@ -557,7 +645,9 @@ class ConfigCLS:
             lines.insert(insert_pos, modifications_text)
             final_content = '\n'.join(lines)
         else:
-            # Si no hay clase, crear una básica
+            # ES: Si no hay clase, crear una básica
+            # EN: If there is no class, create a basic one
+            # JP: クラスが無い場合は基本クラスを作成する
             final_content += "\n\n# === Modificaciones temporales ===\n"
             for mod in modifications:
                 final_content += mod + "\n"
@@ -580,8 +670,10 @@ class ConfigCLS:
             unexperimented_file = None
             
             if not unexperimented_files:
-                # No se encontró el archivo, pedir al usuario que lo seleccione
-                self.console_output.emit(f"⚠️ No se encontró archivo *_未実験データ.xlsx en {project_path}")
+                # ES: No se encontró el archivo; pedir al usuario que lo seleccione
+                # EN: File not found; ask the user to select it
+                # JP: ファイルが見つからないため、ユーザーに選択してもらう
+                self.console_output.emit(f"⚠️ *_未実験データ.xlsx が見つかりません: {project_path}")
                 self.status_updated.emit("ファイル選択待ち...")
                 
                 # Resetear variables de selección
@@ -591,30 +683,42 @@ class ConfigCLS:
                 # Emitir señal para que la GUI muestre el diálogo
                 self.file_selection_requested.emit(str(project_path))
                 
-                # Esperar a que el usuario seleccione el archivo (máximo 5 minutos)
+                # ES: Esperar a que el usuario seleccione el archivo (máximo 5 minutos)
+                # EN: Wait for the user to select a file (max 5 minutes)
+                # JP: ユーザーのファイル選択を待つ（最大5分）
                 max_wait = 300  # 5 minutos en segundos
                 if self._file_selection_event.wait(timeout=max_wait):
-                    # Usuario seleccionó archivo
+                    # ES: El usuario seleccionó un archivo
+                    # EN: User selected a file
+                    # JP: ユーザーがファイルを選択した
                     if self._selected_file_path:
                         unexperimented_file = Path(self._selected_file_path)
-                        print(f"📋 Archivo seleccionado por usuario: {unexperimented_file}")
+                        print(f"📋 ユーザーが選択したファイル: {unexperimented_file}")
                     else:
                         self.error.emit("❌ ファイルが選択されませんでした。")
                         return None
                 else:
-                    # Timeout - usuario no seleccionó archivo a tiempo
+                    # ES: Timeout: el usuario no seleccionó el archivo a tiempo
+                    # EN: Timeout: user did not select a file in time
+                    # JP: タイムアウト: ユーザーが時間内にファイルを選択しなかった
                     self.error.emit("❌ ファイル選択がタイムアウトしました。")
                     return None
             else:
-                # Usar el primer archivo encontrado
+                # ES: Usar el primer archivo encontrado
+                # EN: Use the first found file
+                # JP: 見つかった最初のファイルを使用する
                 unexperimented_file = unexperimented_files[0]
-                print(f"📋 Archivo 未実験データ encontrado: {unexperimented_file}")
+                print(f"📋 未実験データ ファイルを見つけました: {unexperimented_file}")
             
-            # Leer el archivo
+            # ES: Leer el archivo
+            # EN: Read the file
+            # JP: ファイルを読み込む
             self.status_updated.emit("ファイル読み込み中...")
             df_predict = pd.read_excel(unexperimented_file)
             
-            # Validar que el archivo tiene las columnas necesarias
+            # ES: Validar que el archivo tiene las columnas necesarias
+            # EN: Validate that the file contains the required columns
+            # JP: 必要な列があるか検証する
             required_columns = ['回転速度', '送り速度', 'UPカット', '切込量', '突出量', '載せ率', 'パス数']
             missing_columns = [col for col in required_columns if col not in df_predict.columns]
             
@@ -628,15 +732,19 @@ class ConfigCLS:
                 self.error.emit(error_msg)
                 return None
             
-            # Validar que el archivo tiene al menos una fila de datos
+            # ES: Validar que el archivo tiene al menos una fila de datos
+            # EN: Validate that the file has at least one data row
+            # JP: 少なくとも1行のデータがあるか検証する
             if len(df_predict) == 0:
                 self.error.emit(f"❌ 選択されたファイルにデータがありません: {unexperimented_file}")
                 return None
             
-            print(f"✅ Archivo validado correctamente. Columnas: {list(df_predict.columns)}")
-            print(f"✅ Filas de datos: {len(df_predict)}")
+            print(f"✅ ファイルを検証しました。列: {list(df_predict.columns)}")
+            print(f"✅ 行数: {len(df_predict)}")
             
-            # Agregar columnas A13, A11, A21, A32
+            # ES: Agregar columnas A13, A11, A21, A32
+            # EN: Add columns A13, A11, A21, A32
+            # JP: A13/A11/A21/A32列を追加
             # La columna seleccionada será 1, las otras 0
             # A13 debe estar en la primera posición (columna A)
             df_predict['A13'] = 0
@@ -677,7 +785,7 @@ class ConfigCLS:
             return output_file
             
         except Exception as e:
-            self.console_output.emit(f"❌ Error creando Prediction_input.xlsx: {str(e)}")
+            self.console_output.emit(f"❌ Prediction_input.xlsx 作成中にエラー: {str(e)}")
             import traceback
             traceback.print_exc()
             return None
@@ -697,7 +805,9 @@ class ConfigCLS:
         return None
     
     def _run_pipeline(self, script_path, working_dir, config_file):
-        """Ejecuta el pipeline de clasificación"""
+        """ES: Ejecuta el pipeline de clasificación
+        EN: Run the classification pipeline
+        JA: 分類パイプラインを実行"""
         try:
             # Configurar variables de entorno
             env = os.environ.copy()
@@ -709,7 +819,9 @@ class ConfigCLS:
             env["QT_QPA_PLATFORM"] = "offscreen"
             env["KMP_DUPLICATE_LIB_OK"] = "TRUE"
             
-            # Buscar ml_modules en .venv (no copiado)
+            # ES: Buscar ml_modules en .venv (no copiado)
+            # EN: Locate ml_modules in .venv (not copied)
+            # JP: .venv内のml_modulesを探す（コピーしない）
             script_dir = Path(__file__).parent.absolute()
             venv_ml_modules = script_dir / "ml_modules"
             if not venv_ml_modules.exists() or not (venv_ml_modules / "models_cls.py").exists():
@@ -729,17 +841,25 @@ class ConfigCLS:
             if ml_modules_in_workdir.exists():
                 python_paths.append(str(ml_modules_in_workdir))
             
-            # También crear un symlink o alias ml_modules -> 99_ml_modules para compatibilidad
-            # En Windows, creamos un symlink si es posible, sino copiamos solo config_cls.py
+            # ES: También crear un symlink o alias ml_modules -> 99_ml_modules para compatibilidad
+            # EN: Also create a symlink/alias ml_modules -> 99_ml_modules for compatibility
+            # JP: 互換性のためml_modules -> 99_ml_modulesのリンク/エイリアスも作成する
+            # ES: En Windows, creamos un symlink si es posible; si no, al menos usamos 99_ml_modules en PYTHONPATH
+            # EN: On Windows, create a symlink if possible; otherwise at least use 99_ml_modules in PYTHONPATH
+            # JP: Windowsでは可能ならシンボリックリンク、不可なら99_ml_modulesをPYTHONPATHに入れる
             ml_modules_alias = Path(working_dir) / "ml_modules"
             if not ml_modules_alias.exists() and ml_modules_in_workdir.exists():
                 try:
-                    # Intentar crear symlink (requiere permisos en Windows)
+                    # ES: Intentar crear symlink (requiere permisos en Windows)
+                    # EN: Try to create a symlink (requires permissions on Windows)
+                    # JP: シンボリックリンク作成を試す（Windowsでは権限が必要）
                     if hasattr(os, 'symlink'):
                         os.symlink(ml_modules_in_workdir, ml_modules_alias, target_is_directory=True)
                         python_paths.append(str(ml_modules_alias))
                 except:
-                    # Si falla, al menos agregar 99_ml_modules al path
+                    # ES: Si falla, al menos agregar 99_ml_modules al path
+                    # EN: If it fails, at least add 99_ml_modules to the path
+                    # JP: 失敗した場合は最低限99_ml_modulesをパスに追加する
                     pass
             
             # 2. working_dir - directorio de trabajo actual
@@ -754,13 +874,17 @@ class ConfigCLS:
             if script_dir.exists():
                 python_paths.append(str(script_dir))
             
-            # 6. Agregar site-packages
+            # ES: 6. Agregar site-packages
+            # EN: 6. Add site-packages
+            # JP: 6. site-packages を追加
             import site
             for site_pkg in site.getsitepackages():
                 if os.path.exists(site_pkg):
                     python_paths.append(site_pkg)
             
-            # 7. Agregar PYTHONPATH existente si hay
+            # ES: 7. Agregar PYTHONPATH existente si hay
+            # EN: 7. Add existing PYTHONPATH if present
+            # JP: 7. 既存のPYTHONPATHがあれば追加
             existing_pythonpath = env.get("PYTHONPATH", "")
             if existing_pythonpath:
                 python_paths.append(existing_pythonpath)
@@ -780,23 +904,29 @@ class ConfigCLS:
             self.console_output.emit(f"📁 Directorio de trabajo: {working_dir}")
             self.console_output.emit(f"📁 PYTHONPATH: {env['PYTHONPATH']}")
             
-            # Verificar que config_cls.py existe en 99_ml_modules dentro de working_dir
+            # ES: Verificar que config_cls.py existe en 99_ml_modules dentro de working_dir
+            # EN: Verify that config_cls.py exists under 99_ml_modules in working_dir
+            # JP: working_dir内の99_ml_modulesにconfig_cls.pyがあるか確認
             ml_modules_in_workdir = Path(working_dir) / "99_ml_modules"
             config_check = ml_modules_in_workdir / "config_cls.py"
             if not config_check.exists():
-                self.console_output.emit(f"❌ Error: config_cls.py no encontrado en {ml_modules_in_workdir}")
+                self.console_output.emit(f"❌ エラー: config_cls.py が見つかりません: {ml_modules_in_workdir}")
                 return False
             
-            # Verificar que ml_modules del .venv existe
+            # ES: Verificar que ml_modules del .venv existe
+            # EN: Verify that the .venv ml_modules exists
+            # JP: .venv側のml_modulesが存在するか確認
             if not venv_ml_modules.exists() or not (venv_ml_modules / "models_cls.py").exists():
-                self.console_output.emit(f"❌ Error: ml_modules no encontrado en {venv_ml_modules}")
+                self.console_output.emit(f"❌ エラー: ml_modules が見つかりません: {venv_ml_modules}")
                 return False
             
             # Usar el script original del .venv (no copiado)
             script_to_run = script_path
             self.console_output.emit(f"📝 Usando script del .venv: {script_to_run}")
             
-            # Debug: Verificar estructura antes de ejecutar
+            # ES: Debug: Verificar estructura antes de ejecutar
+            # EN: Debug: Check structure before running
+            # JP: Debug: 実行前に構造を確認
             self.console_output.emit(f"📋 Verificando estructura en {working_dir}:")
             workdir_path = Path(working_dir)
             if workdir_path.exists():
@@ -819,7 +949,9 @@ class ConfigCLS:
             # Asegurar que working_dir es un string para subprocess
             working_dir_str = str(working_dir) if isinstance(working_dir, Path) else working_dir
             
-            # Ejecutar script con Popen para poder leer salida en tiempo real
+            # ES: Ejecutar script con Popen para poder leer salida en tiempo real
+            # EN: Run the script with Popen so we can read output in real time
+            # JP: リアルタイムで出力を読むためPopenでスクリプトを実行
             # IMPORTANTE: cwd debe ser working_dir para que BASE = Path("./") funcione
             process = subprocess.Popen(
                 [sys.executable, script_to_run],
@@ -833,14 +965,18 @@ class ConfigCLS:
                 bufsize=1  # Line buffered
             )
             
-            # Guardar referencia al proceso para poder cancelarlo
+            # ES: Guardar referencia al proceso para poder cancelarlo
+            # EN: Store a reference to the process so we can cancel it
+            # JP: キャンセルできるようプロセス参照を保持
             self._current_process = process
             
             # Event para detener los threads de lectura de forma segura
             stop_reading = threading.Event()
             self._stop_reading = stop_reading
             
-            # Leer stdout y stderr en tiempo real usando threads
+            # ES: Leer stdout y stderr en tiempo real usando threads
+            # EN: Read stdout and stderr in real time using threads
+            # JP: スレッドでstdout/stderrをリアルタイム読取
             def read_output(pipe, is_stderr=False):
                 try:
                     while not stop_reading.is_set():
@@ -870,8 +1006,8 @@ class ConfigCLS:
             # Usar polling para poder cancelar
             while process.poll() is None:
                 if self._cancelled:
-                    print("🛑 Cancelando proceso...")
-                    self.console_output.emit("🛑 Cancelando proceso...")
+                    print("🛑 処理をキャンセル中...")
+                    self.console_output.emit("🛑 処理をキャンセル中...")
                     try:
                         process.terminate()  # Intentar terminar suavemente
                         # Esperar un poco para que termine (polling)
@@ -882,12 +1018,12 @@ class ConfigCLS:
                         
                         # Si aún no terminó, forzar kill
                         if process.poll() is None:
-                            print("⚠️ Proceso no terminó, forzando cierre...")
-                            self.console_output.emit("⚠️ Proceso no terminó, forzando cierre...")
+                            print("⚠️ プロセスが終了しません。強制終了します...")
+                            self.console_output.emit("⚠️ プロセスが終了しません。強制終了します...")
                             process.kill()
                             process.wait()
                     except Exception as e:
-                        print(f"⚠️ Error al cancelar proceso: {e}")
+                        print(f"⚠️ キャンセル処理中にエラー: {e}")
                         try:
                             if process.poll() is None:
                                 process.kill()
@@ -895,20 +1031,26 @@ class ConfigCLS:
                         except:
                             pass
                     return False
-                time.sleep(0.1)  # Esperar un poco antes de verificar de nuevo
+                time.sleep(0.1)  # Wait a bit before checking again
             
             returncode = process.returncode
             
-            # Detener los threads de lectura antes de cerrar pipes
+            # ES: Detener los threads de lectura antes de cerrar pipes
+            # EN: Stop reader threads before closing pipes
+            # JP: パイプを閉じる前に読取スレッドを停止
             stop_reading.set()
             stdout_thread.join(timeout=1.0)  # Esperar máximo 1 segundo
             stderr_thread.join(timeout=1.0)  # Esperar máximo 1 segundo
             
-            # Limpiar referencia al proceso
+            # ES: Limpiar referencia al proceso
+            # EN: Clear process references
+            # JP: プロセス参照をクリア
             self._current_process = None
             self._stop_reading = None
             
-            # Cerrar pipes de forma segura (ya no hay threads leyendo)
+            # ES: Cerrar pipes de forma segura (ya no hay threads leyendo)
+            # EN: Close pipes safely (no threads are reading anymore)
+            # JP: パイプを安全に閉じる（読取スレッドは停止済み）
             try:
                 if process.stdout:
                     process.stdout.close()
@@ -922,7 +1064,9 @@ class ConfigCLS:
                 return True
             else:
                 self.console_output.emit(f"❌ Pipeline falló con código {returncode}")
-                # Intentar leer cualquier salida restante de stderr para ver el error
+                # ES: Intentar leer cualquier salida restante de stderr para ver el error
+                # EN: Try to read any remaining stderr output to see the error
+                # JP: エラー確認のためstderrの残り出力を読んでみる
                 try:
                     if process.stderr:
                         remaining_stderr = process.stderr.read()
@@ -947,7 +1091,9 @@ class ConfigCLS:
         y actualizar la barra de progreso con información detallada
         """
         try:
-            # Detectar modelo comparación
+            # ES: Detectar modelo comparación
+            # EN: Detect model comparison
+            # JP: モデル比較を検出
             if 'モデル比較評価' in line or 'モデル比較' in line:
                 self.current_task = 'model_comparison'
                 self.progress_updated.emit(5, "モデル比較中...")
@@ -1019,7 +1165,9 @@ class ConfigCLS:
                 self.progress_updated.emit(75, "学習完了、予測準備中...")
                 return
             
-            # Detectar predicción
+            # ES: Detectar predicción
+            # EN: Detect prediction
+            # JP: 予測を検出
             if '予測実行' in line or '予測処理開始' in line or 'predict' in line.lower():
                 self.current_task = 'prediction'
                 self.progress_updated.emit(80, "予測実行中...")
@@ -1042,7 +1190,9 @@ class ConfigCLS:
                 self.progress_updated.emit(88, "最終評価中...")
                 return
             
-            # Detectar análisis de características
+            # ES: Detectar análisis de características
+            # EN: Detect feature analysis
+            # JP: 特徴量解析を検出
             if '[特徴量重要度分析]' in line or '特徴量重要度' in line:
                 self.progress_updated.emit(92, "特徴量重要度分析中...")
                 return
@@ -1059,7 +1209,9 @@ class ConfigCLS:
                 return
             
         except Exception as e:
-            # Si hay error en el parsing, no hacer nada (no es crítico)
+            # ES: Si hay error en el parsing, no hacer nada (no es crítico)
+            # EN: If parsing fails, do nothing (not critical)
+            # JP: パースでエラーが出ても何もしない（致命的ではない）
             pass
     
     def _find_results(self):
@@ -1071,20 +1223,30 @@ class ConfigCLS:
             'evaluation_files': []
         }
         
-        # El pipeline crea una carpeta con timestamp
-        # Buscar en el directorio de trabajo
+        # ES: El pipeline crea una carpeta con timestamp
+        # EN: The pipeline creates a timestamped folder
+        # JP: パイプラインはタイムスタンプ付きフォルダを作成する
+        # ES: Buscar en el directorio de trabajo
+        # EN: Search in the working directory
+        # JP: 作業ディレクトリ内で検索する
         if not os.path.exists(self.output_folder):
             return results
         
-        # Buscar carpetas de resultados
+        # ES: Buscar carpetas de resultados
+        # EN: Search for result folders
+        # JP: 結果フォルダを探す
         for item in os.listdir(self.output_folder):
             item_path = os.path.join(self.output_folder, item)
             if os.path.isdir(item_path):
-                # Verificar si es una carpeta de resultados del pipeline
+                # ES: Verificar si es una carpeta de resultados del pipeline
+                # EN: Check whether this is a pipeline results folder
+                # JP: パイプライン結果フォルダか確認する
                 if "分類解析結果" in item or "分類" in item:
                     results['result_folders'].append(item_path)
         
-        # Buscar archivos de gráficos
+        # ES: Buscar archivos de gráficos
+        # EN: Search for chart files
+        # JP: グラフファイルを探す
         for root, dirs, files in os.walk(self.output_folder):
             for file in files:
                 if file.endswith(('.png', '.jpg', '.jpeg')):

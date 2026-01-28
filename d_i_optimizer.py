@@ -12,7 +12,9 @@ from d_i_logic import (
 )
 
 def run_d_i_optimizer(sample_file, existing_data_file, output_folder, num_experiments=15):
-    # === Leer combinaciones ya generadas ===
+    # ES: === Leer combinaciones ya generadas ===
+    # EN: === Read already-generated combinations ===
+    # JP: === 既に生成された組合せを読み込む ===
     candidate_df = pd.read_excel(sample_file)
     candidate_points = candidate_df.values
     variable_names = list(candidate_df.columns)
@@ -54,7 +56,7 @@ def run_d_i_optimizer(sample_file, existing_data_file, output_folder, num_experi
     selected_d_df["側面ダレ"] = ""
     selected_d_df["摩耗量"] = ""
 
-    # === Guardar Excel ===
+    # ES: Guardar Excel | EN: Save Excel | JA: Excelを保存
     os.makedirs(output_folder, exist_ok=True)
     d_path = os.path.join(output_folder, "D_optimal_新規実験点.xlsx")
     i_path = os.path.join(output_folder, "I_optimal_新規実験点.xlsx")

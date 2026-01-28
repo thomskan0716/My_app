@@ -37,7 +37,7 @@ def create_visualization(df_filtered, X, optimal_indices, output_prefix):
     reducer = umap.UMAP(random_state=42)
     X_umap = reducer.fit_transform(X_scaled)
 
-    result_values = np.zeros(len(df_filtered))  # Color neutro para todos
+    result_values = np.zeros(len(df_filtered))  # Neutral color for all
 
     # ========= PCA Plot =========
     plt.figure(figsize=(10, 8))
@@ -46,11 +46,15 @@ def create_visualization(df_filtered, X, optimal_indices, output_prefix):
         c=result_values, cmap='viridis', alpha=0.6, s=100
     )
 
-    # Puntos seleccionados
+    # ES: Puntos seleccionados
+    # EN: Selected points
+    # JA: 選択点
     plt.scatter(X_pca[optimal_indices, 0], X_pca[optimal_indices, 1],
                 color='red', marker='x', s=200, label='Selected Points')
 
-    # ➕ Números del 1 al N sobre los puntos seleccionados
+    # ES: ➕ Números del 1 al N sobre los puntos seleccionados
+    # EN: ➕ Labels from 1..N on the selected points
+    # JA: ➕ 選択点に 1..N のラベルを表示
     for idx, (x, y) in enumerate(X_pca[optimal_indices]):
         plt.text(x, y, str(idx + 1), fontsize=12, color='black',
                  ha='center', va='center', weight='bold')
@@ -75,7 +79,9 @@ def create_visualization(df_filtered, X, optimal_indices, output_prefix):
     plt.scatter(X_umap[optimal_indices, 0], X_umap[optimal_indices, 1],
                 color='red', marker='x', s=200, label='Selected Points')
 
-    # ➕ Números sobre los puntos seleccionados
+    # ES: ➕ Números sobre los puntos seleccionados
+    # EN: ➕ Labels on the selected points
+    # JA: ➕ 選択点にラベルを表示
     for idx, (x, y) in enumerate(X_umap[optimal_indices]):
         plt.text(x, y, str(idx + 1), fontsize=12, color='black',
                  ha='center', va='center', weight='bold')
@@ -107,19 +113,27 @@ def create_visualization(df_filtered, X, optimal_indices, output_prefix):
     }
 
 def run_d_i_saitekika(setting_file, output_folder="outputs", n_experiments=15):
-    # Leer Excel
+    # ES: Leer Excel
+    # EN: Read Excel
+    # JA: Excelを読み込み
     design_df = pd.read_excel(setting_file, sheet_name="実験計画_説明変数設定")
     variable_names = design_df["説明変数名"].tolist()
 
-    # Generar puntos candidatos
+    # ES: Generar puntos candidatos
+    # EN: Generate candidate points
+    # JA: 候補点を生成
     candidate_points = generate_candidate_points(design_df)
     candidate_df = pd.DataFrame(candidate_points, columns=variable_names)
 
-    # Escalar
+    # ES: Escalar
+    # EN: Scale
+    # JA: スケーリング
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(candidate_points)
 
-    # Selección D-optimal
+    # ES: Selección D-optimal
+    # EN: D-optimal selection
+    # JA: D最適選択
     selected_indices = []
     remaining = list(range(len(X_scaled)))
     for _ in range(n_experiments):
@@ -136,19 +150,19 @@ def run_d_i_saitekika(setting_file, output_folder="outputs", n_experiments=15):
             selected_indices.append(best_idx)
             remaining.remove(best_idx)
 
-    # Crear DataFrame con resultados
+    # ES: Crear DataFrame con resultados | EN: Create results DataFrame | JA: 結果のDataFrameを作成
     selected_df = candidate_df.iloc[selected_indices].copy()
     selected_df.insert(0, "No.", range(1, len(selected_df) + 1))
     selected_df["上面ダレ"] = ""
     selected_df["側面ダレ"] = ""
     selected_df["摩耗量"] = ""
 
-    # Guardar Excel
+    # ES: Guardar Excel | EN: Save Excel | JA: Excelを保存
     os.makedirs(output_folder, exist_ok=True)
     output_excel = os.path.join(output_folder, "selected_samples.xlsx")
     selected_df.to_excel(output_excel, index=False)
 
-    # Guardar imagen
+    # ES: Guardar imagen | EN: Save image | JA: 画像を保存
     fig_path = os.path.join(output_folder, "histogram_sample.png")
     plt.figure()
     for col in variable_names:

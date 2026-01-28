@@ -1,7 +1,6 @@
-"""
-Gestor de carpetas para análisis no lineal
-Crea carpetas con numeración correlativa y timestamp
-"""
+"""ES: Gestor de carpetas para análisis no lineal. Crea carpetas con numeración correlativa y timestamp.
+EN: Folder manager for non-linear analysis. Creates folders with sequential numbering and timestamp.
+JA: 非線形解析用フォルダ管理。連番＋タイムスタンプでフォルダを作成。"""
 import os
 import re
 from datetime import datetime
@@ -9,16 +8,21 @@ from pathlib import Path
 
 
 class NonlinearFolderManager:
-    """Gestiona la creación de carpetas para análisis no lineal"""
+    """ES: Gestiona la creación de carpetas para análisis no lineal
+    EN: Manages folder creation for non-linear analysis
+    JA: 非線形解析用フォルダ作成を管理"""
     
     def __init__(self, project_folder):
-        """
-        Inicializa el gestor de carpetas
+        """ES: Inicializa el gestor de carpetas
+        EN: Initialize the folder manager
+        JA: フォルダマネージャを初期化
         
         Parameters
         ----------
         project_folder : str
-            Carpeta base del proyecto (donde está NOMBRE_DEL_PROYECTO)
+            ES: Carpeta base del proyecto (donde está NOMBRE_DEL_PROYECTO)
+            EN: Project base folder (where NOMBRE_DEL_PROYECTO is)
+            JA: プロジェクトのベースフォルダ（NOMBRE_DEL_PROYECTO の所在）
         """
         self.project_folder = project_folder
         self.base_folder = os.path.join(project_folder, "04_非線形回帰")
@@ -33,23 +37,23 @@ class NonlinearFolderManager:
         str
             Ruta completa de la carpeta creada
         """
-        # Crear carpeta base si no existe
+        # ES: Crear carpeta base si no existe | EN: Create base folder if missing | JA: ベースフォルダが無ければ作成
         os.makedirs(self.base_folder, exist_ok=True)
         
-        # Obtener siguiente número correlativo
+        # ES: Obtener siguiente número correlativo | EN: Get next sequential number | JA: 次の連番を取得
         next_number = self._get_next_correlative_number()
         
-        # Obtener timestamp
+        # ES: Obtener timestamp | EN: Get timestamp | JA: タイムスタンプ取得
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
-        # Crear nombre de carpeta: NUM_timestamp
+        # ES: Crear nombre de carpeta: NUM_timestamp | EN: Build folder name: NUM_timestamp | JA: フォルダ名（NUM_timestamp）を作成
         folder_name = f"{next_number:02d}_{timestamp}"
         full_path = os.path.join(self.base_folder, folder_name)
         
-        # Crear carpeta
+        # ES: Crear carpeta | EN: Create folder | JA: フォルダ作成
         os.makedirs(full_path, exist_ok=True)
         
-        print(f"📁 Carpeta creada: {full_path}")
+        print(f"📁 フォルダーを作成しました: {full_path}")
         return full_path
     
     def _get_next_correlative_number(self):
@@ -66,11 +70,11 @@ class NonlinearFolderManager:
         
         existing_numbers = []
         
-        # Buscar todas las carpetas con patrón NUM_*
+        # ES: Buscar todas las carpetas con patrón NUM_* | EN: Find all folders matching NUM_* | JA: NUM_* パターンのフォルダを探索
         for item in os.listdir(self.base_folder):
             item_path = os.path.join(self.base_folder, item)
             if os.path.isdir(item_path):
-                # Buscar patrones como "01_", "02_", etc.
+                # ES: Buscar patrones como "01_", "02_", etc. | EN: Match patterns like "01_", "02_", etc. | JA: 「01_」「02_」などのパターンをマッチ
                 match = re.match(r'^(\d{2})_', item)
                 if match:
                     number = int(match.group(1))
@@ -104,7 +108,7 @@ class NonlinearFolderManager:
         
         for folder_path in subfolders.values():
             os.makedirs(folder_path, exist_ok=True)
-            print(f"📁 Subcarpeta creada: {folder_path}")
+            print(f"📁 サブフォルダーを作成しました: {folder_path}")
         
         return subfolders
     

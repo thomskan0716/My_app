@@ -1,0 +1,2661 @@
+Root: C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app
+Total matches: 874
+Unique messages: 784
+
+== Matches (by file) ==
+
+01_model_builder.py
+  L679 [print] ⚠️ DEBUG _downcast_df falló: {...}
+    print(f"⚠️ DEBUG _downcast_df falló: {_e}")
+
+0sec.py
+  L72 [print] 🔧 Importando módulos...
+    print("🔧 Importando módulos...")
+  L75 [print] 🔧 Importando widgets...
+    print("🔧 Importando widgets...")
+  L83 [print] ❌ Error importando widgets: {...}
+    print(f"❌ Error importando widgets: {e}")
+  L87 [print] 🔧 Importando workers...
+    print("🔧 Importando workers...")
+  L93 [print] ❌ Error importando workers: {...}
+    print(f"❌ Error importando workers: {e}")
+  L97 [print] 🔧 Importando nonlinear worker...
+    print("🔧 Importando nonlinear worker...")
+  L101 [print] ⚠️ Error importando nonlinear worker: {...}
+    print(f"⚠️ Error importando nonlinear worker: {e}")
+  L102 [print]   (continuando sin análisis no lineal)
+    print("  (continuando sin análisis no lineal)")
+  L106 [print] 🔧 Importando diálogos de análisis no lineal...
+    print("🔧 Importando diálogos de análisis no lineal...")
+  L110 [print] ✅ Diálogos importados correctamente
+    print("✅ Diálogos importados correctamente")
+  L112 [print] ⚠️ Error importando diálogos: {...}
+    print(f"⚠️ Error importando diálogos: {e}")
+  L113 [print]   (continuando sin diálogos)
+    print("  (continuando sin diálogos)")
+  L119 [print] 🔧 Importando classification worker...
+    print("🔧 Importando classification worker...")
+  L123 [print] ⚠️ Error importando classification worker: {...}
+    print(f"⚠️ Error importando classification worker: {e}")
+  L124 [print]   (continuando sin análisis de clasificación)
+    print("  (continuando sin análisis de clasificación)")
+  L128 [print] 🔧 Importando diálogo de clasificación...
+    print("🔧 Importando diálogo de clasificación...")
+  L130 [print] ✅ Diálogo de clasificación importado correctamente
+    print("✅ Diálogo de clasificación importado correctamente")
+  L132 [print] ⚠️ Error importando diálogo de clasificación: {...}
+    print(f"⚠️ Error importando diálogo de clasificación: {e}")
+  L133 [print]   (continuando sin diálogo)
+    print("  (continuando sin diálogo)")
+  L137 [print] 🔧 Importando diálogo de selección de cepillo...
+    print("🔧 Importando diálogo de selección de cepillo...")
+  L139 [print] ✅ Diálogo de selección de cepillo importado correctamente
+    print("✅ Diálogo de selección de cepillo importado correctamente")
+  L141 [print] ⚠️ Error importando diálogo de selección de cepillo: {...}
+    print(f"⚠️ Error importando diálogo de selección de cepillo: {e}")
+  L142 [print]   (continuando sin diálogo)
+    print("  (continuando sin diálogo)")
+  L146 [print] 🔧 Importando módulos de base de datos...
+    print("🔧 Importando módulos de base de datos...")
+  L149 [print] ✅ Módulos de BD importados correctamente
+    print("✅ Módulos de BD importados correctamente")
+  L151 [print] ❌ Error importando módulos de BD: {...}
+    print(f"❌ Error importando módulos de BD: {e}")
+  L155 [print] 🔧 Importando integrated optimizer...
+    print("🔧 Importando integrated optimizer...")
+  L159 [print] ❌ Error importando integrated optimizer: {...}
+    print(f"❌ Error importando integrated optimizer: {e}")
+  L162 [print] ✅ Todos los módulos importados correctamente
+    print("✅ Todos los módulos importados correctamente")
+  L416 [print] ⚠️ WARNING: LoadingOverlay se detectó como ventana, corrigiendo...
+    print("⚠️ WARNING: LoadingOverlay se detectó como ventana, corrigiendo...")
+  L466 [print] ⚠️ WARNING: LoadingOverlay se convirtió en ventana después de show(), corrigiendo...
+    print("⚠️ WARNING: LoadingOverlay se convirtió en ventana después de show(), corrigiendo...")
+  L621 [print] ⚠️ No se pudo cargar {...}
+    print(f"⚠️ No se pudo cargar {chibi_image}")
+  L1545 [print] ❌ Error en predicción Yosoku: {...}
+    print(f"❌ Error en predicción Yosoku: {e}")
+  L1670 [print] 📁 Creando carpeta temporal...
+    print("📁 Creando carpeta temporal...")
+  L1679 [print] ✅ Carpeta {...} creada
+    print(f"✅ Carpeta {temp_folder} creada")
+  L1686 [print] 📋 Creando copia del archivo Excel...
+    print("📋 Creando copia del archivo Excel...")
+  L1730 [print] 🔄 Convirtiendo fórmulas a valores...
+    print("🔄 Convirtiendo fórmulas a valores...")
+  L1738 [print] 📊 Usando xlwings para convertir fórmulas...
+    print("📊 Usando xlwings para convertir fórmulas...")
+  L1750 [print] ✅ Fórmulas convertidas a valores con xlwings
+    print("✅ Fórmulas convertidas a valores con xlwings")
+  L1756 [print] ⚠️ xlwings no encontrado, instalando...
+    print("⚠️ xlwings no encontrado, instalando...")
+  L1762 [print] 📊 Usando xlwings (instalado) para convertir fórmulas...
+    print("📊 Usando xlwings (instalado) para convertir fórmulas...")
+  L1774 [print] ✅ Fórmulas convertidas a valores con xlwings (instalado)
+    print("✅ Fórmulas convertidas a valores con xlwings (instalado)")
+  L1781 [print] 📊 Usando método alternativo (openpyxl)...
+    print("📊 Usando método alternativo (openpyxl)...")
+  L1794 [print] ✅ Fórmulas convertidas a valores con openpyxl (best-effort)
+    print("✅ Fórmulas convertidas a valores con openpyxl (best-effort)")
+  L1879 [print] ⚡ Eliminando índice anterior y creando nuevo índice único...
+    print("⚡ Eliminando índice anterior y creando nuevo índice único...")
+  L1888 [print] 🗑️ Índice anterior eliminado
+    print("🗑️ Índice anterior eliminado")
+  L1890 [print] ⚠️ No había índice anterior: {...}
+    print(f"⚠️ No había índice anterior: {e}")
+  L1902 [print] ✅ Nuevo índice único creado
+    print("✅ Nuevo índice único creado")
+  L1919 [print] 📝 Ejecutando INSERT OR REPLACE (sobreescritura automática)
+    print("📝 Ejecutando INSERT OR REPLACE (sobreescritura automática)")
+  L1920 [print] 🔍 Verificando que el índice único esté activo...
+    print("🔍 Verificando que el índice único esté activo...")
+  L1928 [print] ✅ Índice único confirmado: idx_unique_yosoku
+    print("✅ Índice único confirmado: idx_unique_yosoku")
+  L1930 [print] ❌ ERROR: Índice único no encontrado!
+    print("❌ ERROR: Índice único no encontrado!")
+  L2005 [print] 💡 Los registros duplicados se sobreescribieron automáticamente
+    print("💡 Los registros duplicados se sobreescribieron automáticamente")
+  L2162 [print] ❌ Error en importación de clasificación: {...}
+    print(f"❌ Error en importación de clasificación: {e}")
+  L2181 [print] ℹ️ BBDD {...} no existe, se creará automáticamente
+    print(f"ℹ️ BBDD {db_path} no existe, se creará automáticamente")
+  L2390 [print] 📊 BBDD vacía, insertando todos los registros
+    print("📊 BBDD vacía, insertando todos los registros")
+  L2530 [print] 📊 BBDD vacía, insertando todos los registros
+    print("📊 BBDD vacía, insertando todos los registros")
+  L3120 [print] 🔧 Iniciando creación de Excel durante análisis lineal...
+    print("🔧 Iniciando creación de Excel durante análisis lineal...")
+  L3127 [print] ⚠️ Excel no se pudo crear (retornó None)
+    print("⚠️ Excel no se pudo crear (retornó None)")
+  L3130 [print] ❌ Error detallado creando Excel: {...}
+    print(f"❌ Error detallado creando Excel: {str(e)}")
+  L3196 [print] 🛑 DEBUG: Conexión DB cerrada en worker
+    print("🛑 DEBUG: Conexión DB cerrada en worker")
+  L3302 [print] ✅ Carpeta seleccionada es un proyecto válido: {...}
+    print(f"✅ Carpeta seleccionada es un proyecto válido: {selected_path}")
+  L3386 [print] 📁 Creando nuevo proyecto: {...} en {...}
+    print(f"📁 Creando nuevo proyecto: {project_name} en {directory}")
+  L3401 [print] ✅ Usando proyecto existente: {...}
+    print(f"✅ Usando proyecto existente: {project_path}")
+  L3434 [print] ✅ Usando proyecto seleccionado: {...}
+    print(f"✅ Usando proyecto seleccionado: {project_path}")
+  L3610 [print] 🔧 Creando DBManager...
+    print("🔧 Creando DBManager...")
+  L3618 [print] 🔧 Creando ResultProcessor...
+    print("🔧 Creando ResultProcessor...")
+  L3630 [print] ⚠️ No se pudo ejecutar backup diario: {...}
+    print(f"⚠️ No se pudo ejecutar backup diario: {_e}")
+  L3649 [print] ⚠️ No se pudo cargar el icono: {...}
+    print(f"⚠️ No se pudo cargar el icono: {e}")
+  L3652 [print] 🔧 Creando widget central...
+    print("🔧 Creando widget central...")
+  L3672 [print] 🔧 Creando panel izquierdo...
+    print("🔧 Creando panel izquierdo...")
+  L3786 [print] 🔧 Configuración del panel izquierdo completada
+    print("🔧 Configuración del panel izquierdo completada")
+  L3792 [print] 🔧 Creando panel central...
+    print("🔧 Creando panel central...")
+  L3809 [print] 🔧 Sistema de flecha simplificado - sin botón de activación
+    print("🔧 Sistema de flecha simplificado - sin botón de activación")
+  L3821 [print] 🔧 Creando panel de consola desplegable...
+    print("🔧 Creando panel de consola desplegable...")
+  L3866 [print] 🔧 Añadiendo paneles al layout principal...
+    print("🔧 Añadiendo paneles al layout principal...")
+  L3872 [print] 🔧 Paneles izquierdo y central añadidos correctamente
+    print("🔧 Paneles izquierdo y central añadidos correctamente")
+  L4027 [print] 📁 Carpeta creada: {...}
+    print(f"📁 Carpeta creada: {folder_path}")
+  L4153 [print] ⚠️ Error añadiendo título central: {...}
+    print(f"⚠️ Error añadiendo título central: {e}")
+  L4309 [print] 🔧 Creando panel desplegable superpuesto...
+    print("🔧 Creando panel desplegable superpuesto...")
+  L4492 [print] 🔧 Botón de flecha creado: {...}
+    print(f"🔧 Botón de flecha creado: {self.console_toggle_button}")
+  L4493 [print] 🔧 Botón visible: {...}
+    print(f"🔧 Botón visible: {self.console_toggle_button.isVisible()}")
+  L4494 [print] 🔧 Botón padre: {...}
+    print(f"🔧 Botón padre: {self.console_toggle_button.parent()}")
+  L4553 [print] ❌ done_experiments: falta columna de dirección. main_has={...}, temp_has={...}
+    print(f"❌ done_experiments: falta columna de dirección. main_has={list(main_df.columns)}, temp_has={list(temp_df.columns)}")
+  L4601 [print] ⚠️ Error creando done_experiments.xlsx: {...}
+    print(f"⚠️ Error creando done_experiments.xlsx: {e}")
+  L4638 [print] 📄 99_未実験データ: creando {...}
+    print(f"📄 99_未実験データ: creando {os.path.basename(part_path)}", flush=True)
+  L5228 [print] ⚠️ No se pudo cargar la imagen xebec_chibi.png
+    print("⚠️ No se pudo cargar la imagen xebec_chibi.png")
+  L5584 [print] ✅ Datos filtrados:
+    print("✅ Datos filtrados:")
+  L5596 [print] 📊 Iniciando análisis lineal...
+    print("📊 Iniciando análisis lineal...")
+  L5597 [print] Datos filtrados: {...} registros
+    print(f"Datos filtrados: {len(self.filtered_df)} registros")
+  L5610 [print] 📈 Iniciando análisis no lineal...
+    print("📈 Iniciando análisis no lineal...")
+  L5611 [print] Datos filtrados: {...} registros
+    print(f"Datos filtrados: {len(self.filtered_df)} registros")
+  L5624 [print] 🏷️ Iniciando análisis de clasificación...
+    print("🏷️ Iniciando análisis de clasificación...")
+  L5625 [print] Datos filtrados: {...} registros
+    print(f"Datos filtrados: {len(self.filtered_df)} registros")
+  L5666 [print] ⚙️ Analizando datos filtrados...
+    print("⚙️ Analizando datos filtrados...")
+  L5672 [print] ⚠️ No hay datos filtrados.
+    print("⚠️ No hay datos filtrados.")
+  L5713 [print] ✅ Ningún cepillo específico seleccionado - 'すべて' seleccionado por defecto
+    print("✅ Ningún cepillo específico seleccionado - 'すべて' seleccionado por defecto")
+  L5825 [print] ✅ Archivo pertenece a proyecto existente: {...}
+    print(f"✅ Archivo pertenece a proyecto existente: {project_name}")
+  L5830 [print] ✅ Usando archivo existente en 99_Temp: {...}
+    print(f"✅ Usando archivo existente en 99_Temp: {temp_file_path}")
+  L5836 [print] ⚠️ Archivo no encontrado en 99_Temp, copiando...
+    print(f"⚠️ Archivo no encontrado en 99_Temp, copiando...")
+  L5851 [print] ✅ Archivo copiado a 99_Temp: {...}
+    print(f"✅ Archivo copiado a 99_Temp: {input_file}")
+  L5941 [print] 🔄 ACTUALIZANDO ARCHIVO DE ENTRADA...
+    print("🔄 ACTUALIZANDO ARCHIVO DE ENTRADA...")
+  L5944 [print] ✅ ARCHIVO DE ENTRADA ACTUALIZADO: {...}
+    print(f"✅ ARCHIVO DE ENTRADA ACTUALIZADO: {excel_dest_main}")
+  L5976 [print] ✅ Usando archivo para optimización: {...}
+    print(f"✅ Usando archivo para optimización: {input_file}")
+  L6109 [print] ✅ Archivo pertenece a proyecto existente: {...}
+    print(f"✅ Archivo pertenece a proyecto existente: {project_name}")
+  L6114 [print] ✅ Usando archivo existente en 99_Temp: {...}
+    print(f"✅ Usando archivo existente en 99_Temp: {temp_file_path}")
+  L6120 [print] ⚠️ Archivo no encontrado en 99_Temp, copiando...
+    print(f"⚠️ Archivo no encontrado en 99_Temp, copiando...")
+  L6135 [print] ✅ Archivo copiado a 99_Temp: {...}
+    print(f"✅ Archivo copiado a 99_Temp: {input_file}")
+  L6225 [print] 🔄 ACTUALIZANDO ARCHIVO DE ENTRADA...
+    print("🔄 ACTUALIZANDO ARCHIVO DE ENTRADA...")
+  L6228 [print] ✅ ARCHIVO DE ENTRADA ACTUALIZADO: {...}
+    print(f"✅ ARCHIVO DE ENTRADA ACTUALIZADO: {excel_dest_main}")
+  L6258 [print] ✅ Usando archivo para optimización: {...}
+    print(f"✅ Usando archivo para optimización: {input_file}")
+  L6303 [print] 🔍 DEBUG: Iniciando on_dsaitekika_clicked
+    print("🔍 DEBUG: Iniciando on_dsaitekika_clicked")
+  L6415 [print] 🔍 DEBUG: Llegando al código de actualización del archivo de entrada
+    print("🔍 DEBUG: Llegando al código de actualización del archivo de entrada")
+  L6417 [print] 🔄 ACTUALIZANDO ARCHIVO DE ENTRADA...
+    print("🔄 ACTUALIZANDO ARCHIVO DE ENTRADA...")
+  L6420 [print] ✅ ARCHIVO DE ENTRADA ACTUALIZADO: {...}
+    print(f"✅ ARCHIVO DE ENTRADA ACTUALIZADO: {excel_dest_main}")
+  L6444 [print] ✅ Usando archivo de 99_Temp: {...}
+    print(f"✅ Usando archivo de 99_Temp: {input_file}")
+  L6486 [print] ℹ️ CSV→Excel export ya en ejecución, se omite nueva solicitud
+    print("ℹ️ CSV→Excel export ya en ejecución, se omite nueva solicitud")
+  L6515 [print] ℹ️ done_experiments ya en ejecución, se reutiliza el que salga
+    print("ℹ️ done_experiments ya en ejecución, se reutiliza el que salga", flush=True)
+  L6567 [print] 🔍 DEBUG: Leyendo archivo de resultados: {...}
+    print(f"🔍 DEBUG: Leyendo archivo de resultados: {self.results_file_path}")
+  L6569 [print] 🔍 DEBUG: Archivo de resultados cargado: {...} filas
+    print(f"🔍 DEBUG: Archivo de resultados cargado: {len(df_results)} filas")
+  L6570 [print] 🔍 DEBUG: Columnas del archivo de resultados: {...}
+    print(f"🔍 DEBUG: Columnas del archivo de resultados: {list(df_results.columns)}")
+  L6574 [print] 🔍 DEBUG: Primera fila de resultados:
+    print("🔍 DEBUG: Primera fila de resultados:")
+  L6597 [print] ❌ DEBUG: Carpeta 01_実験リスト no existe: {...}
+    print(f"❌ DEBUG: Carpeta 01_実験リスト no existe: {experiment_list_path}")
+  L6598 [print] 🔍 DEBUG: Verificando estructura del proyecto:
+    print(f"🔍 DEBUG: Verificando estructura del proyecto:")
+  L6601 [print] 🔍 DEBUG: Contenido del proyecto:
+    print(f"🔍 DEBUG: Contenido del proyecto:")
+  L6608 [print] ❌ DEBUG: El proyecto no existe: {...}
+    print(f"❌ DEBUG: El proyecto no existe: {project_path}")
+  L6611 [print] 🔍 DEBUG: Buscando en: {...}
+    print(f"🔍 DEBUG: Buscando en: {experiment_list_path}")
+  L6650 [print] 🔍 DEBUG: Encontrado archivo: {...}
+    print(f"🔍 DEBUG: Encontrado archivo: {file_path}")
+  L6653 [print] 🔍 DEBUG: No se encontraron archivos de experimento en {...}
+    print(f"🔍 DEBUG: No se encontraron archivos de experimento en {subfolder.name}")
+  L6657 [print] 🔍 DEBUG: Comparando con archivo: {...}
+    print(f"🔍 DEBUG: Comparando con archivo: {file_path}")
+  L6658 [print] 🔍 DEBUG: Patrón del archivo: {...}
+    print(f"🔍 DEBUG: Patrón del archivo: {pattern}")
+  L6660 [print] 🔍 DEBUG: Archivo de experimento cargado: {...} filas
+    print(f"🔍 DEBUG: Archivo de experimento cargado: {len(df_experiment)} filas")
+  L6676 [print] 🔍 DEBUG: Comparación {...}: Resultado fila {...} vs Experimento fila {...}
+    print(f"🔍 DEBUG: Comparación {comparison_count}: Resultado fila {idx} vs Experimento fila {exp_idx}")
+  L6711 [print]     ✅ Valores numéricos iguales: {...}
+    print(f"    ✅ Valores numéricos iguales: {result_float}")
+  L6715 [print]     ❌ Valores numéricos diferentes: {...} != {...}
+    print(f"    ❌ Valores numéricos diferentes: {result_float} != {exp_float}")
+  L6738 [print]   ❌ Columna '{...}' no existe en experimento
+    print(f"  ❌ Columna '{col}' no existe en experimento")
+  L6744 [print] ✅ DEBUG: ¡COINCIDENCIA ENCONTRADA!
+    print(f"✅ DEBUG: ¡COINCIDENCIA ENCONTRADA!")
+  L6745 [print]    Archivo: {...}
+    print(f"   Archivo: {file_path}")
+  L6752 [print] 🔍 DEBUG: Nombre de carpeta extraído: {...}
+    print(f"🔍 DEBUG: Nombre de carpeta extraído: {folder_name}")
+  L6759 [print] 🔍 DEBUG: Tipo D detectado por nombre de archivo
+    print(f"🔍 DEBUG: Tipo D detectado por nombre de archivo")
+  L6762 [print] 🔍 DEBUG: Tipo I detectado por nombre de archivo
+    print(f"🔍 DEBUG: Tipo I detectado por nombre de archivo")
+  L6767 [print] 🔍 DEBUG: Fallback - analizando nombre de carpeta: {...}
+    print(f"🔍 DEBUG: Fallback - analizando nombre de carpeta: {folder_name}")
+  L6770 [print] 🔍 DEBUG: Tipo D detectado por nombre de carpeta
+    print(f"🔍 DEBUG: Tipo D detectado por nombre de carpeta")
+  L6773 [print] 🔍 DEBUG: Tipo I detectado por nombre de carpeta
+    print(f"🔍 DEBUG: Tipo I detectado por nombre de carpeta")
+  L6778 [print] 🔍 DEBUG: Tipo de optimización final: {...}
+    print(f"🔍 DEBUG: Tipo de optimización final: {optimization_type}")
+  L6794 [print] ❌ Error leyendo {...}: {...}
+    print(f"❌ Error leyendo {file_path}: {e}")
+  L6797 [print] ❌ DEBUG: No se encontró coincidencia en ningún archivo de experimento
+    print("❌ DEBUG: No se encontró coincidencia en ningún archivo de experimento")
+  L6816 [print] 🔍 DEBUG: Iniciando create_experiment_data_folder
+    print("🔍 DEBUG: Iniciando create_experiment_data_folder")
+  L6825 [print] 🔍 DEBUG: Procesando carpeta: '{...}'
+    print(f"🔍 DEBUG: Procesando carpeta: '{folder_name}'")
+  L6826 [print] 🔍 DEBUG: Tipo de optimización: '{...}'
+    print(f"🔍 DEBUG: Tipo de optimización: '{optimization_type}'")
+  L6827 [print] 🔍 DEBUG: Longitud del nombre de carpeta: {...}
+    print(f"🔍 DEBUG: Longitud del nombre de carpeta: {len(folder_name)}")
+  L6847 [print]   🔍 DEBUG: Patrón {...}: {...}
+    print(f"  🔍 DEBUG: Patrón {i+1}: {pattern}")
+  L6853 [print]   ✅ DEBUG: Coincidencia encontrada con patrón '{...}'
+    print(f"  ✅ DEBUG: Coincidencia encontrada con patrón '{pattern}'")
+  L6854 [print]   ✅ DEBUG: Número extraído: '{...}'
+    print(f"  ✅ DEBUG: Número extraído: '{extracted_number}'")
+  L6855 [print]   ✅ DEBUG: Número rellenado: '{...}'
+    print(f"  ✅ DEBUG: Número rellenado: '{folder_number}'")
+  L6858 [print]   ❌ DEBUG: No coincidencia con patrón '{...}'
+    print(f"  ❌ DEBUG: No coincidencia con patrón '{pattern}'")
+  L6861 [print] 🔍 DEBUG: Resumen de extracción:
+    print(f"🔍 DEBUG: Resumen de extracción:")
+  L6862 [print]   - Nombre de carpeta original: '{...}'
+    print(f"  - Nombre de carpeta original: '{folder_name}'")
+  L6863 [print]   - Patrón usado: '{...}'
+    print(f"  - Patrón usado: '{pattern_used}'")
+  L6864 [print]   - Número final extraído: '{...}'
+    print(f"  - Número final extraído: '{folder_number}'")
+  L6865 [print]   - Tipo de optimización: '{...}'
+    print(f"  - Tipo de optimización: '{optimization_type}'")
+  L6874 [print] 🔍 DEBUG: Nombre de carpeta final generado: '{...}'
+    print(f"🔍 DEBUG: Nombre de carpeta final generado: '{new_folder_name}'")
+  L6878 [print] 🔍 DEBUG: Ruta completa a crear: {...}
+    print(f"🔍 DEBUG: Ruta completa a crear: {experiment_data_path}")
+  L6882 [print] ⚠️ DEBUG: La carpeta ya existe: {...}
+    print(f"⚠️ DEBUG: La carpeta ya existe: {experiment_data_path}")
+  L6888 [print] 🔍 DEBUG: Intentando crear carpeta alternativa: {...}
+    print(f"🔍 DEBUG: Intentando crear carpeta alternativa: {new_folder_name}")
+  L6893 [print] 🔍 DEBUG: Carpeta final a crear: {...}
+    print(f"🔍 DEBUG: Carpeta final a crear: {experiment_data_path}")
+  L6897 [print] ✅ DEBUG: Carpeta creada exitosamente: {...}
+    print(f"✅ DEBUG: Carpeta creada exitosamente: {experiment_data_path}")
+  L6901 [print] ❌ DEBUG: Error creando carpeta de experimento: {...}
+    print(f"❌ DEBUG: Error creando carpeta de experimento: {e}")
+  L6926 [print] 🔍 Detectando carpeta del proyecto para: {...}
+    print(f"🔍 Detectando carpeta del proyecto para: {file_path}")
+  L6932 [print] 🔍 Directorio del archivo: {...}
+    print(f"🔍 Directorio del archivo: {file_dir}")
+  L6959 [print] ✅ Encontrada carpeta de proyecto: {...}
+    print(f"✅ Encontrada carpeta de proyecto: {folder}")
+  L6964 [print] ✅ Carpeta del proyecto detectada: {...}
+    print(f"✅ Carpeta del proyecto detectada: {project_root}")
+  L6975 [print] ✅ Estructura de proyecto detectada con {...} carpetas
+    print(f"✅ Estructura de proyecto detectada con {project_folder_count} carpetas")
+  L6984 [print] ❌ No se pudo detectar automáticamente la carpeta del proyecto
+    print("❌ No se pudo detectar automáticamente la carpeta del proyecto")
+  L6988 [print] ❌ Error detectando carpeta del proyecto: {...}
+    print(f"❌ Error detectando carpeta del proyecto: {e}")
+  L7015 [print] ✅ Carpeta del proyecto detectada automáticamente: {...}
+    print(f"✅ Carpeta del proyecto detectada automáticamente: {project_folder}")
+  L7018 [print] ❌ No se pudo detectar automáticamente la carpeta del proyecto
+    print("❌ No se pudo detectar automáticamente la carpeta del proyecto")
+  L7029 [print] ✅ Carpeta del proyecto guardada: {...}
+    print(f"✅ Carpeta del proyecto guardada: {self.current_project_folder}")
+  L7032 [print] 🔍 DEBUG: Iniciando búsqueda de archivo de experimento...
+    print("🔍 DEBUG: Iniciando búsqueda de archivo de experimento...")
+  L7035 [print] ✅ DEBUG: Archivo de experimento encontrado: {...}
+    print(f"✅ DEBUG: Archivo de experimento encontrado: {experiment_info}")
+  L7038 [print] ✅ DEBUG: Información de experimento guardada para procesamiento posterior
+    print(f"✅ DEBUG: Información de experimento guardada para procesamiento posterior")
+  L7040 [print] ⚠️ DEBUG: No se encontró archivo de experimento correspondiente
+    print("⚠️ DEBUG: No se encontró archivo de experimento correspondiente")
+  L7043 [print] ✅ DEBUG: No se creará carpeta por defecto prematuramente
+    print(f"✅ DEBUG: No se creará carpeta por defecto prematuramente")
+  L7062 [print] 🔧 Loading se posicionará por encima de la consola
+    print("🔧 Loading se posicionará por encima de la consola")
+  L7065 [print] 🔧 Frame central geometría: {...}
+    print(f"🔧 Frame central geometría: {self.center_frame.geometry()}")
+  L7066 [print] 🔧 Loading overlay geometría: {...}
+    print(f"🔧 Loading overlay geometría: {self.loader_overlay.geometry()}")
+  L7069 [print] 🔍 Debug - Creando ShowResultsWorker con:
+    print(f"🔍 Debug - Creando ShowResultsWorker con:")
+  L7080 [print] 🔍 Debug - Archivo de resultados contiene {...} filas
+    print(f"🔍 Debug - Archivo de resultados contiene {len(df_results)} filas")
+  L7081 [print] 🔍 Debug - Columnas del archivo: {...}
+    print(f"🔍 Debug - Columnas del archivo: {list(df_results.columns)}")
+  L7082 [print] 🔍 Debug - Primera fila de datos:
+    print(f"🔍 Debug - Primera fila de datos:")
+  L7093 [print] 🔍 Debug - Error leyendo archivo de resultados: {...}
+    print(f"🔍 Debug - Error leyendo archivo de resultados: {e}")
+  L7100 [print] ❌ Error importando ShowResultsWorker: {...}
+    print(f"❌ Error importando ShowResultsWorker: {e}")
+  L7106 [print] ❌ self.processor no existe
+    print("❌ self.processor no existe")
+  L7119 [print] 🔍 Debug - Ruta de la base de datos: {...}
+    print(f"🔍 Debug - Ruta de la base de datos: {os.path.abspath(db_path)}")
+  L7120 [print] 🔍 Debug - ¿Existe la base de datos?: {...}
+    print(f"🔍 Debug - ¿Existe la base de datos?: {os.path.exists(db_path)}")
+  L7135 [print] 🔍 Debug - Verificando estructura de la base de datos...
+    print(f"🔍 Debug - Verificando estructura de la base de datos...")
+  L7138 [print] 🔍 Debug - Columnas en la base de datos:
+    print(f"🔍 Debug - Columnas en la base de datos:")
+  L7153 [print] 🔍 Debug - Registros en la base de datos antes de importar: {...}
+    print(f"🔍 Debug - Registros en la base de datos antes de importar: {count_before}")
+  L7158 [print] 🔍 Debug - ¿Existe base de datos en el proyecto?: {...}
+    print(f"🔍 Debug - ¿Existe base de datos en el proyecto?: {os.path.exists(project_db_path)}")
+  L7160 [print] 🔍 Debug - Ruta de BD del proyecto: {...}
+    print(f"🔍 Debug - Ruta de BD del proyecto: {os.path.abspath(project_db_path)}")
+  L7167 [print] 🔍 Debug - Registros en BD del proyecto: {...}
+    print(f"🔍 Debug - Registros en BD del proyecto: {count_project}")
+  L7169 [print] 🔍 Debug - Error verificando BD del proyecto: {...}
+    print(f"🔍 Debug - Error verificando BD del proyecto: {e}")
+  L7171 [print] 🔍 Debug - Error verificando base de datos antes: {...}
+    print(f"🔍 Debug - Error verificando base de datos antes: {e}")
+  L7196 [print] 🔍 Debug - Iniciando thread para importación...
+    print("🔍 Debug - Iniciando thread para importación...")
+  L7224 [print] 🔍 Debug - Registros en la base de datos después de importar: {...}
+    print(f"🔍 Debug - Registros en la base de datos después de importar: {total_records_after}")
+  L7247 [print] 🔍 Debug - Contenido completo de la base de datos:
+    print("🔍 Debug - Contenido completo de la base de datos:")
+  L7268 [print] 🔍 Debug - La base de datos está vacía
+    print("🔍 Debug - La base de datos está vacía")
+  L7272 [print] 🔍 Debug - Error verificando base de datos: {...}
+    print(f"🔍 Debug - Error verificando base de datos: {e}")
+  L7447 [print] 🧹 Limpiando dsaitekika_results para forzar I最適化
+    print("🧹 Limpiando dsaitekika_results para forzar I最適化")
+  L7451 [print] 🧹 Limpiando isaitekika_results para forzar D最適化
+    print("🧹 Limpiando isaitekika_results para forzar D最適化")
+  L7485 [print] 🧹 Limpiando isaitekika_results para exportación D
+    print("🧹 Limpiando isaitekika_results para exportación D")
+  L7490 [print] 🧹 Limpiando dsaitekika_results para exportación I
+    print("🧹 Limpiando dsaitekika_results para exportación I")
+  L7511 [print] 📁 Creando carpeta con prefijo I: {...}
+    print(f"📁 Creando carpeta con prefijo I: {prefix}")
+  L7514 [print] 📁 Creando carpeta con prefijo D: {...}
+    print(f"📁 Creando carpeta con prefijo D: {prefix}")
+  L7532 [print] 📁 Carpeta creada: {...}
+    print(f"📁 Carpeta creada: {folder_name}")
+  L7533 [print] 📁 Ruta completa: {...}
+    print(f"📁 Ruta completa: {sample_folder}")
+  L7688 [print] ⚠️ Error recalculando D基準値 (referencia) desde candidato/índices: {...}
+    print(f"⚠️ Error recalculando D基準値 (referencia) desde candidato/índices: {e}")
+  L7737 [print] 🗑️ Carpeta Temp eliminada después de guardar: {...}
+    print(f"🗑️ Carpeta Temp eliminada después de guardar: {self.current_temp_folder}")
+  L7742 [print] 📁 Carpeta 99_Temp mantenida: {...}
+    print(f"📁 Carpeta 99_Temp mantenida: {temp_base}")
+  L7801 [print] 🔍 Debug NG: Carpeta existe, procediendo a borrar...
+    print(f"🔍 Debug NG: Carpeta existe, procediendo a borrar...")
+  L7803 [print] 🗑️ Carpeta Temp eliminada: {...}
+    print(f"🗑️ Carpeta Temp eliminada: {self.current_temp_folder}")
+  L7805 [print] 🔍 Debug NG: Carpeta no existe: {...}
+    print(f"🔍 Debug NG: Carpeta no existe: {self.current_temp_folder}")
+  L7811 [print] 📁 Carpeta 99_Temp mantenida: {...}
+    print(f"📁 Carpeta 99_Temp mantenida: {temp_base}")
+  L7813 [print] 🔍 Debug NG: No hay current_temp_folder definido
+    print(f"🔍 Debug NG: No hay current_temp_folder definido")
+  L8036 [print] Número de gráficos:
+    print("Número de gráficos:", len(self.graph_images))
+  L8044 [print] ⚠️ Layout del área de gráficos es None, creando nuevo layout...
+    print("⚠️ Layout del área de gráficos es None, creando nuevo layout...")
+  L8080 [print] 📋 Mostrando tabla D-óptimo
+    print("📋 Mostrando tabla D-óptimo")
+  L8083 [print] 📋 Mostrando tabla I-óptimo
+    print("📋 Mostrando tabla I-óptimo")
+  L8248 [print] 📊 Configurando navegación de gráficos:
+    print(f"📊 Configurando navegación de gráficos:")
+  L8249 [print]   - Total de gráficos: {...}
+    print(f"  - Total de gráficos: {len(self.graph_images)}")
+  L8250 [print]   - Gráficos disponibles: {...}
+    print(f"  - Gráficos disponibles: {[os.path.basename(path) for path in self.graph_images]}")
+  L8260 [print] ✅ Sistema de navegación configurado:
+    print(f"✅ Sistema de navegación configurado:")
+  L8261 [print]   - Gráfico actual: {...}/{...}
+    print(f"  - Gráfico actual: {self.current_graph_index + 1}/{len(self.graph_images)}")
+  L8262 [print]   - Botón anterior: {...}
+    print(f"  - Botón anterior: {'Habilitado' if self.prev_button.isEnabled() else 'Deshabilitado'}")
+  L8263 [print]   - Botón siguiente: {...}
+    print(f"  - Botón siguiente: {'Habilitado' if self.next_button.isEnabled() else 'Deshabilitado'}")
+  L8266 [print] 📋 Añadiendo tabla D-óptimo con {...} filas
+    print(f"📋 Añadiendo tabla D-óptimo con {len(self.dsaitekika_selected_df)} filas")
+  L8270 [print] 📋 Añadiendo tabla I-óptimo con {...} filas
+    print(f"📋 Añadiendo tabla I-óptimo con {len(self.isaitekika_selected_df)} filas")
+  L8302 [print] DEBUG: Entró en on_d_optimizer_finished
+    print("DEBUG: Entró en on_d_optimizer_finished")
+  L8310 [print] 🧹 Limpiando isaitekika_results anteriores
+    print("🧹 Limpiando isaitekika_results anteriores")
+  L8313 [print] 🧹 Limpiando isaitekika_selected_df anteriores
+    print("🧹 Limpiando isaitekika_selected_df anteriores")
+  L8318 [print] 🔍 Debug - dsaitekika_results existe después de limpiar: {...}
+    print(f"🔍 Debug - dsaitekika_results existe después de limpiar: {hasattr(self, 'dsaitekika_results')}")
+  L8319 [print] 🔍 Debug - isaitekika_results existe después de limpiar: {...}
+    print(f"🔍 Debug - isaitekika_results existe después de limpiar: {hasattr(self, 'isaitekika_results')}")
+  L8394 [print] DEBUG: Entró en on_i_optimizer_finished
+    print("DEBUG: Entró en on_i_optimizer_finished")
+  L8401 [print] 🧹 Limpiando dsaitekika_results anteriores
+    print("🧹 Limpiando dsaitekika_results anteriores")
+  L8404 [print] 🧹 Limpiando dsaitekika_selected_df anteriores
+    print("🧹 Limpiando dsaitekika_selected_df anteriores")
+  L8409 [print] 🔍 Debug - isaitekika_results existe después de limpiar: {...}
+    print(f"🔍 Debug - isaitekika_results existe después de limpiar: {hasattr(self, 'isaitekika_results')}")
+  L8410 [print] 🔍 Debug - dsaitekika_results existe después de limpiar: {...}
+    print(f"🔍 Debug - dsaitekika_results existe después de limpiar: {hasattr(self, 'dsaitekika_results')}")
+  L8460 [print] DEBUG: Entró en on_dsaitekika_finished
+    print("DEBUG: Entró en on_dsaitekika_finished")
+  L8467 [print] 🧹 Limpiando isaitekika_results anteriores
+    print("🧹 Limpiando isaitekika_results anteriores")
+  L8470 [print] 🧹 Limpiando isaitekika_selected_df anteriores
+    print("🧹 Limpiando isaitekika_selected_df anteriores")
+  L8475 [print] 🔍 Debug - dsaitekika_results existe después de limpiar: {...}
+    print(f"🔍 Debug - dsaitekika_results existe después de limpiar: {hasattr(self, 'dsaitekika_results')}")
+  L8476 [print] 🔍 Debug - isaitekika_results existe después de limpiar: {...}
+    print(f"🔍 Debug - isaitekika_results existe después de limpiar: {hasattr(self, 'isaitekika_results')}")
+  L8719 [print] 📋 Creando backup: {...}
+    print(f"📋 Creando backup: {backup_path}")
+  L8732 [print] 📊 Leyendo archivo de resultados: {...}
+    print(f"📊 Leyendo archivo de resultados: {results_file_path}")
+  L8762 [print] 📊 Leyendo archivo de muestreo: {...}
+    print(f"📊 Leyendo archivo de muestreo: {sample_file_path}")
+  L8766 [print] 📊 Archivo de muestreo original: {...} filas
+    print(f"📊 Archivo de muestreo original: {len(df_sample)} filas")
+  L8789 [print] 🔍 Columnas disponibles en archivo de resultados: {...}
+    print(f"🔍 Columnas disponibles en archivo de resultados: {available_columns}")
+  L8790 [print] 🔍 Columnas disponibles en archivo de muestreo: {...}
+    print(f"🔍 Columnas disponibles en archivo de muestreo: {df_sample.columns.tolist()}")
+  L8806 [print] ⚠️ El archivo de muestreo no contiene '{...}'. Se eliminará la primera coincidencia por clave estricta.
+    print(f"⚠️ El archivo de muestreo no contiene '{len_col}'. Se eliminará la primera coincidencia por clave estricta.")
+  L8917 [print] ⚠️ Coincidencias no encontradas para {...}/{...} filas de resultados. (Revisa tipos/columnas/valores)
+    print(f"⚠️ Coincidencias no encontradas para {missing}/{len(df_results)} filas de resultados. (Revisa tipos/columnas/valores)")
+  L8926 [print] 📊 Archivo de muestreo actualizado: {...} filas
+    print(f"📊 Archivo de muestreo actualizado: {len(df_sample_updated)} filas")
+  L8944 [print] ✅ Archivo de muestreo actualizado guardado: {...}
+    print(f"✅ Archivo de muestreo actualizado guardado: {sample_file_path}")
+  L8995 [print] 🔄 Iniciando proceso de backup y actualización del archivo de muestreo...
+    print("🔄 Iniciando proceso de backup y actualización del archivo de muestreo...")
+  L9044 [print] 🛑 Cerrando aplicación...
+    print("🛑 Cerrando aplicación...")
+  L9051 [print] 🛑 Cancelando análisis no lineal antes de cerrar...
+    print("🛑 Cancelando análisis no lineal antes de cerrar...")
+  L9058 [print] ⚠️ El worker no terminó en 5 segundos, forzando cierre...
+    print("⚠️ El worker no terminó en 5 segundos, forzando cierre...")
+  L9062 [print] ✅ Worker de análisis no lineal cancelado
+    print("✅ Worker de análisis no lineal cancelado")
+  L9070 [print] ✅ Aplicación cerrada correctamente
+    print("✅ Aplicación cerrada correctamente")
+  L9212 [print] 🔍 Debug - Columnas resultados esperadas: {...}
+    print(f"🔍 Debug - Columnas resultados esperadas: {columnas_resultados_minimas}")
+  L9281 [print] 🔄 Archivo de proyecto diferente detectado. Limpiando proyecto activo: {...}
+    print(f"🔄 Archivo de proyecto diferente detectado. Limpiando proyecto activo: {getattr(self, 'proyecto_nombre', 'Unknown')}")
+  L9282 [print] 🔄 Archivo: {...}
+    print(f"🔄 Archivo: {file_dir}")
+  L9283 [print] 🔄 Proyecto: {...}
+    print(f"🔄 Proyecto: {self.proyecto_folder}")
+  L9288 [print] ✅ Proyecto activo limpiado. Se pedirá nuevo proyecto en la próxima optimización.
+    print("✅ Proyecto activo limpiado. Se pedirá nuevo proyecto en la próxima optimización.")
+  L9290 [print] ✅ Archivo pertenece al proyecto activo: {...}
+    print(f"✅ Archivo pertenece al proyecto activo: {getattr(self, 'proyecto_nombre', 'Unknown')}")
+  L9305 [print] 🔄 Archivo de muestreo detectado en pantalla de filtros. Volviendo a pantalla principal...
+    print("🔄 Archivo de muestreo detectado en pantalla de filtros. Volviendo a pantalla principal...")
+  L9726 [print] ❌ Error iniciando exportación: {...}
+    print(f"❌ Error iniciando exportación: {e}")
+  L9863 [print] ✅ Archivo de entrada cambiado automáticamente a: {...}
+    print(f"✅ Archivo de entrada cambiado automáticamente a: {unexperimented_file}")
+  L9869 [print] 🧹 Limpiando pantalla principal...
+    print("🧹 Limpiando pantalla principal...")
+  L9974 [print] 🔧 Inicialización de MainWindow completada
+    print("🔧 Inicialización de MainWindow completada")
+  L10149 [print] 🔍 DEBUG: Estado del botón de flecha
+    print("🔍 DEBUG: Estado del botón de flecha")
+  L10150 [print] 🔍 Botón existe: {...}
+    print(f"🔍 Botón existe: {hasattr(self, 'console_toggle_button')}")
+  L10152 [print] 🔍 Botón visible: {...}
+    print(f"🔍 Botón visible: {self.console_toggle_button.isVisible()}")
+  L10153 [print] 🔍 Botón geometría: {...}
+    print(f"🔍 Botón geometría: {self.console_toggle_button.geometry()}")
+  L10154 [print] 🔍 Botón padre: {...}
+    print(f"🔍 Botón padre: {self.console_toggle_button.parent()}")
+  L10155 [print] 🔍 Botón texto: {...}
+    print(f"🔍 Botón texto: {self.console_toggle_button.text()}")
+  L10156 [print] 🔍 Botón estilo: {...}
+    print(f"🔍 Botón estilo: {self.console_toggle_button.styleSheet()}")
+  L10158 [print] ❌ Botón de flecha no existe
+    print("❌ Botón de flecha no existe")
+  L10212 [print] 🔧 Mostrando panel desplegable...
+    print("🔧 Mostrando panel desplegable...")
+  L10219 [print] 🔧 Mostrando panel desplegable en el lado derecho...
+    print("🔧 Mostrando panel desplegable en el lado derecho...")
+  L10225 [print] 🔧 Posición actual de la ventana: {...}
+    print(f"🔧 Posición actual de la ventana: {current_window_pos}")
+  L10477 [print] ✅ Consola reposicionada en la nueva ubicación
+    print("✅ Consola reposicionada en la nueva ubicación")
+  L10483 [print] ⚠️ Error verificando posición de ventana: {...}
+    print(f"⚠️ Error verificando posición de ventana: {e}")
+  L10619 [print] 📁 Creada carpeta: {...}
+    print(f"📁 Creada carpeta: {subfolder_path}")
+  L10621 [print] ✅ Estructura de proyecto creada en: {...}
+    print(f"✅ Estructura de proyecto creada en: {project_path}")
+  L10625 [print] ❌ Error creando estructura del proyecto: {...}
+    print(f"❌ Error creando estructura del proyecto: {e}")
+  L10650 [print] 📁 Creada carpeta: {...}
+    print(f"📁 Creada carpeta: {subfolder_path}")
+  L10667 [print] ✅ Estructura de proyecto creada en: {...}
+    print(f"✅ Estructura de proyecto creada en: {project_path}")
+  L10671 [print] ❌ Error creando estructura del proyecto: {...}
+    print(f"❌ Error creando estructura del proyecto: {e}")
+  L10679 [print] 🔧 Ejecutando análisis lineal en proyecto: {...}
+    print(f"🔧 Ejecutando análisis lineal en proyecto: {project_path}")
+  L10683 [print] 📁 Carpeta del proyecto establecida: {...}
+    print(f"📁 Carpeta del proyecto establecida: {self.current_project_folder}")
+  L10705 [print] 📁 Carpeta de resultados creada: {...}
+    print(f"📁 Carpeta de resultados creada: {results_folder}")
+  L10713 [print] ❌ Error ejecutando análisis lineal en proyecto: {...}
+    print(f"❌ Error ejecutando análisis lineal en proyecto: {e}")
+  L10725 [print] 🔧 Ejecutando análisis lineal con carpeta: {...}
+    print(f"🔧 Ejecutando análisis lineal con carpeta: {output_folder}")
+  L10750 [print] ✅ Módulo de análisis lineal importado correctamente
+    print("✅ Módulo de análisis lineal importado correctamente")
+  L10752 [print] ❌ Error importando módulo de análisis lineal: {...}
+    print(f"❌ Error importando módulo de análisis lineal: {e}")
+  L10766 [print] ❌ Usuario canceló el análisis lineal
+    print("❌ Usuario canceló el análisis lineal")
+  L10772 [print] 🔧 Ejecutando análisis lineal en carpeta: {...}
+    print(f"🔧 Ejecutando análisis lineal en carpeta: {output_folder}")
+  L10776 [print] ❌ Error ejecutando análisis lineal: {...}
+    print(f"❌ Error ejecutando análisis lineal: {e}")
+  L10849 [print] 🚀 Iniciando análisis lineal con progreso (worker)...
+    print("🚀 Iniciando análisis lineal con progreso (worker)...")
+  L10856 [print] 🔧 Iniciando análisis lineal...
+    print("🔧 Iniciando análisis lineal...")
+  L10860 [print] 📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto
+    print("📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto")
+  L10868 [print] 📁 Creando proyecto: {...} en {...}
+    print(f"📁 Creando proyecto: {project_name} en {project_directory}")
+  L10934 [print] ❌ Error en análisis lineal: {...}
+    print(f"❌ Error en análisis lineal: {e}")
+  L10942 [print] 🔧 Iniciando análisis no lineal...
+    print("🔧 Iniciando análisis no lineal...")
+  L10973 [print] 📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto
+    print("📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto")
+  L11000 [print] ✅ Usando proyecto existente: {...}
+    print(f"✅ Usando proyecto existente: {project_path}")
+  L11014 [print] 📁 Creando nuevo proyecto: {...} en {...}
+    print(f"📁 Creando nuevo proyecto: {project_name} en {project_directory}")
+  L11138 [print] 📊 Datos filtrados obtenidos: {...} registros
+    print(f"📊 Datos filtrados obtenidos: {len(df)} registros")
+  L11141 [print] ❌ Error obteniendo datos filtrados: {...}
+    print(f"❌ Error obteniendo datos filtrados: {e}")
+  L11153 [print] 📁 Usando carpeta del proyecto: {...}
+    print(f"📁 Usando carpeta del proyecto: {project_folder}")
+  L11157 [print] ⚠️ No hay carpeta de proyecto configurada, usando: {...}
+    print(f"⚠️ No hay carpeta de proyecto configurada, usando: {project_folder}")
+  L11185 [print] ❌ Usuario canceló el diálogo de configuración
+    print("❌ Usuario canceló el diálogo de configuración")
+  L11192 [print] 📋 Configuración: {...}
+    print(f"📋 Configuración: {config_values}")
+  L11208 [print] ❌ Usuario canceló el análisis no lineal
+    print("❌ Usuario canceló el análisis no lineal")
+  L11220 [print] 🔧 Iniciando worker de análisis no lineal...
+    print("🔧 Iniciando worker de análisis no lineal...")
+  L11252 [print] ❌ Error en análisis no lineal: {...}
+    print(f"❌ Error en análisis no lineal: {e}")
+  L11342 [print] 🛑 DEBUG: Resultado no lineal recibido tras cancelación. Ignorando.
+    print("🛑 DEBUG: Resultado no lineal recibido tras cancelación. Ignorando.")
+  L11351 [print] ✅ Análisis no lineal completado
+    print("✅ Análisis no lineal completado")
+  L11352 [print]    Carpeta de salida: {...}
+    print(f"   Carpeta de salida: {results['output_folder']}")
+  L11404 [print] ✅ Usuario confirmó gráficos - continuar con stages 2-3
+    print("✅ Usuario confirmó gráficos - continuar con stages 2-3")
+  L11422 [print] ❌ Usuario canceló - proceso detenido
+    print("❌ Usuario canceló - proceso detenido")
+  L11634 [print] ✅ Datos de análisis cargados desde: {...}
+    print(f"✅ Datos de análisis cargados desde: {analysis_results_path}")
+  L11636 [print] ⚠️ Error leyendo analysis_results.json: {...}
+    print(f"⚠️ Error leyendo analysis_results.json: {e}")
+  L11638 [print] ⚠️ analysis_results.json no encontrado en: {...}
+    print(f"⚠️ analysis_results.json no encontrado en: {analysis_results_path}")
+  L11933 [print] ✅ Carpeta abierta: {...}
+    print(f"✅ Carpeta abierta: {output_folder}")
+  L11935 [print] ❌ Error abriendo carpeta: {...}
+    print(f"❌ Error abriendo carpeta: {e}")
+  L12001 [print] ❌ Error cargando estadísticas del análisis: {...}
+    print(f"❌ Error cargando estadísticas del análisis: {e}")
+  L12049 [print] 🔧 Mostrando gráficos del análisis no lineal...
+    print("🔧 Mostrando gráficos del análisis no lineal...")
+  L12322 [print] ✅ Gráficos del análisis no lineal mostrados
+    print("✅ Gráficos del análisis no lineal mostrados")
+  L12325 [print] ❌ Error mostrando gráficos del análisis no lineal: {...}
+    print(f"❌ Error mostrando gráficos del análisis no lineal: {e}")
+  L12396 [print] ✅ Mostrando gráfico: {...}
+    print(f"✅ Mostrando gráfico: {filename}")
+  L12398 [print] ❌ No se pudo cargar la imagen: {...}
+    print(f"❌ No se pudo cargar la imagen: {current_image_path}")
+  L12405 [print] 🔧 Mostrando gráficos de Pareto en pantalla...
+    print("🔧 Mostrando gráficos de Pareto en pantalla...")
+  L12667 [print] ✅ Gráficos de Pareto mostrados en pantalla
+    print("✅ Gráficos de Pareto mostrados en pantalla")
+  L12670 [print] ❌ Error mostrando gráficos de Pareto: {...}
+    print(f"❌ Error mostrando gráficos de Pareto: {e}")
+  L12725 [print] ✅ Mostrando gráfico de Pareto: {...}
+    print(f"✅ Mostrando gráfico de Pareto: {filename}")
+  L12727 [print] ❌ No se pudo cargar la imagen: {...}
+    print(f"❌ No se pudo cargar la imagen: {current_image_path}")
+  L12734 [print] 🔧 Iniciando predicción no lineal desde pantalla de gráficos...
+    print("🔧 Iniciando predicción no lineal desde pantalla de gráficos...")
+  L12851 [print] ✅ Mostrando gráficos de Pareto desde: {...}
+    print(f"✅ Mostrando gráficos de Pareto desde: {pareto_plots_folder}")
+  L12860 [print] ❌ DEBUG: pareto_plots_folder no existe
+    print(f"❌ DEBUG: pareto_plots_folder no existe")
+  L12863 [print] ❌ DEBUG: prediction_output_file no existe
+    print(f"❌ DEBUG: prediction_output_file no existe")
+  L12972 [print] 📁 Creando backup: {...} → {...}
+    print(f"📁 Creando backup: {working_dir} → {dest_folder}")
+  L12983 [print] ⚠️ Error creando backup: {...}
+    print(f"⚠️ Error creando backup: {e}")
+  L13049 [print] ⚠️ Usando fallback para carpeta del proyecto: {...}
+    print(f"⚠️ Usando fallback para carpeta del proyecto: {project_folder}")
+  L13051 [print] 📁 Carpeta del proyecto encontrada: {...}
+    print(f"📁 Carpeta del proyecto encontrada: {project_folder}")
+  L13059 [print] 🔍 Buscando archivo: {...}
+    print(f"🔍 Buscando archivo: {expected_path}")
+  L13063 [print] ✅ Archivo encontrado: {...}
+    print(f"✅ Archivo encontrado: {prediction_source_file}")
+  L13068 [print] ⚠️ Archivo esperado no encontrado, buscando patrón *_未実験データ.xlsx...
+    print(f"⚠️ Archivo esperado no encontrado, buscando patrón *_未実験データ.xlsx...")
+  L13072 [print] ✅ Archivo encontrado (patrón): {...}
+    print(f"✅ Archivo encontrado (patrón): {prediction_source_file}")
+  L13074 [print] ❌ No se encontró ningún archivo con patrón *_未実験データ.xlsx en: {...}
+    print(f"❌ No se encontró ningún archivo con patrón *_未実験データ.xlsx en: {project_folder}")
+  L13083 [print] ⚠️ No se encontró el archivo de datos no experimentados en: {...}
+    print(f"⚠️ No se encontró el archivo de datos no experimentados en: {project_folder}")
+  L13084 [print]    Buscando: {...} o *_未実験データ.xlsx
+    print(f"   Buscando: {expected_filename} o *_未実験データ.xlsx")
+  L13092 [print] ✅ Archivo copiado: {...} → {...}
+    print(f"✅ Archivo copiado: {prediction_source_file} → {prediction_input_path}")
+  L13098 [print] ⚠️ No se encontró archivo fuente y no existe destino. Continuando...
+    print(f"⚠️ No se encontró archivo fuente y no existe destino. Continuando...")
+  L13130 [print] ❌ Script no encontrado: 02_prediction.py
+    print(f"❌ Script no encontrado: 02_prediction.py")
+  L13204 [print] 📁 00_Pythonコード encontrado en: {...}
+    print(f"📁 00_Pythonコード encontrado en: {python_code_folder}")
+  L13291 [print] ❌ 02_prediction.py falló con código {...}
+    print(f"❌ 02_prediction.py falló con código {returncode}")
+  L13335 [print] ❌ Script no encontrado: 03_pareto_analyzer.py
+    print(f"❌ Script no encontrado: 03_pareto_analyzer.py")
+  L13409 [print] 📁 00_Pythonコード encontrado en: {...}
+    print(f"📁 00_Pythonコード encontrado en: {python_code_folder}")
+  L13496 [print] ❌ 03_pareto_analyzer.py falló con código {...}
+    print(f"❌ 03_pareto_analyzer.py falló con código {returncode}")
+  L13515 [print] 🛑 DEBUG: Error no lineal recibido tras cancelación: {...}. Ignorando.
+    print(f"🛑 DEBUG: Error no lineal recibido tras cancelación: {error_message}. Ignorando.")
+  L13543 [print] 🔧 Iniciando análisis de clasificación...
+    print("🔧 Iniciando análisis de clasificación...")
+  L13547 [print] 📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto
+    print("📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto")
+  L13577 [print] ✅ Usando proyecto existente: {...}
+    print(f"✅ Usando proyecto existente: {project_path}")
+  L13591 [print] 📁 Creando nuevo proyecto: {...} en {...}
+    print(f"📁 Creando nuevo proyecto: {project_name} en {project_directory}")
+  L13715 [print] 📊 Datos filtrados obtenidos: {...} registros
+    print(f"📊 Datos filtrados obtenidos: {len(df)} registros")
+  L13718 [print] ❌ Error obteniendo datos filtrados: {...}
+    print(f"❌ Error obteniendo datos filtrados: {e}")
+  L13742 [print] ❌ Usuario canceló el análisis de clasificación
+    print("❌ Usuario canceló el análisis de clasificación")
+  L13831 [print] ✅ Parámetros seleccionados:
+    print(f"✅ Parámetros seleccionados:")
+  L13836 [print] ❌ Usuario canceló la selección de parámetros
+    print("❌ Usuario canceló la selección de parámetros")
+  L13839 [print] ℹ️ Carga de folder existente: no se requiere selección de parámetros
+    print("ℹ️ Carga de folder existente: no se requiere selección de parámetros")
+  L13844 [print] 🔧 Iniciando worker de clasificación...
+    print("🔧 Iniciando worker de clasificación...")
+  L13881 [print] ❌ Error en análisis de clasificación: {...}
+    print(f"❌ Error en análisis de clasificación: {e}")
+  L13901 [print] ✅ Análisis de clasificación completado
+    print("✅ Análisis de clasificación completado")
+  L13902 [print]    Carpeta de salida: {...}
+    print(f"   Carpeta de salida: {results.get('output_folder', 'N/A')}")
+  L14032 [print] ✅ Archivo seleccionado y validado: {...}
+    print(f"✅ Archivo seleccionado y validado: {file_path}")
+  L14055 [print] ❌ Error en selección de archivo: {...}
+    print(f"❌ Error en selección de archivo: {e}")
+  L14067 [print] 🛑 Cancelando análisis de clasificación...
+    print("🛑 Cancelando análisis de clasificación...")
+  L14359 [print] ✅ Datos de diagnóstico cargados desde: {...}
+    print(f"✅ Datos de diagnóstico cargados desde: {report_path}")
+  L14360 [print] 🔍 [DEBUG] Datos parseados: {...}
+    print(f"🔍 [DEBUG] Datos parseados: {diagnostic_data}")
+  L14366 [print] ⚠️ Error leyendo diagnostic_report.txt: {...}
+    print(f"⚠️ Error leyendo diagnostic_report.txt: {e}")
+  L14370 [print] ⚠️ diagnostic_report.txt no encontrado en: {...} o {...}
+    print(f"⚠️ diagnostic_report.txt no encontrado en: {diagnostic_report_path} o {alternative_path}")
+  L14430 [print] ✅ [DEBUG] Mostrando Model Information
+    print(f"✅ [DEBUG] Mostrando Model Information")
+  L14554 [print] ✅ [DEBUG] metric_card altura mínima: {...}px
+    print(f"✅ [DEBUG] metric_card altura mínima: {min_height}px")
+  L14577 [print] ✅ [DEBUG] Mostrando Noise Addition Settings
+    print(f"✅ [DEBUG] Mostrando Noise Addition Settings")
+  L14641 [print] ✅ [DEBUG] noise_card altura mínima: {...}px
+    print(f"✅ [DEBUG] noise_card altura mínima: {min_height}px")
+  L14646 [print] ❌ Error cargando estadísticas de clasificación: {...}
+    print(f"❌ Error cargando estadísticas de clasificación: {e}")
+  L14671 [print] ❌ Error cargando archivos existentes de clasificación: {...}
+    print(f"❌ Error cargando archivos existentes de clasificación: {e}")
+  L14723 [print] 🔧 Mostrando gráficos del análisis de clasificación...
+    print("🔧 Mostrando gráficos del análisis de clasificación...")
+  L14977 [print] ✅ Gráficos del análisis de clasificación mostrados
+    print("✅ Gráficos del análisis de clasificación mostrados")
+  L14980 [print] ❌ Error mostrando gráficos del análisis de clasificación: {...}
+    print(f"❌ Error mostrando gráficos del análisis de clasificación: {e}")
+  L15104 [print] 📁 Carpeta de análisis creada: {...}
+    print(f"📁 Carpeta de análisis creada: {analysis_folder}")
+  L15123 [print] 📁 Subcarpeta de gráficos creada: {...}
+    print(f"📁 Subcarpeta de gráficos creada: {chart_subfolder}")
+  L15131 [print] 🔧 Ejecutando análisis lineal...
+    print("🔧 Ejecutando análisis lineal...")
+  L15154 [print] ✅ Módulo de análisis lineal importado correctamente
+    print("✅ Módulo de análisis lineal importado correctamente")
+  L15156 [print] ❌ Error importando módulo de análisis lineal: {...}
+    print(f"❌ Error importando módulo de análisis lineal: {e}")
+  L15170 [print] ❌ Usuario canceló el análisis lineal
+    print("❌ Usuario canceló el análisis lineal")
+  L15178 [print] ⚠️ No se detectó carpeta de proyecto, usando carpeta por defecto
+    print("⚠️ No se detectó carpeta de proyecto, usando carpeta por defecto")
+  L15185 [print] ❌ Error ejecutando análisis lineal: {...}
+    print(f"❌ Error ejecutando análisis lineal: {e}")
+  L15203 [print] 🛑 DEBUG: Resultado recibido pero el usuario canceló. Ignorando resultados.
+    print("🛑 DEBUG: Resultado recibido pero el usuario canceló. Ignorando resultados.")
+  L15272 [print] 🛑 DEBUG: Error recibido tras cancelación: {...}. Ignorando.
+    print(f"🛑 DEBUG: Error recibido tras cancelación: {error_message}. Ignorando.")
+  L15308 [print] ❌ Error en análisis lineal: {...}
+    print(f"❌ Error en análisis lineal: {error_message}")
+  L15321 [print] 🛑 Análisis no lineal cancelado por el usuario
+    print("🛑 Análisis no lineal cancelado por el usuario")
+  L15349 [print] ✅ Worker de análisis no lineal cancelado correctamente
+    print("✅ Worker de análisis no lineal cancelado correctamente")
+  L15361 [print] 🛑 DEBUG: on_analysis_cancelled disparado - Iniciando parada segura
+    print("🛑 DEBUG: on_analysis_cancelled disparado - Iniciando parada segura")
+  L15376 [print] 🛑 DEBUG: Solicitando cancelación al worker {...}
+    print(f"🛑 DEBUG: Solicitando cancelación al worker {self.linear_worker}")
+  L15397 [print] 🛑 DEBUG: Cancelando proceso no lineal
+    print("🛑 DEBUG: Cancelando proceso no lineal")
+  L15407 [print] ✅ Parada segura completada. No debería haber crash.
+    print("✅ Parada segura completada. No debería haber crash.")
+  L15498 [print] 🔧 Mostrando resultados del análisis lineal...
+    print("🔧 Mostrando resultados del análisis lineal...")
+  L15688 [print] ✅ Archivo Excel abierto: {...}
+    print(f"✅ Archivo Excel abierto: {excel_file_path}")
+  L15690 [print] ❌ Error abriendo archivo Excel: {...}
+    print(f"❌ Error abriendo archivo Excel: {e}")
+  L15793 [print] ✅ Resultados del análisis lineal mostrados
+    print("✅ Resultados del análisis lineal mostrados")
+  L15796 [print] ❌ Error mostrando resultados: {...}
+    print(f"❌ Error mostrando resultados: {e}")
+  L15804 [print] 🔧 Mostrando gráficos de evaluación...
+    print("🔧 Mostrando gráficos de evaluación...")
+  L16067 [print] ✅ Gráficos de evaluación mostrados
+    print("✅ Gráficos de evaluación mostrados")
+  L16070 [print] ❌ Error mostrando gráficos de evaluación: {...}
+    print(f"❌ Error mostrando gráficos de evaluación: {e}")
+  L16127 [print] ✅ Mostrando gráfico: {...}
+    print(f"✅ Mostrando gráfico: {filename}")
+  L16129 [print] ❌ No se pudo cargar la imagen: {...}
+    print(f"❌ No se pudo cargar la imagen: {current_image_path}")
+  L16138 [print] ❌ Error en procesamiento de fórmulas: {...}
+    print(f"❌ Error en procesamiento de fórmulas: {error_msg}")
+  L16214 [print] 📊 Parámetros seleccionados: {...}
+    print(f"📊 Parámetros seleccionados: {selected_params}")
+  L16220 [print] ❌ Error mostrando diálogo de parámetros: {...}
+    print(f"❌ Error mostrando diálogo de parámetros: {e}")
+  L16325 [print] ❌ No se encontró la carpeta: {...}
+    print(f"❌ No se encontró la carpeta: {linear_regression_folder}")
+  L16350 [print] ❌ No se encontraron subcarpetas de análisis lineal en: {...}
+    print(f"❌ No se encontraron subcarpetas de análisis lineal en: {linear_regression_folder}")
+  L16360 [print] 📊 Carpeta más reciente encontrada: {...}
+    print(f"📊 Carpeta más reciente encontrada: {latest_folder}")
+  L16368 [print] ❌ No se encontró la carpeta: {...}
+    print(f"❌ No se encontró la carpeta: {prediction_folder}")
+  L16377 [print] ✅ Archivo de fórmulas encontrado: {...}
+    print(f"✅ Archivo de fórmulas encontrado: {formulas_file}")
+  L16380 [print] ❌ No se encontró el archivo: {...}
+    print(f"❌ No se encontró el archivo: {formulas_file}")
+  L16384 [print] ❌ Error buscando archivo de fórmulas: {...}
+    print(f"❌ Error buscando archivo de fórmulas: {e}")
+  L16474 [print] 📊 Validando archivo: {...}
+    print(f"📊 Validando archivo: {filtered_data_file}")
+  L16482 [print] 📊 Datos cargados para validación: {...} filas, {...} columnas
+    print(f"📊 Datos cargados para validación: {len(data_df)} filas, {len(data_df.columns)} columnas")
+  L16587 [print] ❌ Errores de validación encontrados:
+    print("❌ Errores de validación encontrados:")
+  L16591 [print] ⚠️ Warnings de validación:
+    print("⚠️ Warnings de validación:")
+  L16597 [print] ⚠️ Warnings de validación:
+    print("⚠️ Warnings de validación:")
+  L16601 [print] ✅ Validación exitosa - Todos los parámetros son consistentes
+    print("✅ Validación exitosa - Todos los parámetros son consistentes")
+  L16615 [print] 🔧 Iniciando predicción Yosoku...
+    print("🔧 Iniciando predicción Yosoku...")
+  L16668 [print] ℹ️ Usuario canceló la predicción tras advertencia de múltiples valores
+    print("ℹ️ Usuario canceló la predicción tras advertencia de múltiples valores")
+  L16679 [print] ❌ Usuario canceló la selección de parámetros
+    print("❌ Usuario canceló la selección de parámetros")
+  L16689 [print] 📊 Parámetros seleccionados: {...}
+    print(f"📊 Parámetros seleccionados: {selected_params}")
+  L16694 [print] 🔍 Validando datos filtrados...
+    print("🔍 Validando datos filtrados...")
+  L16702 [print] ❌ Validación fallida:
+    print("❌ Validación fallida:")
+  L16728 [print] ℹ️ Usuario canceló la predicción tras warnings de validación
+    print("ℹ️ Usuario canceló la predicción tras warnings de validación")
+  L16736 [print] ✅ Validación exitosa - Continuando con la predicción
+    print("✅ Validación exitosa - Continuando con la predicción")
+  L16744 [print] ❌ Error ejecutando predicción: {...}
+    print(f"❌ Error ejecutando predicción: {e}")
+  L16811 [print] ❌ Error iniciando predicción: {...}
+    print(f"❌ Error iniciando predicción: {e}")
+  L16848 [print] ❌ Error buscando archivo 未実験データ: {...}
+    print(f"❌ Error buscando archivo 未実験データ: {e}")
+  L16899 [print] ❌ Error en finalización: {...}
+    print(f"❌ Error en finalización: {e}")
+  L16973 [print] ❌ Error iniciando importación: {...}
+    print(f"❌ Error iniciando importación: {e}")
+  L17011 [print] ❌ Error en manejo de finalización: {...}
+    print(f"❌ Error en manejo de finalización: {e}")
+  L17065 [print] ❌ Error cancelando importación: {...}
+    print(f"❌ Error cancelando importación: {e}")
+  L17096 [print] 🔍 Carpeta raíz del análisis: {...}
+    print(f"🔍 Carpeta raíz del análisis: {analysis_root}")
+  L17097 [print] 🔍 Carpeta raíz existe: {...}
+    print(f"🔍 Carpeta raíz existe: {analysis_root.exists()}")
+  L17104 [print] 🔍 Buscando archivo de predicción en: {...}
+    print(f"🔍 Buscando archivo de predicción en: {pred_folder}")
+  L17105 [print] 🔍 Carpeta existe: {...}
+    print(f"🔍 Carpeta existe: {pred_folder.exists()}")
+  L17112 [print] 🔍 Intentando con ruta absoluta: {...}
+    print(f"🔍 Intentando con ruta absoluta: {pred_folder_abs}")
+  L17117 [print] ❌ Carpeta de predicción no encontrada
+    print(f"❌ Carpeta de predicción no encontrada")
+  L17118 [print]    Ruta intentada 1: {...}
+    print(f"   Ruta intentada 1: {pred_folder}")
+  L17119 [print]    Ruta intentada 2: {...}
+    print(f"   Ruta intentada 2: {pred_folder_abs}")
+  L17120 [print]    Carpeta raíz: {...}
+    print(f"   Carpeta raíz: {analysis_root}")
+  L17121 [print]    Carpeta raíz existe: {...}
+    print(f"   Carpeta raíz existe: {analysis_root.exists()}")
+  L17123 [print]    Contenido de carpeta raíz:
+    print(f"   Contenido de carpeta raíz:")
+  L17141 [print] 🔍 Archivos encontrados en carpeta ({...}):
+    print(f"🔍 Archivos encontrados en carpeta ({len(all_files)}):")
+  L17143 [print]   - {...} (archivo: {...}, dir: {...})
+    print(f"  - {f.name} (archivo: {f.is_file()}, dir: {f.is_dir()})")
+  L17157 [print] ✅ Archivo encontrado (Prioridad 1): {...}
+    print(f"✅ Archivo encontrado (Prioridad 1): {prediction_file}")
+  L17168 [print] ✅ Archivo encontrado (Prioridad 2): {...}
+    print(f"✅ Archivo encontrado (Prioridad 2): {prediction_file}")
+  L17179 [print] ✅ Archivo encontrado (Prioridad 3): {...}
+    print(f"✅ Archivo encontrado (Prioridad 3): {prediction_file}")
+  L17202 [print] ✅ Archivo de predicción seleccionado: {...}
+    print(f"✅ Archivo de predicción seleccionado: {prediction_file}")
+  L17248 [print] ❌ Error iniciando importación de clasificación: {...}
+    print(f"❌ Error iniciando importación de clasificación: {e}")
+  L17288 [print] ❌ Error en manejo de finalización: {...}
+    print(f"❌ Error en manejo de finalización: {e}")
+  L17343 [print] ❌ Error cancelando importación: {...}
+    print(f"❌ Error cancelando importación: {e}")
+  L17350 [print] ❌ Error cancelando importación: {...}
+    print(f"❌ Error cancelando importación: {e}")
+  L17383 [print] ❌ Error en manejo de finalización de exportación: {...}
+    print(f"❌ Error en manejo de finalización de exportación: {e}")
+  L17416 [print] ❌ Error en manejo de error de exportación: {...}
+    print(f"❌ Error en manejo de error de exportación: {e}")
+  L17440 [print] ❌ Error cancelando exportación: {...}
+    print(f"❌ Error cancelando exportación: {e}")
+  L17499 [print] ⚠️ 送り速度 no encontrado, 加工時間 = 0
+    print("⚠️ 送り速度 no encontrado, 加工時間 = 0")
+  L17522 [print] ❌ Usuario canceló la selección de parámetros
+    print("❌ Usuario canceló la selección de parámetros")
+  L17541 [print] 📊 Leyendo archivo: {...}
+    print(f"📊 Leyendo archivo: {excel_path}")
+  L17543 [print] ✅ Datos cargados: {...} filas, {...} columnas
+    print(f"✅ Datos cargados: {len(df)} filas, {len(df.columns)} columnas")
+  L17569 [print] 📁 Archivo intermedio guardado: {...}
+    print(f"📁 Archivo intermedio guardado: {intermediate_path}")
+  L17571 [print] ⚠️ Error guardando archivo intermedio: {...}
+    print(f"⚠️ Error guardando archivo intermedio: {e}")
+  L17582 [print] 📁 Archivo temporal creado: {...}
+    print(f"📁 Archivo temporal creado: {temp_file}")
+  L17603 [print] 🗑️ Archivo temporal eliminado: {...}
+    print(f"🗑️ Archivo temporal eliminado: {temp_file}")
+  L17610 [print] ❌ Error importando Pareto a BD: {...}
+    print(f"❌ Error importando Pareto a BD: {e}")
+  L17658 [print] ❌ Error iniciando worker de importación: {...}
+    print(f"❌ Error iniciando worker de importación: {e}")
+  L17836 [print] ❌ Error cancelando predicción: {...}
+    print(f"❌ Error cancelando predicción: {e}")
+  L17983 [print] ❌ Error validando parámetros: {...}
+    print(f"❌ Error validando parámetros: {e}")
+  L17996 [print] ⚠️ No hay carpeta de proyecto actual
+    print("⚠️ No hay carpeta de proyecto actual")
+  L18004 [print] ⚠️ Carpeta 03_線形回帰 no encontrada
+    print("⚠️ Carpeta 03_線形回帰 no encontrada")
+  L18056 [print] ⚠️ No se encontraron carpetas de análisis lineal
+    print("⚠️ No se encontraron carpetas de análisis lineal")
+  L18065 [print] ✅ Carpeta de predicción encontrada: {...}
+    print(f"✅ Carpeta de predicción encontrada: {prediction_folder}")
+  L18068 [print] ⚠️ Carpeta 04_予測計算 no encontrada en: {...}
+    print(f"⚠️ Carpeta 04_予測計算 no encontrada en: {latest_subfolder}")
+  L18072 [print] ❌ Error buscando carpeta de predicción: {...}
+    print(f"❌ Error buscando carpeta de predicción: {e}")
+  L18081 [print] ❌ No hay carpeta de proyecto configurada
+    print("❌ No hay carpeta de proyecto configurada")
+  L18086 [print] ❌ Carpeta de análisis lineal no encontrada
+    print("❌ Carpeta de análisis lineal no encontrada")
+  L18089 [print] 🔍 Buscando archivo de fórmulas en: {...}
+    print(f"🔍 Buscando archivo de fórmulas en: {linear_regression_folder}")
+  L18108 [print] ✅ Archivo de fórmulas encontrado: {...}
+    print(f"✅ Archivo de fórmulas encontrado: {formulas_file}")
+  L18121 [print] ✅ Archivo de fórmulas encontrado (search): {...}
+    print(f"✅ Archivo de fórmulas encontrado (search): {found}")
+  L18136 [print] ❌ No se encontraron subcarpetas de análisis lineal
+    print("❌ No se encontraron subcarpetas de análisis lineal")
+  L18144 [print] 📊 Encontradas {...} carpetas de análisis lineal
+    print(f"📊 Encontradas {len(subfolders)} carpetas de análisis lineal")
+  L18151 [print] 🔍 Verificando carpeta {...}/{...}: {...}
+    print(f"🔍 Verificando carpeta {i+1}/{len(subfolders)}: {folder_name}")
+  L18160 [print] ✅ Archivo de fórmulas encontrado: {...}
+    print(f"✅ Archivo de fórmulas encontrado: {formulas_file}")
+  L18163 [print]    ⚠️ Archivo de fórmulas no encontrado en: {...}
+    print(f"   ⚠️ Archivo de fórmulas no encontrado en: {prediction_folder}")
+  L18165 [print]    ⚠️ Carpeta de predicción no encontrada: {...}
+    print(f"   ⚠️ Carpeta de predicción no encontrada: {prediction_folder}")
+  L18167 [print] ❌ No se encontró ningún archivo de fórmulas válido
+    print("❌ No se encontró ningún archivo de fórmulas válido")
+  L18171 [print] ❌ Error buscando archivo de fórmulas: {...}
+    print(f"❌ Error buscando archivo de fórmulas: {e}")
+  L18189 [print] 🔍 DEBUG - No hay consola desplegable
+    print("🔍 DEBUG - No hay consola desplegable")
+  L18258 [print] 🛑 Cerrando aplicación...
+    print("🛑 Cerrando aplicación...")
+  L18289 [print] 🛑 Cancelando análisis no lineal antes de cerrar...
+    print("🛑 Cancelando análisis no lineal antes de cerrar...")
+  L18294 [print] ⚠️ El worker no terminó en 5 segundos, forzando cierre...
+    print("⚠️ El worker no terminó en 5 segundos, forzando cierre...")
+  L18297 [print] ✅ Worker de análisis no lineal cancelado
+    print("✅ Worker de análisis no lineal cancelado")
+  L18353 [print] 🚀 Aplicación iniciada correctamente
+    print("🚀 Aplicación iniciada correctamente")
+  L18356 [print] ❌ Error al iniciar la aplicación: {...}
+    print(f"❌ Error al iniciar la aplicación: {e}")
+
+build_exe_onedir.ps1
+  L60 [Write-Host] WARN: no existe asset opcional: $($item.src) (se omitirá)
+    Write-Host "WARN: no existe asset opcional: $($item.src) (se omitirá)"
+  L69 [Write-Host] WARN: no se encontró kiwisolver _cext .pyd en $kiwiPyd
+    Write-Host "WARN: no se encontró kiwisolver _cext .pyd en $kiwiPyd"
+  L82 [Write-Host] ✅ Build terminado. Revisa: dist\\$name\\$name.exe
+    Write-Host "✅ Build terminado. Revisa: dist\\$name\\$name.exe"
+
+build_exe_onefile.ps1
+  L21 [Write-Host] NOTA: en --onefile puede haber un delay inicial por descompresión antes de que Qt pueda mostrar el splash.
+    Write-Host "NOTA: en --onefile puede haber un delay inicial por descompresión antes de que Qt pueda mostrar el splash."
+  L64 [Write-Host] WARN: no existe asset opcional: $($item.src) (se omitirá)
+    Write-Host "WARN: no existe asset opcional: $($item.src) (se omitirá)"
+  L73 [Write-Host] WARN: no se encontró kiwisolver _cext .pyd en $kiwiPyd
+    Write-Host "WARN: no se encontró kiwisolver _cext .pyd en $kiwiPyd"
+  L86 [Write-Host] ✁EBuild terminado. Revisa: dist\\$name.exe
+    Write-Host "✁EBuild terminado. Revisa: dist\\$name.exe"
+
+build_installer.ps1
+  L55 [Write-Host] Generando BBDD vacías para el instalador (installer\\db_templates\\)...
+    Write-Host "Generando BBDD vacías para el instalador (installer\\db_templates\\)..."
+  L259 [Write-Host] SkipSetupIcon activo: no se generará setup_icon.ico
+    Write-Host "SkipSetupIcon activo: no se generará setup_icon.ico"
+  L267 [Write-Host] Generando imágenes del instalador (wizard_small.bmp / wizard_large.bmp)...
+    Write-Host "Generando imágenes del instalador (wizard_small.bmp / wizard_large.bmp)..."
+  L312 [Write-Host] SkipWizardImages activo: no se generarán wizard_small.bmp / wizard_large.bmp
+    Write-Host "SkipWizardImages activo: no se generarán wizard_small.bmp / wizard_large.bmp"
+  L326 [Write-Host] SkipVCRedistDownload activo: no se descargará vc_redist.x64.exe
+    Write-Host "SkipVCRedistDownload activo: no se descargará vc_redist.x64.exe"
+  L337 [Write-Host] Limpiando $p ...
+    Write-Host "Limpiando $p ..."
+  L342 [Write-Host] SkipClean activo: no se borrarán build/dist
+    Write-Host "SkipClean activo: no se borrarán build/dist"
+  L366 [Write-Host] InstallerOnly activo pero NO existe el build en dist/. Se ejecutará PyInstaller primero...
+    Write-Host "InstallerOnly activo pero NO existe el build en dist/. Se ejecutará PyInstaller primero..."
+  L373 [Write-Host] Limpiando $p ...
+    Write-Host "Limpiando $p ..."
+  L378 [Write-Host] SkipClean activo: no se borrarán build/dist
+    Write-Host "SkipClean activo: no se borrarán build/dist"
+  L390 [Write-Host] InstallerOnly activo: se omite PyInstaller (se usará el dist existente).
+    Write-Host "InstallerOnly activo: se omite PyInstaller (se usará el dist existente)."
+  L410 [Write-Host] ✅ Instalador generado en: installer\ (archivo: 0_00sec_Setup_x64_*.exe)
+    Write-Host "✅ Instalador generado en: installer\ (archivo: 0_00sec_Setup_x64_*.exe)"
+
+check_db_columns.py
+  L16 [print] ❌ La tabla 'main_results' no existe
+    print("❌ La tabla 'main_results' no existe")
+  L92 [print] 🔧 Query de migración: {...}
+    print(f"🔧 Query de migración: {select_query}")
+  L106 [print] ✅ Base de datos actualizada correctamente
+    print("✅ Base de datos actualizada correctamente")
+  L109 [print] ❌ Error actualizando la base de datos: {...}
+    print(f"❌ Error actualizando la base de datos: {e}")
+  L113 [print] ✅ Las columnas ya están actualizadas en la base de datos
+    print("✅ Las columnas ya están actualizadas en la base de datos")
+  L119 [print] ⚠️ No se encontraron las columnas esperadas
+    print("⚠️ No se encontraron las columnas esperadas")
+
+check_filtered_data.py
+  L18 [print] 🔧 Verificando archivo: {...}
+    print(f"🔧 Verificando archivo: {file_path}")
+  L21 [print] ❌ Archivo no encontrado: {...}
+    print(f"❌ Archivo no encontrado: {file_path}")
+  L28 [print] 📊 Filas en el archivo: {...}
+    print(f"📊 Filas en el archivo: {len(df)}")
+  L29 [print] 📊 Columnas en el archivo: {...}
+    print(f"📊 Columnas en el archivo: {list(df.columns)}")
+  L34 [print] 📊 Valores únicos en 線材長: {...}
+    print(f"📊 Valores únicos en 線材長: {unique_values}")
+  L38 [print] 📊 Distribución de valores en 線材長:
+    print(f"📊 Distribución de valores en 線材長:")
+  L58 [print] 
+📊 Distribución de A11 en registros con 線材長 = 74:
+    print(f"\n📊 Distribución de A11 en registros con 線材長 = 74:")
+  L62 [print] ✅ CORRECTO: No se encontraron registros con 線材長 = 74
+    print("✅ CORRECTO: No se encontraron registros con 線材長 = 74")
+  L64 [print] ❌ Columna 線材長 no encontrada en el archivo
+    print("❌ Columna 線材長 no encontrada en el archivo")
+  L73 [print] 📊 Valores únicos en {...}: {...}
+    print(f"📊 Valores únicos en {col}: {unique_vals}")
+
+check_models.py
+  L30 [print]    🔍 Buscando desde: {...}
+    print(f"   🔍 Buscando desde: {current_dir}", flush=True)
+  L75 [print]       ✅ Encontrado: {...}
+    print(f"      ✅ Encontrado: {prediction_path}", flush=True)
+  L77 [print]       ⚠️ No encontrado en: {...}
+    print(f"      ⚠️ No encontrado en: {prediction_path}", flush=True)
+  L89 [print]       ✅ Encontrado (búsqueda directa): {...}
+    print(f"      ✅ Encontrado (búsqueda directa): {f}", flush=True)
+  L99 [print] 🔍 DIAGNÓSTICO DE MODELOS
+    print("🔍 DIAGNÓSTICO DE MODELOS", flush=True)
+  L103 [print] 
+📋 CONFIGURACIÓN:
+    print("\n📋 CONFIGURACIÓN:")
+  L110 [print] 
+📦 ARCHIVOS DE MODELO:
+    print("\n📦 ARCHIVOS DE MODELO:")
+  L151 [print]       Tamaño: {...} MB
+    print(f"      Tamaño: {size:.2f} MB")
+  L165 [print] 
+📊 ARCHIVO DE PREDICCIÓN:
+    print("\n📊 ARCHIVO DE PREDICCIÓN:")
+  L171 [print]    🔍 Buscando archivos de predicción en estructura de análisis no lineal...
+    print(f"   🔍 Buscando archivos de predicción en estructura de análisis no lineal...")
+  L174 [print]    ✅ Se encontraron {...} archivo(s) de predicción:
+    print(f"   ✅ Se encontraron {len(prediction_files)} archivo(s) de predicción:")
+  L183 [print]          📁 Carpeta de gráficos: {...}
+    print(f"         📁 Carpeta de gráficos: {graphics_folder}")
+  L195 [print]    ⚠️ No se encontraron archivos en estructura de análisis no lineal
+    print(f"   ⚠️ No se encontraron archivos en estructura de análisis no lineal")
+  L196 [print]    🔍 Intentando ruta por defecto: {...}
+    print(f"   🔍 Intentando ruta por defecto: {prediction_path}")
+  L199 [print]    ✅ Archivo encontrado: {...}
+    print(f"   ✅ Archivo encontrado: {prediction_path}")
+  L212 [print] 
+   🎯 COLUMNAS DE PREDICCIÓN ESPERADAS:
+    print(f"\n   🎯 COLUMNAS DE PREDICCIÓN ESPERADAS:")
+  L231 [print]       Columnas de predicción encontradas: {...}/{...}
+    print(f"      Columnas de predicción encontradas: {found_pred_cols}/{len(expected_cols)}")
+  L232 [print]       Columna 切削時間 encontrada: {...}
+    print(f"      Columna 切削時間 encontrada: {'Sí' if cutting_time_col in df.columns else 'No'}")
+  L237 [print] 
+   🎯 VERIFICACIÓN PARA PARETO:
+    print(f"\n   🎯 VERIFICACIÓN PARA PARETO:")
+  L268 [print] 
+   ⚠️ ADVERTENCIA: Solo se encontraron {...} objetivos de Pareto.
+    print(f"\n   ⚠️ ADVERTENCIA: Solo se encontraron {len(pareto_found)} objetivos de Pareto.")
+  L269 [print]       Se necesitan al menos 2 para el análisis de Pareto.
+    print(f"      Se necesitan al menos 2 para el análisis de Pareto.")
+  L271 [print] 
+   ✅ OK: Se encontraron {...} objetivos de Pareto (suficiente para análisis)
+    print(f"\n   ✅ OK: Se encontraron {len(pareto_found)} objetivos de Pareto (suficiente para análisis)")
+  L274 [print]    ❌ Error leyendo el archivo: {...}
+    print(f"   ❌ Error leyendo el archivo: {e}")
+  L278 [print]    ❌ Archivo NO encontrado: {...}
+    print(f"   ❌ Archivo NO encontrado: {prediction_path}")
+  L289 [print]    ✅ Todos los modelos están disponibles
+    print("   ✅ Todos los modelos están disponibles")
+
+classification_config_dialog.py
+  L57 [print] ⚠️ Error importando config_cls: {...}
+    print(f"⚠️ Error importando config_cls: {e}")
+  L1292 [print] 📋 Información de datos filtrados:
+{...}
+    print(f"📋 Información de datos filtrados:\n{info_text}")
+
+classification_worker.py
+  L194 [print] ✅ ml_modules encontrado: {...}
+    print(f"✅ ml_modules encontrado: {venv_ml_modules}")
+  L205 [print] ✅ Pipeline script encontrado: {...}
+    print(f"✅ Pipeline script encontrado: {venv_pipeline_script}")
+  L219 [print] ✅ Datos guardados: {...}
+    print(f"✅ Datos guardados: {input_file}")
+  L231 [print] ✅ Archivo de predicción creado: {...}
+    print(f"✅ Archivo de predicción creado: {predict_input_file}")
+  L245 [print] ✅ Configuración creada: {...}
+    print(f"✅ Configuración creada: {config_file}")
+  L335 [print] ✅ config_cls.py copiado también a ml_modules para compatibilidad
+    print(f"✅ config_cls.py copiado también a ml_modules para compatibilidad")
+  L344 [print] ⚠️ No se pudo crear symlink, copiando config_cls.py a ml_modules: {...}
+    print(f"⚠️ No se pudo crear symlink, copiando config_cls.py a ml_modules: {e}")
+  L373 [print] ✅ Configuración temporal creada: {...}
+    print(f"✅ Configuración temporal creada: {config_file}")
+  L696 [print] 📋 Archivo seleccionado por usuario: {...}
+    print(f"📋 Archivo seleccionado por usuario: {unexperimented_file}")
+  L711 [print] 📋 Archivo 未実験データ encontrado: {...}
+    print(f"📋 Archivo 未実験データ encontrado: {unexperimented_file}")
+  L742 [print] ✅ Archivo validado correctamente. Columnas: {...}
+    print(f"✅ Archivo validado correctamente. Columnas: {list(df_predict.columns)}")
+  L743 [print] ✅ Filas de datos: {...}
+    print(f"✅ Filas de datos: {len(df_predict)}")
+  L1009 [print] 🛑 Cancelando proceso...
+    print("🛑 Cancelando proceso...")
+  L1021 [print] ⚠️ Proceso no terminó, forzando cierre...
+    print("⚠️ Proceso no terminó, forzando cierre...")
+
+db_manager.py
+  L176 [print] ⚠️ No hay datos para insertar.
+    print("⚠️ No hay datos para insertar.")
+  L217 [print] ⚠️ Todos los registros ya existían en la base de datos.
+    print("⚠️ Todos los registros ya existían en la base de datos.")
+  L237 [print] 📊 Total de registros en la base de datos: {...}
+    print(f"📊 Total de registros en la base de datos: {len(results)}")
+  L243 [print] 📋 No hay registros en la base de datos
+    print("📋 No hay registros en la base de datos")
+
+diagnostico_estadisticas.py
+  L22 [print] DIAGNÓSTICO DE ESTADÍSTICAS DE CLASIFICACIÓN
+    print("DIAGNÓSTICO DE ESTADÍSTICAS DE CLASIFICACIÓN")
+  L25 [print] 
+📁 Carpeta de salida: {...}
+    print(f"\n📁 Carpeta de salida: {output_folder}")
+  L27 [print] ❌ La carpeta de salida no existe
+    print("❌ La carpeta de salida no existe")
+  L48 [print] 
+📄 Buscando diagnostic_report.txt:
+    print("\n📄 Buscando diagnostic_report.txt:")
+  L55 [print]    ✅ Encontrado en: {...}
+    print(f"   ✅ Encontrado en: {diagnostic_report_path}")
+  L58 [print]    ✅ Encontrado en (alternativa): {...}
+    print(f"   ✅ Encontrado en (alternativa): {alternative_path}")
+  L60 [print]    ❌ No encontrado en ubicaciones esperadas
+    print(f"   ❌ No encontrado en ubicaciones esperadas")
+  L66 [print] 
+   🔍 Búsqueda recursiva de diagnostic_report.txt:
+    print(f"\n   🔍 Búsqueda recursiva de diagnostic_report.txt:")
+  L71 [print]       ✅ Encontrado en: {...}
+    print(f"      ✅ Encontrado en: {found_path}")
+  L77 [print]       ❌ No encontrado en ninguna ubicación
+    print(f"      ❌ No encontrado en ninguna ubicación")
+  L81 [print] 
+📖 Analizando archivo: {...}
+    print(f"\n📖 Analizando archivo: {report_path}")
+  L86 [print]    ✅ Archivo leído correctamente
+    print(f"   ✅ Archivo leído correctamente")
+  L87 [print]    Tamaño: {...} caracteres
+    print(f"   Tamaño: {len(content)} caracteres")
+  L88 [print]    Líneas: {...} líneas
+    print(f"   Líneas: {len(content.splitlines())} líneas")
+  L91 [print] 
+📋 Primeras 20 líneas del archivo:
+    print(f"\n📋 Primeras 20 líneas del archivo:")
+  L108 [print]       ❌ NP_ALPHA: No encontrado
+    print(f"      ❌ NP_ALPHA: No encontrado")
+  L112 [print]          ⚠️  Variación encontrada: {...}
+    print(f"         ⚠️  Variación encontrada: {alt_match.group(1)}")
+  L121 [print]       ❌ 目的変数: No encontrado
+    print(f"      ❌ 目的変数: No encontrado")
+  L125 [print]          ⚠️  Variación encontrada: {...}
+    print(f"         ⚠️  Variación encontrada: {alt_match.group(1).strip()}")
+  L136 [print]       ❌ Calibrator: No encontrado
+    print(f"      ❌ Calibrator: No encontrado")
+  L149 [print]       ❌ τ+ (tau_pos): No encontrado
+    print(f"      ❌ τ+ (tau_pos): No encontrado")
+  L162 [print]       ❌ τ- (tau_neg): No encontrado
+    print(f"      ❌ τ- (tau_neg): No encontrado")
+  L170 [print]       ❌ 選択特徴量数: No encontrado
+    print(f"      ❌ 選択特徴量数: No encontrado")
+  L179 [print]       ❌ 総データ数: No encontrado
+    print(f"      ❌ 総データ数: No encontrado")
+  L188 [print]       ❌ カバレッジ: No encontrado
+    print(f"      ❌ カバレッジ: No encontrado")
+  L197 [print]       ❌ ノイズ付加: No encontrado
+    print(f"      ❌ ノイズ付加: No encontrado")
+  L206 [print]       ❌ ノイズレベル: No encontrado
+    print(f"      ❌ ノイズレベル: No encontrado")
+  L209 [print] 
+📊 Resumen de datos parseados:
+    print(f"\n📊 Resumen de datos parseados:")
+  L217 [print] 
+🎨 Análisis de qué se mostraría en la UI:
+    print(f"\n🎨 Análisis de qué se mostraría en la UI:")
+  L225 [print]    Información básica (info_label): {...}
+    print(f"   Información básica (info_label): {'✅ Sí' if has_basic_info else '❌ No'}")
+  L227 [print]       Se mostraría: 解析完了時刻, 解析時間
+    print(f"      Se mostraría: 解析完了時刻, 解析時間")
+  L240 [print]    Información del modelo (metric_card): {...}
+    print(f"   Información del modelo (metric_card): {'✅ Sí' if has_model_info else '❌ No'}")
+  L243 [print]       tau_pos encontrado: {...}
+    print(f"      tau_pos encontrado: {bool(diagnostic_data.get('tau_pos'))}")
+  L244 [print]       tau_neg encontrado: {...}
+    print(f"      tau_neg encontrado: {bool(diagnostic_data.get('tau_neg'))}")
+  L247 [print]    Información de ruido (noise_card): {...}
+    print(f"   Información de ruido (noise_card): {'✅ Sí' if has_noise_info else '❌ No'}")
+  L250 [print] 
+🔍 DIAGNÓSTICO DEL PROBLEMA:
+    print(f"\n🔍 DIAGNÓSTICO DEL PROBLEMA:")
+  L252 [print]    ❌ PROBLEMA CRÍTICO: No se encontraron datos suficientes para mostrar
+    print(f"   ❌ PROBLEMA CRÍTICO: No se encontraron datos suficientes para mostrar")
+  L253 [print]       Esto explicaría por qué la pantalla está vacía
+    print(f"      Esto explicaría por qué la pantalla está vacía")
+  L259 [print]    ⚠️  PROBLEMA: Falta información del modelo (tau_pos o tau_neg)
+    print(f"   ⚠️  PROBLEMA: Falta información del modelo (tau_pos o tau_neg)")
+  L260 [print]       Se mostrará información básica pero no la sección de modelo
+    print(f"      Se mostrará información básica pero no la sección de modelo")
+  L262 [print]    ✅ Todo parece estar bien. Los datos deberían mostrarse correctamente.
+    print(f"   ✅ Todo parece estar bien. Los datos deberían mostrarse correctamente.")
+  L263 [print]       Si aún no se ven, el problema puede estar en:
+    print(f"      Si aún no se ven, el problema puede estar en:")
+  L264 [print]         1. El layout no se está actualizando correctamente
+    print(f"        1. El layout no se está actualizando correctamente")
+  L265 [print]         2. Los widgets se crean pero no son visibles (problema de CSS)
+    print(f"        2. Los widgets se crean pero no son visibles (problema de CSS)")
+  L266 [print]         3. El container_layout no está conectado correctamente
+    print(f"        3. El container_layout no está conectado correctamente")
+  L271 [print] 
+❌ Error leyendo archivo: {...}
+    print(f"\n❌ Error leyendo archivo: {e}")
+  L300 [print] 📁 Usando carpeta más reciente: {...}
+    print(f"📁 Usando carpeta más reciente: {output_folder}")
+  L302 [print] ❌ No se encontraron carpetas de análisis
+    print("❌ No se encontraron carpetas de análisis")
+  L306 [print] ❌ No se encontró la carpeta base 05_分類
+    print("❌ No se encontró la carpeta base 05_分類")
+
+diagnostico_pareto.py
+  L15 [print] DIAGNÓSTICO DE ERROR DE PARETO ANALYSIS
+    print("DIAGNÓSTICO DE ERROR DE PARETO ANALYSIS")
+  L22 [print]   ✅ xlsxwriter instalado: versión {...}
+    print(f"  ✅ xlsxwriter instalado: versión {xlsxwriter.__version__}")
+  L23 [print]   📍 Ubicación: {...}
+    print(f"  📍 Ubicación: {xlsxwriter.__file__}")
+  L25 [print]   ❌ xlsxwriter NO está instalado: {...}
+    print(f"  ❌ xlsxwriter NO está instalado: {e}")
+  L35 [print]   ✅ pandas instalado: versión {...}
+    print(f"  ✅ pandas instalado: versión {pd.__version__}")
+  L36 [print]   📍 Ubicación: {...}
+    print(f"  📍 Ubicación: {pd.__file__}")
+  L38 [print]   ❌ pandas NO está instalado: {...}
+    print(f"  ❌ pandas NO está instalado: {e}")
+  L52 [print]   ✅ Archivo Excel creado exitosamente
+    print("  ✅ Archivo Excel creado exitosamente")
+  L57 [print]   ✅ Archivo de prueba eliminado
+    print("  ✅ Archivo de prueba eliminado")
+  L67 [print]   Python versión: {...}
+    print(f"  Python versión: {sys.version}")
+  L68 [print]   Directorio actual: {...}
+    print(f"  Directorio actual: {os.getcwd()}")
+  L78 [print]   ⚠️ No se encontraron paths del venv en sys.path
+    print("  ⚠️ No se encontraron paths del venv en sys.path")
+  L102 [print]   ✅ Permisos de escritura OK en el directorio actual
+    print("  ✅ Permisos de escritura OK en el directorio actual")
+  L127 [print]   ❌ CONFLICTO: Múltiples runtimes OpenMP detectados
+    print("  ❌ CONFLICTO: Múltiples runtimes OpenMP detectados")
+  L131 [print]   ✅ No se detectaron DLLs OpenMP
+    print("  ✅ No se detectaron DLLs OpenMP")
+  L133 [print]   ⚠️ No se pudo importar dll_debug (no crítico)
+    print("  ⚠️ No se pudo importar dll_debug (no crítico)")
+  L145 [print]   ✅ Carpeta existe: {...}
+    print(f"  ✅ Carpeta existe: {folder}")
+  L156 [print]   ⚠️ Carpeta no existe: {...} (se creará automáticamente)
+    print(f"  ⚠️ Carpeta no existe: {folder} (se creará automáticamente)")
+  L161 [print]   - El directorio de trabajo puede ser diferente
+    print("  - El directorio de trabajo puede ser diferente")
+  L166 [print] DIAGNÓSTICO COMPLETADO
+    print("DIAGNÓSTICO COMPLETADO")
+  L168 [print] 
+Si todos los checks pasaron (✅), el problema probablemente está en:
+    print("\nSi todos los checks pasaron (✅), el problema probablemente está en:")
+  L169 [print]   1. El entorno del subproceso (variables de entorno diferentes)
+    print("  1. El entorno del subproceso (variables de entorno diferentes)")
+  L170 [print]   2. El directorio de trabajo cuando se ejecuta desde nonlinear_worker
+    print("  2. El directorio de trabajo cuando se ejecuta desde nonlinear_worker")
+  L172 [print] 
+Recomendación: Revisa nonlinear_worker.py para asegurar que:
+    print("\nRecomendación: Revisa nonlinear_worker.py para asegurar que:")
+  L175 [print]   - Las variables de entorno no interfieren con xlsxwriter
+    print("  - Las variables de entorno no interfieren con xlsxwriter")
+
+excel_calculator.py
+  L69 [print] ⚠️ openpyxl no disponible, no se puede crear la calculadora Excel
+    print("⚠️ openpyxl no disponible, no se puede crear la calculadora Excel")
+  L76 [print] ⚠️ No hay modelos compatibles para Excel
+    print("⚠️ No hay modelos compatibles para Excel")
+
+integrated_optimizer.py
+  L28 [print] ⚠️ Joblib no disponible, continuando sin configuración específica
+    print("⚠️ Joblib no disponible, continuando sin configuración específica")
+
+linear_analysis_advanced.py
+  L1519 [print] ⚠️ openpyxl no disponible, no se puede crear la calculadora Excel
+    print("⚠️ openpyxl no disponible, no se puede crear la calculadora Excel")
+  L1523 [print] 🔧 Creando Excel calculator...
+    print(f"🔧 Creando Excel calculator...")
+  L1525 [print] 🔧 Transformación disponible: {...}
+    print(f"🔧 Transformación disponible: {len(self.transformation_info) if hasattr(self, 'transformation_info') else 'No disponible'}")
+  L1530 [print] ⚠️ No hay modelos compatibles para Excel
+    print("⚠️ No hay modelos compatibles para Excel")
+  L2083 [print] 🔧 Iniciando análisis lineal desde base de datos...
+    print("🔧 Iniciando análisis lineal desde base de datos...")
+  L2085 [print] 🔧 Carpeta de salida: {...}
+    print(f"🔧 Carpeta de salida: {output_folder}")
+  L2088 [print] 📊 Obteniendo datos filtrados de la base de datos...
+    print("📊 Obteniendo datos filtrados de la base de datos...")
+  L2114 [print] 🔧 Filtros de cepillo específicos aplicados: {...}
+    print(f"🔧 Filtros de cepillo específicos aplicados: {brush_selections}")
+  L2116 [print] 🔧 No se aplicaron filtros de cepillo específicos
+    print("🔧 No se aplicaron filtros de cepillo específicos")
+  L2146 [print] ⚠️ Error convirtiendo valores de filtro para {...}: {...}
+    print(f"⚠️ Error convirtiendo valores de filtro para {field_name}: {e}")
+  L2164 [print] ⚠️ Error convirtiendo valor de filtro para {...}: {...}
+    print(f"⚠️ Error convirtiendo valor de filtro para {field_name}: {e}")
+  L2170 [print] 🔧 No se aplicaron filtros de rango
+    print("🔧 No se aplicaron filtros de rango")
+  L2173 [print] 🔧 Parámetros: {...}
+    print(f"🔧 Parámetros: {params}")
+  L2196 [print] ❌ No se encontraron datos en ninguna tabla
+    print("❌ No se encontraron datos en ninguna tabla")
+  L2212 [print] ✅ Datos obtenidos: {...} registros
+    print(f"✅ Datos obtenidos: {len(filtered_data)} registros")
+  L2215 [print] ❌ Error obteniendo datos: {...}
+    print(f"❌ Error obteniendo datos: {e}")
+  L2263 [print] ✅ Datos filtrados guardados en: {...}
+    print(f"✅ Datos filtrados guardados en: {filtered_data_path}")
+  L2268 [print] 🔧 Configurando pipeline de análisis lineal...
+    print("🔧 Configurando pipeline de análisis lineal...")
+  L2290 [print] 🚀 Ejecutando análisis lineal completo...
+    print("🚀 Ejecutando análisis lineal completo...")
+  L2341 [print] ✅ Análisis lineal completado exitosamente
+    print("✅ Análisis lineal completado exitosamente")
+  L2343 [print] 📁 Resultados guardados en: {...}
+    print(f"📁 Resultados guardados en: {output_folder}")
+  L2348 [print] ❌ Error en análisis lineal: {...}
+    print(f"❌ Error en análisis lineal: {e}")
+
+linear_analysis_module.py
+  L156 [print] ⚠️ No se pudo configurar fuente japonesa: {...}
+    print(f"⚠️ No se pudo configurar fuente japonesa: {e}")
+  L162 [print] 🔧 Preparando datos para análisis...
+    print("🔧 Preparando datos para análisis...")
+  L185 [print] 🔧 Características disponibles: {...}
+    print(f"🔧 Características disponibles: {available_features}")
+  L209 [print] 🔧 Entrenando modelo para {...} ({...})
+    print(f"🔧 Entrenando modelo para {target_col} ({task_type})")
+  L218 [print] ⚠️ Insuficientes datos para {...}: {...} muestras
+    print(f"⚠️ Insuficientes datos para {target_col}: {len(X_valid)} muestras")
+  L229 [print] ❌ Error entrenando modelo para {...}: {...}
+    print(f"❌ Error entrenando modelo para {target_col}: {e}")
+  L382 [print] ✅ Gráfico guardado: {...}
+    print(f"✅ Gráfico guardado: {plot_path}")
+  L385 [print] ⚠️ Error creando gráfico para {...}: {...}
+    print(f"⚠️ Error creando gráfico para {target_name}: {e}")
+  L391 [print] 🔧 Guardando resultados...
+    print("🔧 Guardando resultados...")
+  L432 [print] ✅ Resultados guardados: {...}
+    print(f"✅ Resultados guardados: {results_path}")
+  L451 [print] ✅ Resultados JSON guardados: {...}
+    print(f"✅ Resultados JSON guardados: {json_path}")
+  L457 [print] 🚀 Iniciando análisis lineal...
+    print("🚀 Iniciando análisis lineal...")
+  L466 [print] ✅ Datos preparados: {...} muestras, {...} características
+    print(f"✅ Datos preparados: {X.shape[0]} muestras, {X.shape[1]} características")
+  L476 [print] ✅ Análisis lineal completado exitosamente
+    print("✅ Análisis lineal completado exitosamente")
+  L486 [print] ❌ Error en análisis lineal: {...}
+    print(f"❌ Error en análisis lineal: {e}")
+  L546 [print] ⚠️ Error obteniendo datos de la BD: {...}
+    print(f"⚠️ Error obteniendo datos de la BD: {e}")
+  L549 [print] 📊 Datos obtenidos: {...} filas, {...} columnas
+    print(f"📊 Datos obtenidos: {df.shape[0]} filas, {df.shape[1]} columnas")
+  L558 [print] ❌ Error ejecutando análisis lineal: {...}
+    print(f"❌ Error ejecutando análisis lineal: {e}")
+
+memory_monitor.py
+  L548 [print] ✅ Datos exportados a: {...}
+    print(f"✅ Datos exportados a: {filepath}")
+
+memory_visualizer.py
+  L42 [print] ⚠️ No hay datos de memoria para graficar
+    print("⚠️ No hay datos de memoria para graficar")
+  L115 [print] ✅ Gráfico guardado: {...}
+    print(f"✅ Gráfico guardado: {output_path}")
+  L127 [print] ⚠️ No hay causas de fragmentación identificadas
+    print("⚠️ No hay causas de fragmentación identificadas")
+  L164 [print] ✅ Gráfico de causas guardado: {...}
+    print(f"✅ Gráfico de causas guardado: {output_path}")
+  L176 [print] ⚠️ No hay datos de tipos de objetos
+    print("⚠️ No hay datos de tipos de objetos")
+  L187 [print] ⚠️ No hay tipos de objetos registrados
+    print("⚠️ No hay tipos de objetos registrados")
+  L213 [print] ✅ Gráfico de tipos guardado: {...}
+    print(f"✅ Gráfico de tipos guardado: {output_path}")
+  L236 [print] ❌ Archivo no encontrado: {...}
+    print(f"❌ Archivo no encontrado: {json_path}")
+  L245 [print] 
+📊 Generando reporte de memoria desde: {...}
+    print(f"\n📊 Generando reporte de memoria desde: {json_path}")
+  L292 [print] ✅ Reporte de texto guardado: {...}
+    print(f"✅ Reporte de texto guardado: {report_path}")
+  L293 [print] 
+✅ Reporte completo generado en: {...}
+    print(f"\n✅ Reporte completo generado en: {output_dir}")
+
+nonlinear_folder_manager.py
+  L56 [print] 📁 Carpeta creada: {...}
+    print(f"📁 Carpeta creada: {full_path}")
+
+nonlinear_worker.py
+  L163 [print] 🛑 Análisis cancelado antes de crear carpetas
+    print("🛑 Análisis cancelado antes de crear carpetas")
+  L172 [print] 🛑 Análisis cancelado después de crear carpetas
+    print("🛑 Análisis cancelado después de crear carpetas")
+  L186 [print] ✅ Datos guardados: {...}
+    print(f"✅ Datos guardados: {input_file}")
+  L204 [print] ⚠️ No se pudieron preparar columnas en analysis_df.xlsx: {...}
+    print(f"⚠️ No se pudieron preparar columnas en analysis_df.xlsx: {e}")
+  L208 [print] ✅ Datos de análisis guardados: {...}
+    print(f"✅ Datos de análisis guardados: {analysis_file}")
+  L212 [print] 🛑 Análisis cancelado después de guardar datos
+    print("🛑 Análisis cancelado después de guardar datos")
+  L222 [print] 🛑 Análisis cancelado después de guardar configuración
+    print("🛑 Análisis cancelado después de guardar configuración")
+  L261 [print] 🛑 Análisis cancelado durante copia de scripts
+    print("🛑 Análisis cancelado durante copia de scripts")
+  L271 [print] ⚠️ Script no encontrado: {...}
+    print(f"⚠️ Script no encontrado: {script_path}")
+  L277 [print] 🛑 Análisis cancelado antes de ejecutar Stage 01
+    print("🛑 Análisis cancelado antes de ejecutar Stage 01")
+  L289 [print] 🛑 Análisis cancelado antes de ejecutar Stage 01
+    print("🛑 Análisis cancelado antes de ejecutar Stage 01")
+  L296 [print] 🛑 Análisis cancelado durante Stage 01
+    print("🛑 Análisis cancelado durante Stage 01")
+  L347 [print] 🔍 DEBUG run_stage2_and_3: MÉTODO LLAMADO
+    print("🔍 DEBUG run_stage2_and_3: MÉTODO LLAMADO", flush=True)
+  L354 [print] 🛑 Análisis cancelado antes de ejecutar Stage 02
+    print("🛑 Análisis cancelado antes de ejecutar Stage 02")
+  L367 [print] 🛑 Análisis cancelado durante Stage 02
+    print("🛑 Análisis cancelado durante Stage 02")
+  L371 [print] 🔍 DEBUG run_stage2_and_3: Stage 02 falló, emitiendo error
+    print("🔍 DEBUG run_stage2_and_3: Stage 02 falló, emitiendo error")
+  L379 [print] 🛑 Análisis cancelado antes de ejecutar Stage 03
+    print("🛑 Análisis cancelado antes de ejecutar Stage 03")
+  L392 [print] 🛑 Análisis cancelado durante Stage 03
+    print("🛑 Análisis cancelado durante Stage 03")
+  L396 [print] 🔍 DEBUG run_stage2_and_3: Stage 03 falló, emitiendo error
+    print("🔍 DEBUG run_stage2_and_3: Stage 03 falló, emitiendo error")
+  L429 [print] 🔍 DEBUG nonlinear_worker: gráficos encontrados = {...}
+    print(f"🔍 DEBUG nonlinear_worker: gráficos encontrados = {len(graph_files)}", flush=True)
+  L431 [print] 🔍 DEBUG nonlinear_worker: primeros gráficos = {...}
+    print(f"🔍 DEBUG nonlinear_worker: primeros gráficos = {graph_files[:3]}", flush=True)
+  L441 [print] 🔍 DEBUG run_stage2_and_3: Emitiendo señal finished
+    print("🔍 DEBUG run_stage2_and_3: Emitiendo señal finished", flush=True)
+  L444 [print] 🔍 DEBUG run_stage2_and_3: Señal finished emitida
+    print("🔍 DEBUG run_stage2_and_3: Señal finished emitida", flush=True)
+  L449 [print] 🔍 DEBUG run_stage2_and_3: EXCEPCIÓN CAPTURADA
+    print("🔍 DEBUG run_stage2_and_3: EXCEPCIÓN CAPTURADA")
+  L451 [print] 🔍 DEBUG run_stage2_and_3: Emitiendo señal error
+    print(f"🔍 DEBUG run_stage2_and_3: Emitiendo señal error")
+  L580 [print] ❌ Script no encontrado: {...}
+    print(f"❌ Script no encontrado: {script_name}")
+  L742 [print] 🛑 Cancelando proceso...
+    print("🛑 Cancelando proceso...")
+  L754 [print] ⚠️ Proceso no terminó, forzando cierre...
+    print("⚠️ Proceso no terminó, forzando cierre...")
+  L1202 [print] 🛑 Cancelando análisis no lineal...
+    print("🛑 Cancelando análisis no lineal...")
+  L1218 [print] ⚠️ Proceso no terminó, forzando kill...
+    print("⚠️ Proceso no terminó, forzando kill...")
+  L1243 [print] 🛑 Solicitando terminación del thread del worker...
+    print("🛑 Solicitando terminación del thread del worker...")
+  L1246 [print] ✅ Cancelación completada
+    print("✅ Cancelación completada")
+  L1447 [print] ⚠️ ADVERTENCIA: N_TRIALS podría no haberse reemplazado correctamente
+    print(f"⚠️ ADVERTENCIA: N_TRIALS podría no haberse reemplazado correctamente")
+  L1524 [print] 🔍 Características seleccionadas: {...}
+    print(f"🔍 Características seleccionadas: {features_list}")
+  L1584 [print] 🔍 MANDATORY_FEATURES vacía (ninguna característica obligatoria seleccionada)
+    print(f"🔍 MANDATORY_FEATURES vacía (ninguna característica obligatoria seleccionada)")
+  L1618 [print] ✅ Configuración guardada: {...}
+    print(f"✅ Configuración guardada: {config_file_path}")
+  L1629 [print] 🔍 Línea N_TRIALS en config_custom.py: {...}
+    print(f"🔍 Línea N_TRIALS en config_custom.py: {line.strip()}")
+  L1632 [print] ⚠️ ADVERTENCIA: N_TRIALS no encontrado en config_custom.py después de guardar
+    print(f"⚠️ ADVERTENCIA: N_TRIALS no encontrado en config_custom.py después de guardar")
+  L1661 [print] 📊 Encontrados {...} gráficos
+    print(f"📊 Encontrados {len(graph_paths)} gráficos")
+  L1676 [print] ⚠️ Carpeta de resultados no encontrada: {...}
+    print(f"⚠️ Carpeta de resultados no encontrada: {result_folder}")
+  L1806 [print] ✅ Extraídos {...} modelos con métricas CV desde dcv_results.pkl
+    print(f"✅ Extraídos {models_trained} modelos con métricas CV desde dcv_results.pkl")
+  L1808 [print] ⚠️ Error leyendo dcv_results.pkl para extraer modelos: {...}
+    print(f"⚠️ Error leyendo dcv_results.pkl para extraer modelos: {e}")
+  L1855 [print] ✅ Datos de análisis guardados en: {...}
+    print(f"✅ Datos de análisis guardados en: {json_path}")
+  L1858 [print] ⚠️ Error guardando datos de análisis en JSON: {...}
+    print(f"⚠️ Error guardando datos de análisis en JSON: {e}")
+
+pareto_results_dialog.py
+  L49 [print] 🔍 DEBUG ParetoResultsDialog.__init__: gráficos cargados = {...}
+    print(f"🔍 DEBUG ParetoResultsDialog.__init__: gráficos cargados = {len(self.graph_paths)}")
+  L181 [print] 🔍 DEBUG load_graphs: carpeta = {...}
+    print(f"🔍 DEBUG load_graphs: carpeta = {self.pareto_plots_folder}")
+  L185 [print] ⚠️ Carpeta de gráficos no encontrada: {...}
+    print(f"⚠️ Carpeta de gráficos no encontrada: {self.pareto_plots_folder}")
+  L195 [print] 🔍 DEBUG load_graphs: buscando {...}, encontrados = {...}
+    print(f"🔍 DEBUG load_graphs: buscando {pattern}, encontrados = {len(found)}")
+  L201 [print] 📊 Encontrados {...} gráficos de Pareto
+    print(f"📊 Encontrados {len(self.graph_paths)} gráficos de Pareto")
+  L203 [print] 🔍 DEBUG load_graphs: primeros gráficos = {...}
+    print(f"🔍 DEBUG load_graphs: primeros gráficos = {[os.path.basename(p) for p in self.graph_paths[:3]]}")
+
+result_processor.py
+  L111 [print] ⚠️ No hay datos para insertar.
+    print("⚠️ No hay datos para insertar.")
+  L152 [print] ⚠️ Todos los registros ya existían en la base de datos.
+    print("⚠️ Todos los registros ya existían en la base de datos.")
+  L362 [print] 🟦 UPSERT SKIP (idéntico) id={...} | {...}
+    print(f"🟦 UPSERT SKIP (idéntico) id={row_id} | {brief}", flush=True)
+  L384 [print] ⚠️ No se pudo crear backup automático de la BBDD (ruta no disponible).
+    print("⚠️ No se pudo crear backup automático de la BBDD (ruta no disponible).", flush=True)
+  L413 [print] 📊 Total de registros en la base de datos: {...}
+    print(f"📊 Total de registros en la base de datos: {len(results)}")
+  L419 [print] 📋 No hay registros en la base de datos
+    print("📋 No hay registros en la base de datos")
+  L428 [print] ⚠️ Todos los registros ya existían en la base de datos.
+    print("⚠️ Todos los registros ya existían en la base de datos.")
+  L442 [print] ⚠️ La base de datos está vacía.
+    print("⚠️ La base de datos está vacía.")
+  L448 [print] 📊 Contenido completo de la base de datos:
+
+    print("📊 Contenido completo de la base de datos:\n")
+  L566 [print] ✅ Procesamiento e inserción completados.
+    print("✅ Procesamiento e inserción completados.")
+  L682 [print] ✅ Procesamiento e inserción completados con valores de UI (conexión personalizada).
+    print("✅ Procesamiento e inserción completados con valores de UI (conexión personalizada).")
+  L696 [print] 📊 Total de registros en la base de datos: {...}
+    print(f"📊 Total de registros en la base de datos: {len(results)}")
+  L702 [print] 📋 No hay registros en la base de datos
+    print("📋 No hay registros en la base de datos")
+
+run_folds.py
+  L54 [print] 🚀 Ejecutando análisis con un proceso por fold
+    print("🚀 Ejecutando análisis con un proceso por fold")
+  L61 [print] ==> Lanzando Fold {...}/{...} (índice {...})
+    print(f"==> Lanzando Fold {fold + 1}/{NUM_FOLDS} (índice {fold})")
+  L79 [print] ❌ Fold {...} falló con código {...}
+    print(f"❌ Fold {fold + 1} falló con código {e.returncode}")
+  L80 [print] ⚠️  Deteniendo ejecución de folds restantes
+    print(f"⚠️  Deteniendo ejecución de folds restantes")
+  L83 [print] 
+⚠️  Interrupción manual detectada
+    print(f"\n⚠️  Interrupción manual detectada")
+
+Sample_Combiner.py
+  L112 [print] 📁 Excel parts: {...} (500,000 filas/archivo)
+    print(f"📁 Excel parts: {excel_folder} (500,000 filas/archivo)", flush=True)
+
+showresultsworker.py
+  L29 [print] 🔍 Debug - ShowResultsWorker usando base de datos: {...}
+    print(f"🔍 Debug - ShowResultsWorker usando base de datos: {os.path.abspath(self.db_path)}")
+  L36 [print] ✅ Debug - Usando información de experimento proporcionada
+    print("✅ Debug - Usando información de experimento proporcionada")
+  L58 [print] 📊 Número de carpeta extraído: {...}
+    print(f"📊 Número de carpeta extraído: {folder_num}")
+  L59 [print] 📁 Carpeta encontrada: {...}
+    print(f"📁 Carpeta encontrada: {folder_name}")
+  L60 [print] 🔧 Tipo de optimización: {...}
+    print(f"🔧 Tipo de optimización: {optimization_type}")
+  L62 [print] ⚠️ Debug - No se proporcionó información de experimento, usando valores por defecto
+    print("⚠️ Debug - No se proporcionó información de experimento, usando valores por defecto")
+  L65 [print] 📊 Usando número de carpeta por defecto: {...}
+    print(f"📊 Usando número de carpeta por defecto: {folder_num}")
+  L66 [print] 🔧 Usando tipo de optimización por defecto: {...}
+    print(f"🔧 Usando tipo de optimización por defecto: {optimization_type}")
+  L71 [print] 🔍 Debug - Verificando si ya existe un archivo idéntico en 02_実験データ...
+    print("🔍 Debug - Verificando si ya existe un archivo idéntico en 02_実験データ...")
+  L81 [print] 🔍 Debug - Archivo actual contiene {...} filas
+    print(f"🔍 Debug - Archivo actual contiene {len(current_results_df)} filas")
+  L92 [print] 🔍 Debug - Revisando carpeta: {...}
+    print(f"🔍 Debug - Revisando carpeta: {subfolder}")
+  L106 [print] ✅ Archivo idéntico encontrado en: {...}/{...}
+    print(f"✅ Archivo idéntico encontrado en: {subfolder}/{file}")
+  L111 [print] 🔍 Debug - Error leyendo {...}: {...}
+    print(f"🔍 Debug - Error leyendo {file}: {e}")
+  L118 [print] ⚠️ Ya existe un archivo idéntico en: {...}
+    print(f"⚠️ Ya existe un archivo idéntico en: {identical_folder}")
+  L119 [print] 🛑 No se procederá con la creación de carpeta
+    print("🛑 No se procederá con la creación de carpeta")
+  L138 [print] ✅ No se encontró archivo idéntico, procediendo con la creación de carpeta...
+    print("✅ No se encontró archivo idéntico, procediendo con la creación de carpeta...")
+  L141 [print] 🔍 Debug - Error leyendo archivo de resultados: {...}
+    print(f"🔍 Debug - Error leyendo archivo de resultados: {e}")
+  L142 [print] ⚠️ Continuando con la creación de carpeta...
+    print("⚠️ Continuando con la creación de carpeta...")
+  L144 [print] 🔍 Debug - Carpeta 02_実験データ no existe, procediendo con la creación...
+    print("🔍 Debug - Carpeta 02_実験データ no existe, procediendo con la creación...")
+  L149 [print] 🔍 Debug - Creando carpeta en 02_実験データ...
+    print("🔍 Debug - Creando carpeta en 02_実験データ...")
+  L162 [print] ✅ Creando nueva carpeta: {...}
+    print(f"✅ Creando nueva carpeta: {new_folder_path}")
+  L167 [print] 🔄 Iniciando proceso de backup y actualización del archivo de muestreo...
+    print("🔄 Iniciando proceso de backup y actualización del archivo de muestreo...")
+  L185 [print] 🔍 Debug - Verificando contenido de la base de datos después de importar...
+    print("🔍 Debug - Verificando contenido de la base de datos después de importar...")
+  L189 [print] 🔍 Debug - Total de registros en la base de datos: {...}
+    print(f"🔍 Debug - Total de registros en la base de datos: {total_count}")
+  L192 [print] 🔍 Debug - Últimos 5 registros insertados:
+    print("🔍 Debug - Últimos 5 registros insertados:")
+  L210 [print] 🔍 Debug - No hay registros en la base de datos
+    print("🔍 Debug - No hay registros en la base de datos")
+
+test_advanced_analysis.py
+  L22 [print] ✅ Módulos importados correctamente
+    print("✅ Módulos importados correctamente")
+  L24 [print] ❌ Error importando módulos: {...}
+    print(f"❌ Error importando módulos: {e}")
+  L32 [print] 🔧 Iniciando prueba del análisis lineal avanzado...
+    print("🔧 Iniciando prueba del análisis lineal avanzado...")
+  L41 [print] ❌ No hay conexión a la base de datos
+    print("❌ No hay conexión a la base de datos")
+  L45 [print] 🔧 Ejecutando análisis sin filtros...
+    print("🔧 Ejecutando análisis sin filtros...")
+  L49 [print] ✅ Análisis ejecutado exitosamente
+    print("✅ Análisis ejecutado exitosamente")
+  L50 [print] 📁 Directorio de salida: {...}
+    print(f"📁 Directorio de salida: {results.get('output_directory', 'N/A')}")
+  L51 [print] 📊 Forma de datos: {...}
+    print(f"📊 Forma de datos: {results.get('data_shape', 'N/A')}")
+  L66 [print] ❌ Error en el análisis: {...}
+    print(f"❌ Error en el análisis: {results.get('error', 'Error desconocido')}")
+  L76 [print] 🚀 Iniciando prueba del análisis lineal avanzado...
+    print("🚀 Iniciando prueba del análisis lineal avanzado...")
+  L80 [print] 
+✅ PRUEBA EXITOSA: El análisis lineal avanzado funciona correctamente
+    print("\n✅ PRUEBA EXITOSA: El análisis lineal avanzado funciona correctamente")
+  L82 [print] 
+❌ PRUEBA FALLIDA: Hay problemas con el análisis lineal avanzado
+    print("\n❌ PRUEBA FALLIDA: Hay problemas con el análisis lineal avanzado")
+
+test_debug_tracking.py
+  L15 [print] 🔧 Testeando tracking de datos con debugs...
+    print("🔧 Testeando tracking de datos con debugs...")
+  L42 [print] 📋 VERIFICACIÓN FINAL:
+    print("📋 VERIFICACIÓN FINAL:")
+  L46 [print] ✅ Análisis exitoso
+    print(f"✅ Análisis exitoso")
+  L47 [print] 📊 Datos procesados: {...}
+    print(f"📊 Datos procesados: {results.get('data_count', 0)}")
+  L48 [print] 📊 Rango de datos: {...}
+    print(f"📊 Rango de datos: {results.get('data_range', 'N/A')}")
+  L54 [print] 
+📊 Verificación del archivo Excel final:
+    print(f"\n📊 Verificación del archivo Excel final:")
+  L55 [print] 📊 Filas en archivo final: {...}
+    print(f"📊 Filas en archivo final: {len(df_final)}")
+  L59 [print] 📊 Valores únicos finales en 線材長: {...}
+    print(f"📊 Valores únicos finales en 線材長: {unique_final}")
+  L67 [print] ❌ PROBLEMA: El archivo final contiene {...} registros con 線材長 = 74
+    print(f"❌ PROBLEMA: El archivo final contiene {count_74_final} registros con 線材長 = 74")
+  L69 [print] ✅ CORRECTO: El archivo final contiene solo registros con 線材長 = 75
+    print(f"✅ CORRECTO: El archivo final contiene solo registros con 線材長 = 75")
+  L71 [print] ❌ Columna 線材長 no encontrada en archivo final
+    print("❌ Columna 線材長 no encontrada en archivo final")
+  L73 [print] ❌ Archivo Excel final no encontrado: {...}
+    print(f"❌ Archivo Excel final no encontrado: {excel_path}")
+  L75 [print] ❌ Error en análisis: {...}
+    print(f"❌ Error en análisis: {results.get('error', 'Error desconocido')}")
+
+test_exact_reference.py
+  L20 [print] 🧪 TESTEANDO ANÁLISIS EXACTO COMO ARCHIVO DE REFERENCIA
+    print("🧪 TESTEANDO ANÁLISIS EXACTO COMO ARCHIVO DE REFERENCIA")
+  L28 [print] 📊 Ejecutando análisis sin filtros...
+    print("📊 Ejecutando análisis sin filtros...")
+  L32 [print] ✅ ANÁLISIS EXITOSO
+    print("✅ ANÁLISIS EXITOSO")
+  L33 [print] 📁 Directorio de salida: {...}
+    print(f"📁 Directorio de salida: {results['output_directory']}")
+  L34 [print] 📊 Forma de datos: {...}
+    print(f"📊 Forma de datos: {results['data_shape']}")
+  L68 [print]   - {...}: {...} transformación
+    print(f"  - {target}: {method} transformación")
+  L71 [print]   - {...}: sin transformación ({...})
+    print(f"  - {target}: sin transformación ({reason})")
+  L78 [print] ✅ Archivo Excel creado correctamente
+    print("✅ Archivo Excel creado correctamente")
+  L80 [print] ❌ Archivo Excel no encontrado
+    print("❌ Archivo Excel no encontrado")
+  L82 [print] ⚠️ No se creó calculadora Excel
+    print("⚠️ No se creó calculadora Excel")
+  L94 [print] 
+🎉 PRUEBA EXITOSA: El análisis funciona exactamente como el archivo de referencia
+    print("\n🎉 PRUEBA EXITOSA: El análisis funciona exactamente como el archivo de referencia")
+  L97 [print] ❌ ANÁLISIS FALLIDO: {...}
+    print(f"❌ ANÁLISIS FALLIDO: {results.get('error', 'Unknown error')}")
+  L111 [print] 
+✅ TODAS LAS PRUEBAS PASARON - El análisis es idéntico al archivo de referencia
+    print("\n✅ TODAS LAS PRUEBAS PASARON - El análisis es idéntico al archivo de referencia")
+  L113 [print] 
+❌ ALGUNAS PRUEBAS FALLARON - Revisar implementación
+    print("\n❌ ALGUNAS PRUEBAS FALLARON - Revisar implementación")
+
+test_filter_logic.py
+  L13 [print] 🔧 Probando lógica de filtros corregida...
+    print("🔧 Probando lógica de filtros corregida...")
+  L79 [print] ✅ ÉXITO: {...} registros procesados, {...} modelos entrenados
+    print(f"✅ ÉXITO: {data_count} registros procesados, {models_trained} modelos entrenados")
+  L100 [print] 📁 Resultados guardados en: {...}
+    print(f"📁 Resultados guardados en: {test_folder}")
+
+test_real_db.py
+  L21 [print] 🔧 Probando análisis lineal con base de datos real...
+    print("🔧 Probando análisis lineal con base de datos real...")
+  L55 [print] 🚀 Ejecutando análisis lineal...
+    print("🚀 Ejecutando análisis lineal...")
+  L59 [print] ✅ Resultados: {...}
+    print(f"✅ Resultados: {results.get('success', False)}")
+  L62 [print] 📊 Datos procesados: {...}
+    print(f"📊 Datos procesados: {results.get('data_count', 0)}")
+  L64 [print] 📁 Carpeta de salida: {...}
+    print(f"📁 Carpeta de salida: {results.get('output_folder', 'N/A')}")
+
+== Unique messages (sorted) ==
+- 
+   ⚠️ ADVERTENCIA: Solo se encontraron {...} objetivos de Pareto.
+- 
+   ✅ OK: Se encontraron {...} objetivos de Pareto (suficiente para análisis)
+- 
+   🎯 COLUMNAS DE PREDICCIÓN ESPERADAS:
+- 
+   🎯 VERIFICACIÓN PARA PARETO:
+- 
+   🔍 Búsqueda recursiva de diagnostic_report.txt:
+- 
+Recomendación: Revisa nonlinear_worker.py para asegurar que:
+- 
+Si todos los checks pasaron (✅), el problema probablemente está en:
+- 
+⚠️  Interrupción manual detectada
+- 
+✅ PRUEBA EXITOSA: El análisis lineal avanzado funciona correctamente
+- 
+✅ Reporte completo generado en: {...}
+- 
+✅ TODAS LAS PRUEBAS PASARON - El análisis es idéntico al archivo de referencia
+- 
+❌ ALGUNAS PRUEBAS FALLARON - Revisar implementación
+- 
+❌ Error leyendo archivo: {...}
+- 
+❌ PRUEBA FALLIDA: Hay problemas con el análisis lineal avanzado
+- 
+🎉 PRUEBA EXITOSA: El análisis funciona exactamente como el archivo de referencia
+- 
+🎨 Análisis de qué se mostraría en la UI:
+- 
+📁 Carpeta de salida: {...}
+- 
+📄 Buscando diagnostic_report.txt:
+- 
+📊 ARCHIVO DE PREDICCIÓN:
+- 
+📊 Distribución de A11 en registros con 線材長 = 74:
+- 
+📊 Generando reporte de memoria desde: {...}
+- 
+📊 Resumen de datos parseados:
+- 
+📊 Verificación del archivo Excel final:
+- 
+📋 CONFIGURACIÓN:
+- 
+📋 Primeras 20 líneas del archivo:
+- 
+📖 Analizando archivo: {...}
+- 
+📦 ARCHIVOS DE MODELO:
+- 
+🔍 DIAGNÓSTICO DEL PROBLEMA:
+-          ⚠️  Variación encontrada: {...}
+-          📁 Carpeta de gráficos: {...}
+-         1. El layout no se está actualizando correctamente
+-         2. Los widgets se crean pero no son visibles (problema de CSS)
+-         3. El container_layout no está conectado correctamente
+-       Columna 切削時間 encontrada: {...}
+-       Columnas de predicción encontradas: {...}/{...}
+-       Esto explicaría por qué la pantalla está vacía
+-       Se mostrará información básica pero no la sección de modelo
+-       Se mostraría: 解析完了時刻, 解析時間
+-       Se necesitan al menos 2 para el análisis de Pareto.
+-       Si aún no se ven, el problema puede estar en:
+-       Tamaño: {...} MB
+-       tau_neg encontrado: {...}
+-       tau_pos encontrado: {...}
+-       ⚠️ No encontrado en: {...}
+-       ✅ Encontrado (búsqueda directa): {...}
+-       ✅ Encontrado en: {...}
+-       ✅ Encontrado: {...}
+-       ❌ Calibrator: No encontrado
+-       ❌ No encontrado en ninguna ubicación
+-       ❌ NP_ALPHA: No encontrado
+-       ❌ τ+ (tau_pos): No encontrado
+-       ❌ τ- (tau_neg): No encontrado
+-       ❌ カバレッジ: No encontrado
+-       ❌ ノイズレベル: No encontrado
+-       ❌ ノイズ付加: No encontrado
+-       ❌ 目的変数: No encontrado
+-       ❌ 総データ数: No encontrado
+-       ❌ 選択特徴量数: No encontrado
+-     ✅ Valores numéricos iguales: {...}
+-     ❌ Valores numéricos diferentes: {...} != {...}
+-    Archivo: {...}
+-    Buscando: {...} o *_未実験データ.xlsx
+-    Carpeta de salida: {...}
+-    Carpeta raíz existe: {...}
+-    Carpeta raíz: {...}
+-    Contenido de carpeta raíz:
+-    Información básica (info_label): {...}
+-    Información de ruido (noise_card): {...}
+-    Información del modelo (metric_card): {...}
+-    Líneas: {...} líneas
+-    Ruta intentada 1: {...}
+-    Ruta intentada 2: {...}
+-    Tamaño: {...} caracteres
+-    ⚠️  PROBLEMA: Falta información del modelo (tau_pos o tau_neg)
+-    ⚠️ Archivo de fórmulas no encontrado en: {...}
+-    ⚠️ Carpeta de predicción no encontrada: {...}
+-    ⚠️ No se encontraron archivos en estructura de análisis no lineal
+-    ✅ Archivo encontrado: {...}
+-    ✅ Archivo leído correctamente
+-    ✅ Encontrado en (alternativa): {...}
+-    ✅ Encontrado en: {...}
+-    ✅ Se encontraron {...} archivo(s) de predicción:
+-    ✅ Todo parece estar bien. Los datos deberían mostrarse correctamente.
+-    ✅ Todos los modelos están disponibles
+-    ❌ Archivo NO encontrado: {...}
+-    ❌ Error leyendo el archivo: {...}
+-    ❌ No encontrado en ubicaciones esperadas
+-    ❌ PROBLEMA CRÍTICO: No se encontraron datos suficientes para mostrar
+-    🔍 Buscando archivos de predicción en estructura de análisis no lineal...
+-    🔍 Buscando desde: {...}
+-    🔍 Intentando ruta por defecto: {...}
+-   (continuando sin análisis de clasificación)
+-   (continuando sin análisis no lineal)
+-   (continuando sin diálogo)
+-   (continuando sin diálogos)
+-   - Botón anterior: {...}
+-   - Botón siguiente: {...}
+-   - El directorio de trabajo puede ser diferente
+-   - Gráfico actual: {...}/{...}
+-   - Gráficos disponibles: {...}
+-   - Las variables de entorno no interfieren con xlsxwriter
+-   - Nombre de carpeta original: '{...}'
+-   - Número final extraído: '{...}'
+-   - Patrón usado: '{...}'
+-   - Tipo de optimización: '{...}'
+-   - Total de gráficos: {...}
+-   - {...} (archivo: {...}, dir: {...})
+-   - {...}: sin transformación ({...})
+-   - {...}: {...} transformación
+-   1. El entorno del subproceso (variables de entorno diferentes)
+-   2. El directorio de trabajo cuando se ejecuta desde nonlinear_worker
+-   Directorio actual: {...}
+-   Python versión: {...}
+-   ⚠️ Carpeta no existe: {...} (se creará automáticamente)
+-   ⚠️ No se encontraron paths del venv en sys.path
+-   ⚠️ No se pudo importar dll_debug (no crítico)
+-   ✅ Archivo de prueba eliminado
+-   ✅ Archivo Excel creado exitosamente
+-   ✅ Carpeta existe: {...}
+-   ✅ DEBUG: Coincidencia encontrada con patrón '{...}'
+-   ✅ DEBUG: Número extraído: '{...}'
+-   ✅ DEBUG: Número rellenado: '{...}'
+-   ✅ No se detectaron DLLs OpenMP
+-   ✅ pandas instalado: versión {...}
+-   ✅ Permisos de escritura OK en el directorio actual
+-   ✅ xlsxwriter instalado: versión {...}
+-   ❌ Columna '{...}' no existe en experimento
+-   ❌ CONFLICTO: Múltiples runtimes OpenMP detectados
+-   ❌ DEBUG: No coincidencia con patrón '{...}'
+-   ❌ pandas NO está instalado: {...}
+-   ❌ xlsxwriter NO está instalado: {...}
+-   📍 Ubicación: {...}
+-   🔍 DEBUG: Patrón {...}: {...}
+- ==> Lanzando Fold {...}/{...} (índice {...})
+- Datos filtrados: {...} registros
+- DEBUG: Entró en on_d_optimizer_finished
+- DEBUG: Entró en on_dsaitekika_finished
+- DEBUG: Entró en on_i_optimizer_finished
+- DIAGNÓSTICO COMPLETADO
+- DIAGNÓSTICO DE ERROR DE PARETO ANALYSIS
+- DIAGNÓSTICO DE ESTADÍSTICAS DE CLASIFICACIÓN
+- Generando BBDD vacías para el instalador (installer\\db_templates\\)...
+- Generando imágenes del instalador (wizard_small.bmp / wizard_large.bmp)...
+- InstallerOnly activo pero NO existe el build en dist/. Se ejecutará PyInstaller primero...
+- InstallerOnly activo: se omite PyInstaller (se usará el dist existente).
+- Limpiando $p ...
+- NOTA: en --onefile puede haber un delay inicial por descompresión antes de que Qt pueda mostrar el splash.
+- Número de gráficos:
+- SkipClean activo: no se borrarán build/dist
+- SkipSetupIcon activo: no se generará setup_icon.ico
+- SkipVCRedistDownload activo: no se descargará vc_redist.x64.exe
+- SkipWizardImages activo: no se generarán wizard_small.bmp / wizard_large.bmp
+- WARN: no existe asset opcional: $($item.src) (se omitirá)
+- WARN: no se encontró kiwisolver _cext .pyd en $kiwiPyd
+- ℹ️ BBDD {...} no existe, se creará automáticamente
+- ℹ️ Carga de folder existente: no se requiere selección de parámetros
+- ℹ️ CSV→Excel export ya en ejecución, se omite nueva solicitud
+- ℹ️ done_experiments ya en ejecución, se reutiliza el que salga
+- ℹ️ Usuario canceló la predicción tras advertencia de múltiples valores
+- ℹ️ Usuario canceló la predicción tras warnings de validación
+- ⚙️ Analizando datos filtrados...
+- ⚠️  Deteniendo ejecución de folds restantes
+- ⚠️ ADVERTENCIA: N_TRIALS no encontrado en config_custom.py después de guardar
+- ⚠️ ADVERTENCIA: N_TRIALS podría no haberse reemplazado correctamente
+- ⚠️ analysis_results.json no encontrado en: {...}
+- ⚠️ Archivo esperado no encontrado, buscando patrón *_未実験データ.xlsx...
+- ⚠️ Archivo no encontrado en 99_Temp, copiando...
+- ⚠️ Carpeta 03_線形回帰 no encontrada
+- ⚠️ Carpeta 04_予測計算 no encontrada en: {...}
+- ⚠️ Carpeta de gráficos no encontrada: {...}
+- ⚠️ Carpeta de resultados no encontrada: {...}
+- ⚠️ Coincidencias no encontradas para {...}/{...} filas de resultados. (Revisa tipos/columnas/valores)
+- ⚠️ Continuando con la creación de carpeta...
+- ⚠️ Debug - No se proporcionó información de experimento, usando valores por defecto
+- ⚠️ DEBUG _downcast_df falló: {...}
+- ⚠️ DEBUG: La carpeta ya existe: {...}
+- ⚠️ DEBUG: No se encontró archivo de experimento correspondiente
+- ⚠️ diagnostic_report.txt no encontrado en: {...} o {...}
+- ⚠️ El archivo de muestreo no contiene '{...}'. Se eliminará la primera coincidencia por clave estricta.
+- ⚠️ El worker no terminó en 5 segundos, forzando cierre...
+- ⚠️ Error añadiendo título central: {...}
+- ⚠️ Error convirtiendo valor de filtro para {...}: {...}
+- ⚠️ Error convirtiendo valores de filtro para {...}: {...}
+- ⚠️ Error creando backup: {...}
+- ⚠️ Error creando done_experiments.xlsx: {...}
+- ⚠️ Error creando gráfico para {...}: {...}
+- ⚠️ Error guardando archivo intermedio: {...}
+- ⚠️ Error guardando datos de análisis en JSON: {...}
+- ⚠️ Error importando classification worker: {...}
+- ⚠️ Error importando config_cls: {...}
+- ⚠️ Error importando diálogo de clasificación: {...}
+- ⚠️ Error importando diálogo de selección de cepillo: {...}
+- ⚠️ Error importando diálogos: {...}
+- ⚠️ Error importando nonlinear worker: {...}
+- ⚠️ Error leyendo analysis_results.json: {...}
+- ⚠️ Error leyendo dcv_results.pkl para extraer modelos: {...}
+- ⚠️ Error leyendo diagnostic_report.txt: {...}
+- ⚠️ Error obteniendo datos de la BD: {...}
+- ⚠️ Error recalculando D基準値 (referencia) desde candidato/índices: {...}
+- ⚠️ Error verificando posición de ventana: {...}
+- ⚠️ Excel no se pudo crear (retornó None)
+- ⚠️ Insuficientes datos para {...}: {...} muestras
+- ⚠️ Joblib no disponible, continuando sin configuración específica
+- ⚠️ La base de datos está vacía.
+- ⚠️ Layout del área de gráficos es None, creando nuevo layout...
+- ⚠️ No había índice anterior: {...}
+- ⚠️ No hay carpeta de proyecto actual
+- ⚠️ No hay carpeta de proyecto configurada, usando: {...}
+- ⚠️ No hay causas de fragmentación identificadas
+- ⚠️ No hay datos de memoria para graficar
+- ⚠️ No hay datos de tipos de objetos
+- ⚠️ No hay datos filtrados.
+- ⚠️ No hay datos para insertar.
+- ⚠️ No hay modelos compatibles para Excel
+- ⚠️ No hay tipos de objetos registrados
+- ⚠️ No se creó calculadora Excel
+- ⚠️ No se detectó carpeta de proyecto, usando carpeta por defecto
+- ⚠️ No se encontraron carpetas de análisis lineal
+- ⚠️ No se encontraron las columnas esperadas
+- ⚠️ No se encontró archivo fuente y no existe destino. Continuando...
+- ⚠️ No se encontró el archivo de datos no experimentados en: {...}
+- ⚠️ No se pudieron preparar columnas en analysis_df.xlsx: {...}
+- ⚠️ No se pudo cargar el icono: {...}
+- ⚠️ No se pudo cargar la imagen xebec_chibi.png
+- ⚠️ No se pudo cargar {...}
+- ⚠️ No se pudo configurar fuente japonesa: {...}
+- ⚠️ No se pudo crear backup automático de la BBDD (ruta no disponible).
+- ⚠️ No se pudo crear symlink, copiando config_cls.py a ml_modules: {...}
+- ⚠️ No se pudo ejecutar backup diario: {...}
+- ⚠️ openpyxl no disponible, no se puede crear la calculadora Excel
+- ⚠️ Proceso no terminó, forzando cierre...
+- ⚠️ Proceso no terminó, forzando kill...
+- ⚠️ Script no encontrado: {...}
+- ⚠️ Todos los registros ya existían en la base de datos.
+- ⚠️ Usando fallback para carpeta del proyecto: {...}
+- ⚠️ WARNING: LoadingOverlay se convirtió en ventana después de show(), corrigiendo...
+- ⚠️ WARNING: LoadingOverlay se detectó como ventana, corrigiendo...
+- ⚠️ Warnings de validación:
+- ⚠️ xlwings no encontrado, instalando...
+- ⚠️ Ya existe un archivo idéntico en: {...}
+- ⚠️ 送り速度 no encontrado, 加工時間 = 0
+- ⚡ Eliminando índice anterior y creando nuevo índice único...
+- ✁EBuild terminado. Revisa: dist\\$name.exe
+- ✅ [DEBUG] metric_card altura mínima: {...}px
+- ✅ [DEBUG] Mostrando Model Information
+- ✅ [DEBUG] Mostrando Noise Addition Settings
+- ✅ [DEBUG] noise_card altura mínima: {...}px
+- ✅ Análisis de clasificación completado
+- ✅ Análisis ejecutado exitosamente
+- ✅ ANÁLISIS EXITOSO
+- ✅ Análisis exitoso
+- ✅ Análisis lineal completado exitosamente
+- ✅ Análisis no lineal completado
+- ✅ Aplicación cerrada correctamente
+- ✅ Archivo copiado a 99_Temp: {...}
+- ✅ Archivo copiado: {...} → {...}
+- ✅ ARCHIVO DE ENTRADA ACTUALIZADO: {...}
+- ✅ Archivo de entrada cambiado automáticamente a: {...}
+- ✅ Archivo de fórmulas encontrado (search): {...}
+- ✅ Archivo de fórmulas encontrado: {...}
+- ✅ Archivo de muestreo actualizado guardado: {...}
+- ✅ Archivo de predicción creado: {...}
+- ✅ Archivo de predicción seleccionado: {...}
+- ✅ Archivo encontrado (patrón): {...}
+- ✅ Archivo encontrado (Prioridad 1): {...}
+- ✅ Archivo encontrado (Prioridad 2): {...}
+- ✅ Archivo encontrado (Prioridad 3): {...}
+- ✅ Archivo encontrado: {...}
+- ✅ Archivo Excel abierto: {...}
+- ✅ Archivo Excel creado correctamente
+- ✅ Archivo idéntico encontrado en: {...}/{...}
+- ✅ Archivo pertenece a proyecto existente: {...}
+- ✅ Archivo pertenece al proyecto activo: {...}
+- ✅ Archivo seleccionado y validado: {...}
+- ✅ Archivo validado correctamente. Columnas: {...}
+- ✅ Base de datos actualizada correctamente
+- ✅ Build terminado. Revisa: dist\\$name\\$name.exe
+- ✅ Cancelación completada
+- ✅ Carpeta abierta: {...}
+- ✅ Carpeta de predicción encontrada: {...}
+- ✅ Carpeta del proyecto detectada automáticamente: {...}
+- ✅ Carpeta del proyecto detectada: {...}
+- ✅ Carpeta del proyecto guardada: {...}
+- ✅ Carpeta seleccionada es un proyecto válido: {...}
+- ✅ Carpeta {...} creada
+- ✅ config_cls.py copiado también a ml_modules para compatibilidad
+- ✅ Configuración creada: {...}
+- ✅ Configuración guardada: {...}
+- ✅ Configuración temporal creada: {...}
+- ✅ Consola reposicionada en la nueva ubicación
+- ✅ CORRECTO: El archivo final contiene solo registros con 線材長 = 75
+- ✅ CORRECTO: No se encontraron registros con 線材長 = 74
+- ✅ Creando nueva carpeta: {...}
+- ✅ Datos cargados: {...} filas, {...} columnas
+- ✅ Datos de análisis cargados desde: {...}
+- ✅ Datos de análisis guardados en: {...}
+- ✅ Datos de análisis guardados: {...}
+- ✅ Datos de diagnóstico cargados desde: {...}
+- ✅ Datos exportados a: {...}
+- ✅ Datos filtrados guardados en: {...}
+- ✅ Datos filtrados:
+- ✅ Datos guardados: {...}
+- ✅ Datos obtenidos: {...} registros
+- ✅ Datos preparados: {...} muestras, {...} características
+- ✅ Debug - Usando información de experimento proporcionada
+- ✅ DEBUG: Archivo de experimento encontrado: {...}
+- ✅ DEBUG: Carpeta creada exitosamente: {...}
+- ✅ DEBUG: Información de experimento guardada para procesamiento posterior
+- ✅ DEBUG: No se creará carpeta por defecto prematuramente
+- ✅ DEBUG: ¡COINCIDENCIA ENCONTRADA!
+- ✅ Diálogo de clasificación importado correctamente
+- ✅ Diálogo de selección de cepillo importado correctamente
+- ✅ Diálogos importados correctamente
+- ✅ Encontrada carpeta de proyecto: {...}
+- ✅ Estructura de proyecto creada en: {...}
+- ✅ Estructura de proyecto detectada con {...} carpetas
+- ✅ Extraídos {...} modelos con métricas CV desde dcv_results.pkl
+- ✅ Filas de datos: {...}
+- ✅ Fórmulas convertidas a valores con openpyxl (best-effort)
+- ✅ Fórmulas convertidas a valores con xlwings
+- ✅ Fórmulas convertidas a valores con xlwings (instalado)
+- ✅ Gráfico de causas guardado: {...}
+- ✅ Gráfico de tipos guardado: {...}
+- ✅ Gráfico guardado: {...}
+- ✅ Gráficos de evaluación mostrados
+- ✅ Gráficos de Pareto mostrados en pantalla
+- ✅ Gráficos del análisis de clasificación mostrados
+- ✅ Gráficos del análisis no lineal mostrados
+- ✅ Instalador generado en: installer\ (archivo: 0_00sec_Setup_x64_*.exe)
+- ✅ Las columnas ya están actualizadas en la base de datos
+- ✅ ml_modules encontrado: {...}
+- ✅ Mostrando gráfico de Pareto: {...}
+- ✅ Mostrando gráfico: {...}
+- ✅ Mostrando gráficos de Pareto desde: {...}
+- ✅ Módulo de análisis lineal importado correctamente
+- ✅ Módulos de BD importados correctamente
+- ✅ Módulos importados correctamente
+- ✅ Ningún cepillo específico seleccionado - 'すべて' seleccionado por defecto
+- ✅ No se encontró archivo idéntico, procediendo con la creación de carpeta...
+- ✅ Nuevo índice único creado
+- ✅ Parada segura completada. No debería haber crash.
+- ✅ Parámetros seleccionados:
+- ✅ Pipeline script encontrado: {...}
+- ✅ Procesamiento e inserción completados con valores de UI (conexión personalizada).
+- ✅ Procesamiento e inserción completados.
+- ✅ Proyecto activo limpiado. Se pedirá nuevo proyecto en la próxima optimización.
+- ✅ Reporte de texto guardado: {...}
+- ✅ Resultados del análisis lineal mostrados
+- ✅ Resultados guardados: {...}
+- ✅ Resultados JSON guardados: {...}
+- ✅ Resultados: {...}
+- ✅ Sistema de navegación configurado:
+- ✅ Todos los módulos importados correctamente
+- ✅ Usando archivo de 99_Temp: {...}
+- ✅ Usando archivo existente en 99_Temp: {...}
+- ✅ Usando archivo para optimización: {...}
+- ✅ Usando proyecto existente: {...}
+- ✅ Usando proyecto seleccionado: {...}
+- ✅ Usuario confirmó gráficos - continuar con stages 2-3
+- ✅ Validación exitosa - Continuando con la predicción
+- ✅ Validación exitosa - Todos los parámetros son consistentes
+- ✅ Worker de análisis no lineal cancelado
+- ✅ Worker de análisis no lineal cancelado correctamente
+- ✅ ÉXITO: {...} registros procesados, {...} modelos entrenados
+- ✅ Índice único confirmado: idx_unique_yosoku
+- ❌ 02_prediction.py falló con código {...}
+- ❌ 03_pareto_analyzer.py falló con código {...}
+- ❌ ANÁLISIS FALLIDO: {...}
+- ❌ Archivo Excel final no encontrado: {...}
+- ❌ Archivo Excel no encontrado
+- ❌ Archivo no encontrado: {...}
+- ❌ Botón de flecha no existe
+- ❌ Carpeta de análisis lineal no encontrada
+- ❌ Carpeta de predicción no encontrada
+- ❌ Columna 線材長 no encontrada en archivo final
+- ❌ Columna 線材長 no encontrada en el archivo
+- ❌ DEBUG: Carpeta 01_実験リスト no existe: {...}
+- ❌ DEBUG: El proyecto no existe: {...}
+- ❌ DEBUG: Error creando carpeta de experimento: {...}
+- ❌ DEBUG: No se encontró coincidencia en ningún archivo de experimento
+- ❌ DEBUG: pareto_plots_folder no existe
+- ❌ DEBUG: prediction_output_file no existe
+- ❌ done_experiments: falta columna de dirección. main_has={...}, temp_has={...}
+- ❌ Error abriendo archivo Excel: {...}
+- ❌ Error abriendo carpeta: {...}
+- ❌ Error actualizando la base de datos: {...}
+- ❌ Error al iniciar la aplicación: {...}
+- ❌ Error buscando archivo de fórmulas: {...}
+- ❌ Error buscando archivo 未実験データ: {...}
+- ❌ Error buscando carpeta de predicción: {...}
+- ❌ Error cancelando exportación: {...}
+- ❌ Error cancelando importación: {...}
+- ❌ Error cancelando predicción: {...}
+- ❌ Error cargando archivos existentes de clasificación: {...}
+- ❌ Error cargando estadísticas de clasificación: {...}
+- ❌ Error cargando estadísticas del análisis: {...}
+- ❌ Error creando estructura del proyecto: {...}
+- ❌ Error detallado creando Excel: {...}
+- ❌ Error detectando carpeta del proyecto: {...}
+- ❌ Error ejecutando análisis lineal en proyecto: {...}
+- ❌ Error ejecutando análisis lineal: {...}
+- ❌ Error ejecutando predicción: {...}
+- ❌ Error en análisis de clasificación: {...}
+- ❌ Error en análisis lineal: {...}
+- ❌ Error en análisis no lineal: {...}
+- ❌ Error en análisis: {...}
+- ❌ Error en el análisis: {...}
+- ❌ Error en finalización: {...}
+- ❌ Error en importación de clasificación: {...}
+- ❌ Error en manejo de error de exportación: {...}
+- ❌ Error en manejo de finalización de exportación: {...}
+- ❌ Error en manejo de finalización: {...}
+- ❌ Error en predicción Yosoku: {...}
+- ❌ Error en procesamiento de fórmulas: {...}
+- ❌ Error en selección de archivo: {...}
+- ❌ Error entrenando modelo para {...}: {...}
+- ❌ Error importando integrated optimizer: {...}
+- ❌ Error importando módulo de análisis lineal: {...}
+- ❌ Error importando módulos de BD: {...}
+- ❌ Error importando módulos: {...}
+- ❌ Error importando Pareto a BD: {...}
+- ❌ Error importando ShowResultsWorker: {...}
+- ❌ Error importando widgets: {...}
+- ❌ Error importando workers: {...}
+- ❌ Error iniciando exportación: {...}
+- ❌ Error iniciando importación de clasificación: {...}
+- ❌ Error iniciando importación: {...}
+- ❌ Error iniciando predicción: {...}
+- ❌ Error iniciando worker de importación: {...}
+- ❌ Error leyendo {...}: {...}
+- ❌ Error mostrando diálogo de parámetros: {...}
+- ❌ Error mostrando gráficos de evaluación: {...}
+- ❌ Error mostrando gráficos de Pareto: {...}
+- ❌ Error mostrando gráficos del análisis de clasificación: {...}
+- ❌ Error mostrando gráficos del análisis no lineal: {...}
+- ❌ Error mostrando resultados: {...}
+- ❌ Error obteniendo datos filtrados: {...}
+- ❌ Error obteniendo datos: {...}
+- ❌ Error validando parámetros: {...}
+- ❌ ERROR: Índice único no encontrado!
+- ❌ Errores de validación encontrados:
+- ❌ Fold {...} falló con código {...}
+- ❌ La carpeta de salida no existe
+- ❌ La tabla 'main_results' no existe
+- ❌ No hay carpeta de proyecto configurada
+- ❌ No hay conexión a la base de datos
+- ❌ No se encontraron carpetas de análisis
+- ❌ No se encontraron datos en ninguna tabla
+- ❌ No se encontraron subcarpetas de análisis lineal
+- ❌ No se encontraron subcarpetas de análisis lineal en: {...}
+- ❌ No se encontró el archivo: {...}
+- ❌ No se encontró la carpeta base 05_分類
+- ❌ No se encontró la carpeta: {...}
+- ❌ No se encontró ningún archivo con patrón *_未実験データ.xlsx en: {...}
+- ❌ No se encontró ningún archivo de fórmulas válido
+- ❌ No se pudo cargar la imagen: {...}
+- ❌ No se pudo detectar automáticamente la carpeta del proyecto
+- ❌ PROBLEMA: El archivo final contiene {...} registros con 線材長 = 74
+- ❌ Script no encontrado: 02_prediction.py
+- ❌ Script no encontrado: 03_pareto_analyzer.py
+- ❌ Script no encontrado: {...}
+- ❌ self.processor no existe
+- ❌ Usuario canceló - proceso detenido
+- ❌ Usuario canceló el análisis de clasificación
+- ❌ Usuario canceló el análisis lineal
+- ❌ Usuario canceló el análisis no lineal
+- ❌ Usuario canceló el diálogo de configuración
+- ❌ Usuario canceló la selección de parámetros
+- ❌ Validación fallida:
+- 🏷️ Iniciando análisis de clasificación...
+- 💡 Los registros duplicados se sobreescribieron automáticamente
+- 📁 00_Pythonコード encontrado en: {...}
+- 📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto
+- 📁 Archivo intermedio guardado: {...}
+- 📁 Archivo temporal creado: {...}
+- 📁 Carpeta 99_Temp mantenida: {...}
+- 📁 Carpeta creada: {...}
+- 📁 Carpeta de análisis creada: {...}
+- 📁 Carpeta de resultados creada: {...}
+- 📁 Carpeta de salida: {...}
+- 📁 Carpeta del proyecto encontrada: {...}
+- 📁 Carpeta del proyecto establecida: {...}
+- 📁 Carpeta encontrada: {...}
+- 📁 Creada carpeta: {...}
+- 📁 Creando backup: {...} → {...}
+- 📁 Creando carpeta con prefijo D: {...}
+- 📁 Creando carpeta con prefijo I: {...}
+- 📁 Creando carpeta temporal...
+- 📁 Creando nuevo proyecto: {...} en {...}
+- 📁 Creando proyecto: {...} en {...}
+- 📁 Directorio de salida: {...}
+- 📁 Excel parts: {...} (500,000 filas/archivo)
+- 📁 Resultados guardados en: {...}
+- 📁 Ruta completa: {...}
+- 📁 Subcarpeta de gráficos creada: {...}
+- 📁 Usando carpeta del proyecto: {...}
+- 📁 Usando carpeta más reciente: {...}
+- 📄 99_未実験データ: creando {...}
+- 📈 Iniciando análisis no lineal...
+- 📊 Archivo de muestreo actualizado: {...} filas
+- 📊 Archivo de muestreo original: {...} filas
+- 📊 BBDD vacía, insertando todos los registros
+- 📊 Carpeta más reciente encontrada: {...}
+- 📊 Columnas en el archivo: {...}
+- 📊 Configurando navegación de gráficos:
+- 📊 Contenido completo de la base de datos:
+
+- 📊 Datos cargados para validación: {...} filas, {...} columnas
+- 📊 Datos filtrados obtenidos: {...} registros
+- 📊 Datos obtenidos: {...} filas, {...} columnas
+- 📊 Datos procesados: {...}
+- 📊 Distribución de valores en 線材長:
+- 📊 Ejecutando análisis sin filtros...
+- 📊 Encontradas {...} carpetas de análisis lineal
+- 📊 Encontrados {...} gráficos
+- 📊 Encontrados {...} gráficos de Pareto
+- 📊 Filas en archivo final: {...}
+- 📊 Filas en el archivo: {...}
+- 📊 Forma de datos: {...}
+- 📊 Iniciando análisis lineal...
+- 📊 Leyendo archivo de muestreo: {...}
+- 📊 Leyendo archivo de resultados: {...}
+- 📊 Leyendo archivo: {...}
+- 📊 Número de carpeta extraído: {...}
+- 📊 Obteniendo datos filtrados de la base de datos...
+- 📊 Parámetros seleccionados: {...}
+- 📊 Rango de datos: {...}
+- 📊 Total de registros en la base de datos: {...}
+- 📊 Usando método alternativo (openpyxl)...
+- 📊 Usando número de carpeta por defecto: {...}
+- 📊 Usando xlwings (instalado) para convertir fórmulas...
+- 📊 Usando xlwings para convertir fórmulas...
+- 📊 Validando archivo: {...}
+- 📊 Valores únicos en {...}: {...}
+- 📊 Valores únicos en 線材長: {...}
+- 📊 Valores únicos finales en 線材長: {...}
+- 📋 Archivo seleccionado por usuario: {...}
+- 📋 Archivo 未実験データ encontrado: {...}
+- 📋 Añadiendo tabla D-óptimo con {...} filas
+- 📋 Añadiendo tabla I-óptimo con {...} filas
+- 📋 Configuración: {...}
+- 📋 Creando backup: {...}
+- 📋 Creando copia del archivo Excel...
+- 📋 Información de datos filtrados:
+{...}
+- 📋 Mostrando tabla D-óptimo
+- 📋 Mostrando tabla I-óptimo
+- 📋 No hay registros en la base de datos
+- 📋 VERIFICACIÓN FINAL:
+- 📝 Ejecutando INSERT OR REPLACE (sobreescritura automática)
+- 🔄 ACTUALIZANDO ARCHIVO DE ENTRADA...
+- 🔄 Archivo de muestreo detectado en pantalla de filtros. Volviendo a pantalla principal...
+- 🔄 Archivo de proyecto diferente detectado. Limpiando proyecto activo: {...}
+- 🔄 Archivo: {...}
+- 🔄 Convirtiendo fórmulas a valores...
+- 🔄 Iniciando proceso de backup y actualización del archivo de muestreo...
+- 🔄 Proyecto: {...}
+- 🔍 [DEBUG] Datos parseados: {...}
+- 🔍 Archivos encontrados en carpeta ({...}):
+- 🔍 Botón estilo: {...}
+- 🔍 Botón existe: {...}
+- 🔍 Botón geometría: {...}
+- 🔍 Botón padre: {...}
+- 🔍 Botón texto: {...}
+- 🔍 Botón visible: {...}
+- 🔍 Buscando archivo de fórmulas en: {...}
+- 🔍 Buscando archivo de predicción en: {...}
+- 🔍 Buscando archivo: {...}
+- 🔍 Características seleccionadas: {...}
+- 🔍 Carpeta existe: {...}
+- 🔍 Carpeta raíz del análisis: {...}
+- 🔍 Carpeta raíz existe: {...}
+- 🔍 Columnas disponibles en archivo de muestreo: {...}
+- 🔍 Columnas disponibles en archivo de resultados: {...}
+- 🔍 Debug - Archivo actual contiene {...} filas
+- 🔍 Debug - Archivo de resultados contiene {...} filas
+- 🔍 Debug - Carpeta 02_実験データ no existe, procediendo con la creación...
+- 🔍 Debug - Columnas del archivo: {...}
+- 🔍 Debug - Columnas en la base de datos:
+- 🔍 Debug - Columnas resultados esperadas: {...}
+- 🔍 Debug - Contenido completo de la base de datos:
+- 🔍 Debug - Creando carpeta en 02_実験データ...
+- 🔍 Debug - Creando ShowResultsWorker con:
+- 🔍 Debug - dsaitekika_results existe después de limpiar: {...}
+- 🔍 Debug - Error leyendo archivo de resultados: {...}
+- 🔍 Debug - Error leyendo {...}: {...}
+- 🔍 Debug - Error verificando base de datos antes: {...}
+- 🔍 Debug - Error verificando base de datos: {...}
+- 🔍 Debug - Error verificando BD del proyecto: {...}
+- 🔍 Debug - Iniciando thread para importación...
+- 🔍 Debug - isaitekika_results existe después de limpiar: {...}
+- 🔍 Debug - La base de datos está vacía
+- 🔍 DEBUG - No hay consola desplegable
+- 🔍 Debug - No hay registros en la base de datos
+- 🔍 Debug - Primera fila de datos:
+- 🔍 Debug - Registros en BD del proyecto: {...}
+- 🔍 Debug - Registros en la base de datos antes de importar: {...}
+- 🔍 Debug - Registros en la base de datos después de importar: {...}
+- 🔍 Debug - Revisando carpeta: {...}
+- 🔍 Debug - Ruta de BD del proyecto: {...}
+- 🔍 Debug - Ruta de la base de datos: {...}
+- 🔍 Debug - ShowResultsWorker usando base de datos: {...}
+- 🔍 Debug - Total de registros en la base de datos: {...}
+- 🔍 Debug - Verificando contenido de la base de datos después de importar...
+- 🔍 Debug - Verificando estructura de la base de datos...
+- 🔍 Debug - Verificando si ya existe un archivo idéntico en 02_実験データ...
+- 🔍 Debug - ¿Existe base de datos en el proyecto?: {...}
+- 🔍 Debug - ¿Existe la base de datos?: {...}
+- 🔍 Debug - Últimos 5 registros insertados:
+- 🔍 DEBUG load_graphs: buscando {...}, encontrados = {...}
+- 🔍 DEBUG load_graphs: carpeta = {...}
+- 🔍 DEBUG load_graphs: primeros gráficos = {...}
+- 🔍 Debug NG: Carpeta existe, procediendo a borrar...
+- 🔍 Debug NG: Carpeta no existe: {...}
+- 🔍 Debug NG: No hay current_temp_folder definido
+- 🔍 DEBUG nonlinear_worker: gráficos encontrados = {...}
+- 🔍 DEBUG nonlinear_worker: primeros gráficos = {...}
+- 🔍 DEBUG ParetoResultsDialog.__init__: gráficos cargados = {...}
+- 🔍 DEBUG run_stage2_and_3: Emitiendo señal error
+- 🔍 DEBUG run_stage2_and_3: Emitiendo señal finished
+- 🔍 DEBUG run_stage2_and_3: EXCEPCIÓN CAPTURADA
+- 🔍 DEBUG run_stage2_and_3: MÉTODO LLAMADO
+- 🔍 DEBUG run_stage2_and_3: Señal finished emitida
+- 🔍 DEBUG run_stage2_and_3: Stage 02 falló, emitiendo error
+- 🔍 DEBUG run_stage2_and_3: Stage 03 falló, emitiendo error
+- 🔍 DEBUG: Archivo de experimento cargado: {...} filas
+- 🔍 DEBUG: Archivo de resultados cargado: {...} filas
+- 🔍 DEBUG: Buscando en: {...}
+- 🔍 DEBUG: Carpeta final a crear: {...}
+- 🔍 DEBUG: Columnas del archivo de resultados: {...}
+- 🔍 DEBUG: Comparación {...}: Resultado fila {...} vs Experimento fila {...}
+- 🔍 DEBUG: Comparando con archivo: {...}
+- 🔍 DEBUG: Contenido del proyecto:
+- 🔍 DEBUG: Encontrado archivo: {...}
+- 🔍 DEBUG: Estado del botón de flecha
+- 🔍 DEBUG: Fallback - analizando nombre de carpeta: {...}
+- 🔍 DEBUG: Iniciando búsqueda de archivo de experimento...
+- 🔍 DEBUG: Iniciando create_experiment_data_folder
+- 🔍 DEBUG: Iniciando on_dsaitekika_clicked
+- 🔍 DEBUG: Intentando crear carpeta alternativa: {...}
+- 🔍 DEBUG: Leyendo archivo de resultados: {...}
+- 🔍 DEBUG: Llegando al código de actualización del archivo de entrada
+- 🔍 DEBUG: Longitud del nombre de carpeta: {...}
+- 🔍 DEBUG: No se encontraron archivos de experimento en {...}
+- 🔍 DEBUG: Nombre de carpeta extraído: {...}
+- 🔍 DEBUG: Nombre de carpeta final generado: '{...}'
+- 🔍 DEBUG: Patrón del archivo: {...}
+- 🔍 DEBUG: Primera fila de resultados:
+- 🔍 DEBUG: Procesando carpeta: '{...}'
+- 🔍 DEBUG: Resumen de extracción:
+- 🔍 DEBUG: Ruta completa a crear: {...}
+- 🔍 DEBUG: Tipo D detectado por nombre de archivo
+- 🔍 DEBUG: Tipo D detectado por nombre de carpeta
+- 🔍 DEBUG: Tipo de optimización final: {...}
+- 🔍 DEBUG: Tipo de optimización: '{...}'
+- 🔍 DEBUG: Tipo I detectado por nombre de archivo
+- 🔍 DEBUG: Tipo I detectado por nombre de carpeta
+- 🔍 DEBUG: Verificando estructura del proyecto:
+- 🔍 Detectando carpeta del proyecto para: {...}
+- 🔍 DIAGNÓSTICO DE MODELOS
+- 🔍 Directorio del archivo: {...}
+- 🔍 Intentando con ruta absoluta: {...}
+- 🔍 Línea N_TRIALS en config_custom.py: {...}
+- 🔍 MANDATORY_FEATURES vacía (ninguna característica obligatoria seleccionada)
+- 🔍 Validando datos filtrados...
+- 🔍 Verificando carpeta {...}/{...}: {...}
+- 🔍 Verificando que el índice único esté activo...
+- 🔧 Añadiendo paneles al layout principal...
+- 🔧 Botón de flecha creado: {...}
+- 🔧 Botón padre: {...}
+- 🔧 Botón visible: {...}
+- 🔧 Características disponibles: {...}
+- 🔧 Carpeta de salida: {...}
+- 🔧 Configuración del panel izquierdo completada
+- 🔧 Configurando pipeline de análisis lineal...
+- 🔧 Creando DBManager...
+- 🔧 Creando Excel calculator...
+- 🔧 Creando panel central...
+- 🔧 Creando panel de consola desplegable...
+- 🔧 Creando panel desplegable superpuesto...
+- 🔧 Creando panel izquierdo...
+- 🔧 Creando ResultProcessor...
+- 🔧 Creando widget central...
+- 🔧 Ejecutando análisis lineal con carpeta: {...}
+- 🔧 Ejecutando análisis lineal en carpeta: {...}
+- 🔧 Ejecutando análisis lineal en proyecto: {...}
+- 🔧 Ejecutando análisis lineal...
+- 🔧 Ejecutando análisis sin filtros...
+- 🔧 Entrenando modelo para {...} ({...})
+- 🔧 Filtros de cepillo específicos aplicados: {...}
+- 🔧 Frame central geometría: {...}
+- 🔧 Guardando resultados...
+- 🔧 Importando classification worker...
+- 🔧 Importando diálogo de clasificación...
+- 🔧 Importando diálogo de selección de cepillo...
+- 🔧 Importando diálogos de análisis no lineal...
+- 🔧 Importando integrated optimizer...
+- 🔧 Importando módulos de base de datos...
+- 🔧 Importando módulos...
+- 🔧 Importando nonlinear worker...
+- 🔧 Importando widgets...
+- 🔧 Importando workers...
+- 🔧 Inicialización de MainWindow completada
+- 🔧 Iniciando análisis de clasificación...
+- 🔧 Iniciando análisis lineal desde base de datos...
+- 🔧 Iniciando análisis lineal...
+- 🔧 Iniciando análisis no lineal...
+- 🔧 Iniciando creación de Excel durante análisis lineal...
+- 🔧 Iniciando predicción no lineal desde pantalla de gráficos...
+- 🔧 Iniciando predicción Yosoku...
+- 🔧 Iniciando prueba del análisis lineal avanzado...
+- 🔧 Iniciando worker de análisis no lineal...
+- 🔧 Iniciando worker de clasificación...
+- 🔧 Loading overlay geometría: {...}
+- 🔧 Loading se posicionará por encima de la consola
+- 🔧 Mostrando gráficos de evaluación...
+- 🔧 Mostrando gráficos de Pareto en pantalla...
+- 🔧 Mostrando gráficos del análisis de clasificación...
+- 🔧 Mostrando gráficos del análisis no lineal...
+- 🔧 Mostrando panel desplegable en el lado derecho...
+- 🔧 Mostrando panel desplegable...
+- 🔧 Mostrando resultados del análisis lineal...
+- 🔧 No se aplicaron filtros de cepillo específicos
+- 🔧 No se aplicaron filtros de rango
+- 🔧 Paneles izquierdo y central añadidos correctamente
+- 🔧 Parámetros: {...}
+- 🔧 Posición actual de la ventana: {...}
+- 🔧 Preparando datos para análisis...
+- 🔧 Probando análisis lineal con base de datos real...
+- 🔧 Probando lógica de filtros corregida...
+- 🔧 Query de migración: {...}
+- 🔧 Sistema de flecha simplificado - sin botón de activación
+- 🔧 Testeando tracking de datos con debugs...
+- 🔧 Tipo de optimización: {...}
+- 🔧 Transformación disponible: {...}
+- 🔧 Usando tipo de optimización por defecto: {...}
+- 🔧 Verificando archivo: {...}
+- 🗑️ Archivo temporal eliminado: {...}
+- 🗑️ Carpeta Temp eliminada después de guardar: {...}
+- 🗑️ Carpeta Temp eliminada: {...}
+- 🗑️ Índice anterior eliminado
+- 🚀 Aplicación iniciada correctamente
+- 🚀 Ejecutando análisis con un proceso por fold
+- 🚀 Ejecutando análisis lineal completo...
+- 🚀 Ejecutando análisis lineal...
+- 🚀 Iniciando análisis lineal con progreso (worker)...
+- 🚀 Iniciando análisis lineal...
+- 🚀 Iniciando prueba del análisis lineal avanzado...
+- 🛑 Análisis cancelado antes de crear carpetas
+- 🛑 Análisis cancelado antes de ejecutar Stage 01
+- 🛑 Análisis cancelado antes de ejecutar Stage 02
+- 🛑 Análisis cancelado antes de ejecutar Stage 03
+- 🛑 Análisis cancelado después de crear carpetas
+- 🛑 Análisis cancelado después de guardar configuración
+- 🛑 Análisis cancelado después de guardar datos
+- 🛑 Análisis cancelado durante copia de scripts
+- 🛑 Análisis cancelado durante Stage 01
+- 🛑 Análisis cancelado durante Stage 02
+- 🛑 Análisis cancelado durante Stage 03
+- 🛑 Análisis no lineal cancelado por el usuario
+- 🛑 Cancelando análisis de clasificación...
+- 🛑 Cancelando análisis no lineal antes de cerrar...
+- 🛑 Cancelando análisis no lineal...
+- 🛑 Cancelando proceso...
+- 🛑 Cerrando aplicación...
+- 🛑 DEBUG: Cancelando proceso no lineal
+- 🛑 DEBUG: Conexión DB cerrada en worker
+- 🛑 DEBUG: Error no lineal recibido tras cancelación: {...}. Ignorando.
+- 🛑 DEBUG: Error recibido tras cancelación: {...}. Ignorando.
+- 🛑 DEBUG: on_analysis_cancelled disparado - Iniciando parada segura
+- 🛑 DEBUG: Resultado no lineal recibido tras cancelación. Ignorando.
+- 🛑 DEBUG: Resultado recibido pero el usuario canceló. Ignorando resultados.
+- 🛑 DEBUG: Solicitando cancelación al worker {...}
+- 🛑 No se procederá con la creación de carpeta
+- 🛑 Solicitando terminación del thread del worker...
+- 🟦 UPSERT SKIP (idéntico) id={...} | {...}
+- 🧪 TESTEANDO ANÁLISIS EXACTO COMO ARCHIVO DE REFERENCIA
+- 🧹 Limpiando dsaitekika_results anteriores
+- 🧹 Limpiando dsaitekika_results para exportación I
+- 🧹 Limpiando dsaitekika_results para forzar I最適化
+- 🧹 Limpiando dsaitekika_selected_df anteriores
+- 🧹 Limpiando isaitekika_results anteriores
+- 🧹 Limpiando isaitekika_results para exportación D
+- 🧹 Limpiando isaitekika_results para forzar D最適化
+- 🧹 Limpiando isaitekika_selected_df anteriores
+- 🧹 Limpiando pantalla principal...

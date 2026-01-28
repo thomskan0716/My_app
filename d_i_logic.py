@@ -10,7 +10,9 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 import umap
 
-# === Carga de datos existentes ===
+# ES: === Carga de datos existentes ===
+# EN: === Load existing data ===
+# JA: === 既存データの読み込み ===
 def load_and_validate_existing_data(existing_file, design_df, verbose=True):
     try:
         existing_df = pd.read_excel(existing_file)
@@ -34,14 +36,18 @@ def load_and_validate_existing_data(existing_file, design_df, verbose=True):
     except:
         return None, []
 
-# === Generación de candidatos ===
+# ES: === Generación de candidatos ===
+# EN: === Candidate generation ===
+# JA: === 候補生成 ===
 def generate_candidate_points(design_df):
     levels = []
     for _, row in design_df.iterrows():
         levels.append(np.arange(row["最小値"], row["最大値"] + row["刻み幅"], row["刻み幅"]))
     return np.array(list(product(*levels)))
 
-# === Emparejamiento con datos existentes ===
+# ES: === Emparejamiento con datos existentes ===
+# EN: === Matching against existing data ===
+# JA: === 既存データとのマッチング ===
 def match_existing_experiments_enhanced(candidate_points, existing_data, variable_names,
                                         tolerance_relative=1e-6, tolerance_absolute=1e-8, verbose=False):
     if existing_data is None or len(existing_data) == 0:
@@ -65,7 +71,9 @@ def match_existing_experiments_enhanced(candidate_points, existing_data, variabl
                 break
     return list(set(matched_indices))
 
-# === Reducción de candidatos ===
+# ES: === Reducción de candidatos ===
+# EN: === Candidate reduction ===
+# JA: === 候補削減 ===
 def hierarchical_candidate_reduction(candidate_points, max_candidates=5000, existing_indices=None):
     from sklearn.cluster import MiniBatchKMeans
     n_original = len(candidate_points)
@@ -136,7 +144,9 @@ def select_d_optimal_design_enhanced(X_all, existing_indices, new_experiments, v
             remaining.remove(best_candidate)
     return selected, best_score
 
-# === i最適化 ===
+# ES: === i最適化 ===
+# EN: === I-optimal selection ===
+# JA: === I最適化 ===
 def select_i_optimal_design(X_all, new_experiments, existing_indices=None):
     if existing_indices:
         selected_indices = list(existing_indices)
@@ -153,7 +163,9 @@ def select_i_optimal_design(X_all, new_experiments, existing_indices=None):
         selected_indices.append(next_idx)
         remaining_indices.remove(next_idx)
 
-    # Calcular el I-criterion (por ejemplo, la mínima distancia entre los seleccionados)
+    # ES: Calcular el I-criterion (por ejemplo, la mínima distancia entre los seleccionados)
+    # EN: Compute I-criterion (e.g., the minimum distance among selected points)
+    # JA: I基準を計算（例：選択点間の最小距離）
     selected_X = X_all[selected_indices]
     dists_selected = cdist(selected_X, selected_X)
     np.fill_diagonal(dists_selected, np.inf)
@@ -161,7 +173,9 @@ def select_i_optimal_design(X_all, new_experiments, existing_indices=None):
 
     return selected_indices, i_score
 
-# === Visualización PCA ===
+# ES: === Visualización PCA ===
+# EN: === PCA visualization ===
+# JA: === PCA可視化 ===
 def visualize_pca_enhanced(X_scaled, selected_indices, existing_indices, output_path="pca.png"):
     pca = PCA(n_components=2)
     components = pca.fit_transform(X_scaled)
@@ -177,7 +191,9 @@ def visualize_pca_enhanced(X_scaled, selected_indices, existing_indices, output_
     plt.savefig(output_path)
     plt.close()
 
-# === Visualización UMAP ===
+# ES: === Visualización UMAP ===
+# EN: === UMAP visualization ===
+# JA: === UMAP可視化 ===
 def visualize_umap_enhanced(X_scaled, d_indices, i_indices, existing_indices, output_path="umap.png"):
     reducer = umap.UMAP(n_components=2, random_state=42, n_neighbors=15, min_dist=0.1)
     embedding = reducer.fit_transform(X_scaled)
