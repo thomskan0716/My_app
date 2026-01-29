@@ -1,0 +1,24 @@
+---
+description: Enforce Git hygiene: small commits, clear messages, never commit secrets.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: Git y commits limpios
+
+### ✅ Qué hacer
+- Commits pequeños y claros:
+  - fix:
+  - add:
+  - refactor:
+- Revisar antes de commitear:
+  - no secretos
+  - no archivos temporales
+  - no datos sensibles
+
+### ❌ Qué NO hacer
+- ❌ Commits gigantes “update”.
+- ❌ Subir secretos, credenciales o dumps.
+
+### Conflictos y prioridad
+- Si hay urgencia, igual no se permite subir secretos (ver Seguridad).

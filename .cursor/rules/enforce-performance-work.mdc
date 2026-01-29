@@ -1,0 +1,19 @@
+---
+description: Enforce performance work only after measuring; ban premature optimization.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: Rendimiento (solo con medición)
+
+### ✅ Qué hacer
+- Prioridad:
+  1) correcto
+  2) claro
+  3) optimizar midiendo (profiling/benchmarks)
+
+### ❌ Qué NO hacer
+- ❌ “Optimizar” por intuición o micro-optimización sin medición.
+
+### Conflictos y prioridad
+- Si performance choca con claridad, gana claridad hasta tener datos medidos.

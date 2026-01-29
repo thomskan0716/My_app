@@ -1,0 +1,20 @@
+Root: C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app
+Total matches: 886
+Unique messages: 793
+
+== Matches (by file) ==
+
+00_Pythonコード\dll_debug.py
+  L292 [print] [DLL] REPORTE DE DLLs - Etapa: {...}
+    print(f"[DLL] REPORTE DE DLLs - Etapa: {stage}", flush=True)
+  L299 [print] [WARN] No se pudieron obtener las DLLs cargadas (puede requerir permisos)
+    print("[WARN] No se pudieron obtener las DLLs cargadas (puede requerir permisos)", flush=True)
+  L313 [print]      ... y {...} mas
+    print(f"     ... y {len(relevant_dlls) - 20} mas", flush=True)
+  L323 [print]        ... y {...} mas
+    print(f"       ... y {len(omp_info['intel']) - 5} mas", flush=True)
+  L327 [print]        ... y {...} mas
+    print(f"       ... y {len(omp_info['msvc']) - 5} mas", flush=True)
+  L331 [print]        ... y {...} mas
+    print(f"       ... y {len(omp_info['gcc']) - 5} mas", flush=True)
+  L335 [print]        ... y {...} mas

@@ -1,0 +1,11 @@
+L14393 [print] ✅ Datos de diagnóstico cargados desde: {...}
+L14394 [print] 🔍 [DEBUG] Datos parseados: {...}
+L14400 [print] ⚠️ Error leyendo diagnostic_report.txt: {...}
+L14404 [print] ⚠️ diagnostic_report.txt no encontrado en: {...} o {...}
+L14464 [print] ✅ [DEBUG] Mostrando Model Information
+L14588 [print] ✅ [DEBUG] metric_card altura mínima: {...}px
+L14611 [print] ✅ [DEBUG] Mostrando Noise Addition Settings
+L14675 [print] ✅ [DEBUG] noise_card altura mínima: {...}px
+L14680 [print] ❌ Error cargando estadísticas de clasificación: {...}
+L14705 [print] ❌ Error cargando archivos existentes de clasificación: {...}
+L14757 [print] 🔧 Mostrando gráficos del análisis de clasificación...

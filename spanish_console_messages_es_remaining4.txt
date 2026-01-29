@@ -1,0 +1,40 @@
+Root: C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app
+Total matches: 9
+Unique messages: 9
+
+== Matches (by file) ==
+
+result_processor.py
+  L428 [print] ⚠️ Todos los registros ya existían en la base de datos.
+    print("⚠️ Todos los registros ya existían en la base de datos.")
+
+test_filter_logic.py
+  L13 [print] 🔧 Probando lógica de filtros corregida...
+    print("🔧 Probando lógica de filtros corregida...")
+  L79 [print] ✅ ÉXITO: {...} registros procesados, {...} modelos entrenados
+    print(f"✅ ÉXITO: {data_count} registros procesados, {models_trained} modelos entrenados")
+  L100 [print] 📁 Resultados guardados en: {...}
+    print(f"📁 Resultados guardados en: {test_folder}")
+
+test_real_db.py
+  L21 [print] 🔧 Probando análisis lineal con base de datos real...
+    print("🔧 Probando análisis lineal con base de datos real...")
+  L55 [print] 🚀 Ejecutando análisis lineal...
+    print("🚀 Ejecutando análisis lineal...")
+  L59 [print] ✅ Resultados: {...}
+    print(f"✅ Resultados: {results.get('success', False)}")
+  L62 [print] 📊 Datos procesados: {...}
+    print(f"📊 Datos procesados: {results.get('data_count', 0)}")
+  L64 [print] 📁 Carpeta de salida: {...}
+    print(f"📁 Carpeta de salida: {results.get('output_folder', 'N/A')}")
+
+== Unique messages (sorted) ==
+- ⚠️ Todos los registros ya existían en la base de datos.
+- ✅ Resultados: {...}
+- ✅ ÉXITO: {...} registros procesados, {...} modelos entrenados
+- 📁 Carpeta de salida: {...}
+- 📁 Resultados guardados en: {...}
+- 📊 Datos procesados: {...}
+- 🔧 Probando análisis lineal con base de datos real...
+- 🔧 Probando lógica de filtros corregida...
+- 🚀 Ejecutando análisis lineal...

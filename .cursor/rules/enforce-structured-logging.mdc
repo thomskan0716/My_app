@@ -1,0 +1,30 @@
+---
+
+```text
+---
+description: Enforce structured logging with context and level discipline; no sensitive data.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: Logging estructurado
+
+### ✅ Qué hacer
+- Logs con:
+  - operationId
+  - parámetros relevantes
+  - durationMs
+
+✅ Ejemplo:
+```text
+INFO Robot_MoveToTarget opId=123 x=10.2 y=5.1 z=2.0 durationMs=42
+Usar niveles correctos: Debug/Info/Warn/Error
+
+❌ Qué NO hacer
+"Error!"  # ❌ sin contexto
+"token=abcd..."  # ❌ datos sensibles
+log en cada iteración sin control  # ❌ spam
+Conflictos y prioridad
+No loguear secretos: prioridad máxima.
+
+Si performance sufre: bajar nivel o throttling, no eliminar trazabilidad crítica.

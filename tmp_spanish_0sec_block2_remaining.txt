@@ -1,0 +1,30 @@
+L7696 [print] ⚠️ Error recalculando D基準値 (referencia) desde candidato/índices: {...}
+L8098 [print] 📋 Mostrando tabla D-óptimo
+L8101 [print] 📋 Mostrando tabla I-óptimo
+L8266 [print] 📊 Configurando navegación de gráficos:
+L8267 [print] - Total de gráficos: {...}
+L8268 [print] - Gráficos disponibles: {...}
+L8278 [print] ✅ Sistema de navegación configurado:
+L8279 [print] - Gráfico actual: {...}/{...}
+L8280 [print] - Botón anterior: {...}
+L8281 [print] - Botón siguiente: {...}
+L8284 [print] 📋 Añadiendo tabla D-óptimo con {...} filas
+L8288 [print] 📋 Añadiendo tabla I-óptimo con {...} filas
+L8747 [print] 📋 Creando backup: {...}
+L8760 [print] 📊 Leyendo archivo de resultados: {...}
+L8790 [print] 📊 Leyendo archivo de muestreo: {...}
+L8794 [print] 📊 Archivo de muestreo original: {...} filas
+L8817 [print] 🔍 Columnas disponibles en archivo de resultados: {...}
+L8818 [print] 🔍 Columnas disponibles en archivo de muestreo: {...}
+L8834 [print] ⚠️ El archivo de muestreo no contiene '{...}'. Se eliminará la primera coincidencia por clave estricta.
+L8945 [print] ⚠️ Coincidencias no encontradas para {...}/{...} filas de resultados. (Revisa tipos/columnas/valores)
+L8954 [print] 📊 Archivo de muestreo actualizado: {...} filas
+L8972 [print] ✅ Archivo de muestreo actualizado guardado: {...}
+L9023 [print] 🔄 Iniciando proceso de backup y actualización del archivo de muestreo...
+L9072 [print] 🛑 Cerrando aplicación...
+L9079 [print] 🛑 Cancelando análisis no lineal antes de cerrar...
+L9086 [print] ⚠️ El worker no terminó en 5 segundos, forzando cierre...
+L9090 [print] ✅ Worker de análisis no lineal cancelado
+L9098 [print] ✅ Aplicación cerrada correctamente
+L9335 [print] 🔄 Archivo de muestreo detectado en pantalla de filtros. Volviendo a pantalla principal...
+L9756 [print] ❌ Error iniciando exportación: {...}

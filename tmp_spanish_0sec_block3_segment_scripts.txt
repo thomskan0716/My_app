@@ -1,0 +1,7 @@
+L13164 [print] ❌ Script no encontrado: 02_prediction.py
+L13238 [print] 📁 00_Pythonコード encontrado en: {...}
+L13325 [print] ❌ 02_prediction.py falló con código {...}
+L13369 [print] ❌ Script no encontrado: 03_pareto_analyzer.py
+L13443 [print] 📁 00_Pythonコード encontrado en: {...}
+L13530 [print] ❌ 03_pareto_analyzer.py falló con código {...}
+L13549 [print] 🛑 DEBUG: Error no lineal recibido tras cancelación: {...}. Ignorando.

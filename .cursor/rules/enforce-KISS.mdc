@@ -1,0 +1,18 @@
+---
+description: Enforce KISS (prefer simplest readable solution).
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: KISS (simplicidad)
+
+### ✅ Qué hacer
+
+```python
+if not items:
+    return 0
+return sum(items)
+❌ Qué NO hacer
+return (lambda x: x and sum(x) or 0)(items)  # ❌ demasiado “clever”
+Conflictos y prioridad
+Si KISS choca con “micro-optimización”, prioriza KISS (ver Prioridad global).

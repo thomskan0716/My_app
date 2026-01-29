@@ -1,0 +1,22 @@
+---
+
+```text
+---
+description: Enforce YAGNI (do not build unused features).
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: YAGNI (no construir por si acaso)
+
+### ✅ Qué hacer
+- Implementar solo lo requerido ahora.
+- Añadir extensión futura solo si:
+  - hay requisito real, o
+  - el cambio es mínimo y no complica.
+
+### ❌ Qué NO hacer
+- ❌ Diseñar un sistema entero de plugins/config avanzada sin necesidad actual.
+
+### Conflictos y prioridad
+- Si YAGNI choca con seguridad o traducibilidad requerida, gana seguridad/i18n.

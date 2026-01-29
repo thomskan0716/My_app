@@ -1,0 +1,51 @@
+L12885 [print] ✅ Mostrando gráficos de Pareto desde: {...}
+L12894 [print] ❌ DEBUG: pareto_plots_folder no existe
+L12897 [print] ❌ DEBUG: prediction_output_file no existe
+L13006 [print] 📁 Creando backup: {...} → {...}
+L13017 [print] ⚠️ Error creando backup: {...}
+L13083 [print] ⚠️ Usando fallback para carpeta del proyecto: {...}
+L13085 [print] 📁 Carpeta del proyecto encontrada: {...}
+L13093 [print] 🔍 Buscando archivo: {...}
+L13097 [print] ✅ Archivo encontrado: {...}
+L13102 [print] ⚠️ Archivo esperado no encontrado, buscando patrón *_未実験データ.xlsx...
+L13106 [print] ✅ Archivo encontrado (patrón): {...}
+L13108 [print] ❌ No se encontró ningún archivo con patrón *_未実験データ.xlsx en: {...}
+L13117 [print] ⚠️ No se encontró el archivo de datos no experimentados en: {...}
+L13118 [print] Buscando: {...} o *_未実験データ.xlsx
+L13126 [print] ✅ Archivo copiado: {...} → {...}
+L13132 [print] ⚠️ No se encontró archivo fuente y no existe destino. Continuando...
+L13164 [print] ❌ Script no encontrado: 02_prediction.py
+L13238 [print] 📁 00_Pythonコード encontrado en: {...}
+L13325 [print] ❌ 02_prediction.py falló con código {...}
+L13369 [print] ❌ Script no encontrado: 03_pareto_analyzer.py
+L13443 [print] 📁 00_Pythonコード encontrado en: {...}
+L13530 [print] ❌ 03_pareto_analyzer.py falló con código {...}
+L13549 [print] 🛑 DEBUG: Error no lineal recibido tras cancelación: {...}. Ignorando.
+L13577 [print] 🔧 Iniciando análisis de clasificación...
+L13581 [print] 📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto
+L13611 [print] ✅ Usando proyecto existente: {...}
+L13625 [print] 📁 Creando nuevo proyecto: {...} en {...}
+L13749 [print] 📊 Datos filtrados obtenidos: {...} registros
+L13752 [print] ❌ Error obteniendo datos filtrados: {...}
+L13776 [print] ❌ Usuario canceló el análisis de clasificación
+L13865 [print] ✅ Parámetros seleccionados:
+L13870 [print] ❌ Usuario canceló la selección de parámetros
+L13873 [print] ℹ️ Carga de folder existente: no se requiere selección de parámetros
+L13878 [print] 🔧 Iniciando worker de clasificación...
+L13915 [print] ❌ Error en análisis de clasificación: {...}
+L13935 [print] ✅ Análisis de clasificación completado
+L13936 [print] Carpeta de salida: {...}
+L14066 [print] ✅ Archivo seleccionado y validado: {...}
+L14089 [print] ❌ Error en selección de archivo: {...}
+L14101 [print] 🛑 Cancelando análisis de clasificación...
+L14393 [print] ✅ Datos de diagnóstico cargados desde: {...}
+L14394 [print] 🔍 [DEBUG] Datos parseados: {...}
+L14400 [print] ⚠️ Error leyendo diagnostic_report.txt: {...}
+L14404 [print] ⚠️ diagnostic_report.txt no encontrado en: {...} o {...}
+L14464 [print] ✅ [DEBUG] Mostrando Model Information
+L14588 [print] ✅ [DEBUG] metric_card altura mínima: {...}px
+L14611 [print] ✅ [DEBUG] Mostrando Noise Addition Settings
+L14675 [print] ✅ [DEBUG] noise_card altura mínima: {...}px
+L14680 [print] ❌ Error cargando estadísticas de clasificación: {...}
+L14705 [print] ❌ Error cargando archivos existentes de clasificación: {...}
+L14757 [print] 🔧 Mostrando gráficos del análisis de clasificación...

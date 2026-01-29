@@ -1,0 +1,29 @@
+---
+
+```text
+---
+description: Enforce testing for critical logic (unit/integration) and documented manual procedures for hardware.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: Testing (lógica crítica)
+
+### ✅ Qué hacer
+- Tests para:
+  - transformaciones geométricas (homography, offsets)
+  - parsing/validación de config
+  - cálculos que afecten al robot
+
+✅ Ejemplos (conceptual):
+- Test: CalculateOffset returns 0 when points identical
+- Test: LoadConfig fails when threshold out of range
+
+- Si hay hardware:
+  - documentar procedimiento manual y criterios de aceptación
+
+### ❌ Qué NO hacer
+- ❌ Cambiar lógica crítica sin tests ni procedimiento documentado.
+
+### Conflictos y prioridad
+- Si no se puede testear automático, documentar pasos manuales (obligatorio).

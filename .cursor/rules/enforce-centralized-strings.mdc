@@ -1,0 +1,30 @@
+---
+
+```text
+---
+description: Enforce centralized strings for UI and user-facing errors; recommend log catalog.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: Strings centralizados (i18n)
+
+### ✅ Qué hacer
+- UI: siempre desde recursos.
+- Errores al usuario: traducibles.
+
+✅ Correcto (conceptual):
+- UI.ButtonText = Strings["Common_OK"]
+- ShowError(Strings["Error_InvalidConfig"])
+
+- Logs/debug: usar catálogo central (recomendado):
+  - Log.Info(LogMsg["Robot_MoveToTarget"], x, y, z)
+
+### ❌ Qué NO hacer
+```text
+button.Text = "Guardar"  # ❌ hardcode UI
+"Error: " + fileName  # ❌ concatenación mala para traducción
+Conflictos y prioridad
+UI y errores al usuario SIEMPRE traducibles.
+
+Logs traducibles solo si el producto lo exige; si no, mantener idioma fijo por consistencia.

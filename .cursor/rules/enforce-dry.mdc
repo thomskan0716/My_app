@@ -1,0 +1,22 @@
+---
+
+```text
+---
+description: Enforce DRY (no copy/paste logic; extract shared code).
+globs: ["**/*"]
+alwaysApply: true
+---
+
+## Regla: DRY (sin duplicación)
+
+### ✅ Qué hacer
+
+- Extraer lógica repetida a una función/módulo:
+```python
+def clamp(v, lo, hi):
+    return max(lo, min(v, hi))
+❌ Qué NO hacer
+❌ Copiar/pegar el mismo bloque en varios archivos y “ajustar un número”.
+
+Conflictos y prioridad
+Si aplicar DRY crea una abstracción fea/oscura, prioriza claridad antes que DRY.

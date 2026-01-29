@@ -1,0 +1,341 @@
+Total Spanish comments without ES/EN/JP marker: 300
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\00_Pythonコード\core\preprocessing.py
+  L262: # CRÍTICO: Debe asignarse para compatibilidad
+  L278: # Asegurar que use_mutual_info siempre exista después de cargar
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\00_Pythonコード\dll_debug.py
+  L162: # Buscar en cada categoría
+  L331: # ADVERTENCIA si hay múltiples runtimes
+  L421: # Verificar múltiples runtimes OpenMP
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\00_Pythonコード\models\lightgbm_model.py
+  L111: # ★ CRÍTICO: Forzar a 1 para evitar conflictos de threading con OpenMP/MKL
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\00_Pythonコード\models\xgboost_model.py
+  L98: # ★ CRÍTICO: Forzar a 1 para evitar conflictos de threading con OpenMP/MKL
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\00_Pythonコード\shap_analysis\complete_shap.py
+  L12: # con matplotlib después de crear muchos gráficos
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\0sec.py
+  L3578: # 90% para el procesamiento, 10% para guardar
+  L6101: # Es un archivo de proyecto existente
+  L6111: # Usar directamente el archivo de 99_Temp
+  L6225: # Usar el archivo de 99_Temp para la optimización
+  L6274: # ✅ FIX: si hay error, cerrar el thread también (si no, queda "isRunning()" para siempre)
+  L6424: # Loader ya se mostró arriba (antes de crear/copiar). Mantenerlo activo.
+  L6444: # ✅ FIX: si hay error, cerrar el thread también (si no, queda "isRunning()" para siempre)
+  L6906: # Obtener el directorio del archivo
+  L6936: # El directorio padre de esta carpeta es el proyecto
+  L7011: # No crear carpeta prematuramente
+  L7016: # No crear carpeta prematuramente
+  L7211: # porque puede ser un early-exit (archivo idéntico) o un fallo parcial.
+  L7245: # Caso cuando ya existe un archivo idéntico
+  L7836: # Aún así, habilitar los botones
+  L8535: # Re-habilitar botones por si quedaron deshabilitados
+  L8590: # Obtener el nombre del proyecto desde la carpeta
+  L8596: # Definir rutas - USAR EL ARCHIVO EN 99_Temp (o 99_Temp/Temp) DE LA CARPETA ESPECIFICADA
+  L8600: # ✅ NO depender del nombre del archivo:
+  L8641: # fallback legacy: nombre basado en carpeta
+  L8668: # 1. Hacer backup del archivo de muestreo
+  L8679: # 2. Leer archivo de resultados (Excel/CSV)
+  L8707: # 3. Leer archivo de muestreo actual (Excel/CSV)
+  L8714: # 4. Eliminar filas del archivo de muestreo:
+  L8874: # En Windows esto suele pasar si el archivo está abierto (Excel lo bloquea)
+  L8979: # Cancelar análisis no lineal si está corriendo
+  L9128: # ✅ Prioridad: si un archivo parece "resultados" y "muestreo" a la vez, se tratará como resultados.
+  L9157: # UI enablement debajo del selector (sin depender del nombre del archivo)
+  L9172: # UI enablement debajo del selector (sin depender del nombre del archivo)
+  L9201: # Archivo de un proyecto diferente, limpiar proyecto activo
+  L9343: # Validar el valor
+  L9610: # ✅ MOSTRAR LOADING después de seleccionar el archivo
+  L9708: # El botón de análisis siempre está habilitado
+  L9745: # El botón de análisis siempre está habilitado
+  L10396: # Carpetas esenciales según el tipo de análisis
+  L10584: # Ejecutar análisis lineal con la carpeta del proyecto
+  L10618: # Importar módulo de análisis lineal
+  L10640: # Ejecutar análisis lineal con la carpeta específica usando el MISMO flujo con popup/cancelación
+  L10757: # Proceder con el análisis lineal en la nueva carpeta
+  L10794: # Ya estamos en la vista de filtros, ejecutar análisis lineal
+  L10866: # No crear estructura, solo usar la carpeta existente
+  L10907: # Continuar con el flujo normal (mostrar diálogo de configuración)
+  L11008: # Obtener carpeta base del proyecto
+  L11047: # Obtener configuración
+  L11074: # Ejecutar análisis no lineal con worker
+  L11458: # Usar la misma función que para análisis nuevo, ya que la estructura es la misma
+  L11459: # existing_folder_path es la carpeta del análisis (NUM_YYYYMMDD_HHMMSS)
+  L11491: # Información del análisis
+  L11513: # Obtener tiempo de análisis
+  L11574: # Iterar sobre cada target y crear tarjeta de métricas
+  L11734: # Ruta clickeable del archivo de salida
+  L12312: # También buscar JPG/JPEG
+  L12676: # DEBUG: Verificar rutas
+  L12752: # Obtener la ruta base del proyecto (donde está 0sec.py)
+  L12769: # Encontramos .venv, crear Backup en el mismo nivel
+  L12842: # Preparar archivo de predicción antes de ejecutar
+  L12863: # Fallback: buscar por nombre de carpeta que contiene "Proyecto"
+  L12981: # También buscar .venv como indicador de la raíz del proyecto
+  L12996: # Último fallback: buscar desde el directorio del script
+  L13182: # También buscar .venv como indicador de la raíz del proyecto
+  L13197: # Último fallback: buscar desde el directorio del script
+  L13388: # Para clasificación, verificar con analysis_type="classification"
+  L13393: # No crear estructura, solo usar la carpeta existente
+  L13434: # Continuar con el flujo normal (mostrar diálogo de configuración)
+  L13556: # Obtener valores de configuración
+  L13650: # Ejecutar análisis de clasificación con worker
+  L13776: # Validar que el archivo existe
+  L13783: # Notificar al worker que no se seleccionó archivo
+  L13789: # Validar columnas del archivo antes de aceptarlo
+  L13805: # Notificar al worker que no se seleccionó archivo válido
+  L13817: # Notificar al worker que no se seleccionó archivo válido
+  L13823: # Archivo válido, notificar al worker
+  L14061: # Intentar leer diagnostic_report.txt
+  L14161: # Formatear tiempo de análisis
+  L14175: # Información del análisis
+  L14210: # Sección de métricas del modelo si están disponibles
+  L14844: # Ruta de la carpeta de análisis lineal
+  L14924: # Importar módulo de análisis lineal
+  L15009: # Ignorar errores al cerrar el popup
+  L15072: # Ignorar errores al cerrar el popup
+  L15169: # 3. Limpiar la UI (el worker puede tardar en parar si está en cómputo pesado)
+  L15214: # Solo agregar filtro si ambos valores están especificados
+  L15222: # Solo agregar filtro si ambos valores están especificados
+  L15236: # Solo agregar filtro si el valor no está vacío
+  L15314: # Información del análisis
+  L15411: # Ruta clickeable con scroll horizontal si es necesario
+  L15431: # Hacer la ruta clickeable
+  L15434: # Abrir el archivo Excel con la aplicación por defecto
+  L16235: # 1. Validar tipos de cepillo (A13, A11, A21, A32)
+  L16258: # 2. Validar material
+  L16272: # 3. Validar diámetro
+  L16324: # Retornar resultado de validación
+  L16419: # Completar parámetros desde archivo (no UI)
+  L16426: # Validar datos filtrados antes de continuar
+  L16471: # Iniciar predicción con diálogo de progreso
+  L16494: # Localizar carpeta de predicción del análisis lineal más reciente (para guardar el CSV)
+  L16555: # Fallback: buscar por patrón, preferir Excel, luego CSV
+  L16781: # Obtener la carpeta raíz del análisis de clasificación
+  L16787: # Intentar obtener la carpeta raíz del análisis
+  L16802: # Construir ruta del archivo de predicción desde la carpeta raíz
+  L16809: # Intentar con ruta absoluta
+  L16836: # Listar archivos en la carpeta para debug
+  L16853: # Prioridad 2: Buscar cualquier archivo *_pred.xlsx (ignorar temporales)
+  L16856: # Seleccionar el más reciente
+  L16860: # Prioridad 3: Buscar cualquier archivo .xlsx en la carpeta (ignorar temporales)
+  L16863: # Seleccionar el más reciente
+  L17150: # Renombrar columnas de predicción si tienen prefijo 'prediction_'
+  L17195: # ✅ MOSTRAR LOADING DESPUÉS de seleccionar parámetros y presionar OK
+  L17202: # 2. Leer Excel y preparar DataFrame
+  L17218: # 4. Guardar DataFrame preparado en archivo intermedio (misma carpeta que Prediction_output.xlsx)
+  L17233: # No detener el proceso si falla guardar el intermedio
+  L17235: # 5. Guardar también en archivo temporal para la importación
+  L17246: # 7. Limpiar archivo temporal después de un delay
+  L17247: # Nota: El archivo intermedio NO se elimina, queda como registro
+  L17700: # Preferir la última carpeta de ejecución (NN_YYYYMMDD_HHMMSS) si existe
+  L17834: # Actualizar gráficos del análisis no lineal si están siendo mostrados
+  L17866: # Cancelar análisis no lineal si está corriendo
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\build_installer.ps1
+  L330: # 3) Limpiar build/dist para evitar artefactos stale (opcional)
+  L353: # Validar que exista el artefacto esperado en dist/, si no, forzar build.
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\check_filtered_data.py
+  L10: # Ruta del archivo que menciona el usuario
+  L19: # Leer el archivo Excel
+  L35: # Verificar si hay valores de 74
+  L44: # Verificar si estos registros tienen A11 = 1
+  L55: # Verificar otras columnas relevantes
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\check_models.py
+  L162: # 3. Verificar archivo de predicción
+  L165: # Si no se proporciona una ruta, buscar archivos
+  L172: # Mostrar también la carpeta de gráficos asociada
+  L183: # Intentar con la ruta por defecto
+  L201: # Verificar columnas de predicción
+  L224: # Verificar para Pareto
+  L240: # Para otros, buscar con prefijo prediction_
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\classification_worker.py
+  L148: # No hay duración para análisis existente
+  L239: # El archivo de configuración se guarda directamente en output_folder/config_cls.py
+  L276: # No es carga existente, es análisis nuevo
+  L294: # un 99_ml_modules en la carpeta de salida solo con config_cls.py
+  L300: # Crear carpeta 99_-----------------
+  L304: # También crear ml_modules como symlink a 99_ml_modules para compatibilidad con el pipeline
+  L305: # El pipeline busca BASE / "ml_modules", así que necesitamos crear este symlink
+  L309: # En Windows, intentar crear symlink (puede requerir privilegios)
+  L314: # Si no hay symlink, copiar solo config_cls.py a ml_modules también
+  L321: # Si falla el symlink, copiar solo config_cls.py
+  L328: # Leer el archivo config_cls.py original como plantilla
+  L336: # Si no se encuentra, crear uno básico
+  L343: # Escribir archivo temporal
+  L381: # Esta función modifica los valores en el contenido del archivo
+  L382: # Por simplicidad, crearemos un archivo que sobrescriba los valores
+  L507: # Usar el nombre del archivo con fecha actual
+  L517: # Cambiar PARENT_FOLDER_TEMPLATE a "." para que no cree carpeta intermedia
+  L520: # Crear contenido final
+  L521: # Reemplazar valores existentes en lugar de solo agregar
+  L526: # Buscar y reemplazar DATA_FOLDER
+  L533: # Reemplazar INPUT_FILE si existe (usar el nombre del archivo con fecha actual)
+  L553: # Reemplazar PARENT_FOLDER_TEMPLATE para que no cree carpeta intermedia
+  L560: # Reemplazar PARENT_FOLDER_TEMPLATE para que no cree carpeta intermedia
+  L567: # Agregar modificaciones al final de la clase
+  L570: # Buscar el último @classmethod o método y agregar antes
+  L574: # Buscar el final de la clase (última línea antes de una línea vacía o fuera de la clase)
+  L596: # Si no hay clase, crear una básica
+  L619: # No se encontró el archivo, pedir al usuario que lo seleccione
+  L630: # Esperar a que el usuario seleccione el archivo (máximo 5 minutos)
+  L633: # Usuario seleccionó archivo
+  L641: # Timeout - usuario no seleccionó archivo a tiempo
+  L645: # Usar el primer archivo encontrado
+  L649: # Leer el archivo
+  L653: # Validar que el archivo tiene las columnas necesarias
+  L667: # Validar que el archivo tiene al menos una fila de datos
+  L675: # Agregar columnas A13, A11, A21, A32
+  L750: # Buscar ml_modules en .venv (no copiado)
+  L770: # También crear un symlink o alias ml_modules -> 99_ml_modules para compatibilidad
+  L775: # Intentar crear symlink (requiere permisos en Windows)
+  L780: # Si falla, al menos agregar 99_ml_modules al path
+  L795: # 6. Agregar site-packages
+  L801: # 7. Agregar PYTHONPATH existente si hay
+  L821: # Verificar que config_cls.py existe en 99_ml_modules dentro de working_dir
+  L828: # Verificar que ml_modules del .venv existe
+  L837: # Debug: Verificar estructura antes de ejecutar
+  L860: # Ejecutar script con Popen para poder leer salida en tiempo real
+  L874: # Guardar referencia al proceso para poder cancelarlo
+  L881: # Leer stdout y stderr en tiempo real usando threads
+  L936: # Esperar un poco antes de verificar de nuevo
+  L940: # Detener los threads de lectura antes de cerrar pipes
+  L945: # Limpiar referencia al proceso
+  L949: # Cerrar pipes de forma segura (ya no hay threads leyendo)
+  L963: # Intentar leer cualquier salida restante de stderr para ver el error
+  L988: # Detectar modelo comparación
+  L1060: # Detectar predicción
+  L1083: # Detectar análisis de características
+  L1100: # Si hay error en el parsing, no hacer nada (no es crítico)
+  L1112: # El pipeline crea una carpeta con timestamp
+  L1113: # Buscar en el directorio de trabajo
+  L1117: # Buscar carpetas de resultados
+  L1121: # Verificar si es una carpeta de resultados del pipeline
+  L1125: # Buscar archivos de gráficos
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\d_i_optimizer.py
+  L15: # === Leer combinaciones ya generadas ===
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\db_manager.py
+  L77: # Tabla Temporal para Análisis (Solo los que pasaron)
+  L195: # 💾 Leer registros actuales desde la BBDD
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\diagnostico_estadisticas.py
+  L214: # Verificar qué se mostraría en la UI
+  L278: # Buscar la última carpeta de análisis de clasificación
+  L286: # Buscar la carpeta más reciente
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\linear_analysis_advanced.py
+  L708: # Solo crear las carpetas que se van a exportar (no crear raw_data ni preprocessed)
+  L2253: # DEBUG: Verificar datos justo antes de generar el archivo filtered_data.xlsx
+  L2280: # DEBUG: Verificar datos justo antes de empezar el análisis lineal
+  L2364: # Crear encabezados
+  L2368: # Agregar datos
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\linear_analysis_module.py
+  L172: # Crear DataFrame con nombres mapeados
+  L175: # Seleccionar solo las columnas necesarias
+  L263: # Entrenar el mejor modelo
+  L272: # Guardar modelo
+  L297: # Verificar que hay suficientes muestras por clase
+  L306: # Entrenar modelo
+  L318: # Guardar modelo
+  L412: # Guardar como Excel
+  L418: # Guardar como JSON
+  L453: # Guardar resultados
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\memory_monitor.py
+  L217: # Guardar en historial
+  L243: # Guardar en log si está configurado
+  L264: # ★ SEGURIDAD: Evitar análisis durante inicialización
+  L314: # Análisis de objetos puede fallar, continuar sin él
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\nonlinear_config_dialog.py
+  L885: # Cargar existente
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\nonlinear_worker.py
+  L244: # Intentar buscar desde el directorio actual
+  L255: # Verificar cancelación durante copia de scripts
+  L269: # Verificar cancelación antes de ejecutar Stage 01
+  L279: # Verificar cancelación antes de ejecutar
+  L295: # Calcular tiempo total de análisis
+  L300: # Guardar resultados en JSON antes de mostrar la pantalla de resumen
+  L303: # Buscar gráficos generados (para referencia, pero no se mostrarán)
+  L313: # No es carga existente, es análisis nuevo
+  L336: # Verificar cancelación antes de continuar
+  L359: # Verificar cancelación antes de Stage 03
+  L386: # Guardar datos de resultados en JSON
+  L389: # Buscar gráficos de Pareto
+  L393: # DEBUG: Verificar rutas
+  L400: # Verificar si existen archivos en la carpeta de gráficos
+  L458: # Máximo 5 minutos esperando que aparezca el archivo
+  L459: # Verificar cada 0.5 segundos
+  L462: # Esperar a que el archivo exista
+  L471: # Leer el archivo en tiempo real (reabriendo cada vez para evitar problemas de bloqueo)
+  L473: # Primero, leer todo el contenido existente
+  L483: # Obtener el tamaño actual del archivo después de leerlo
+  L486: # Leer nuevas líneas mientras el proceso está corriendo
+  L490: # Verificar si el archivo creció
+  L494: # Reabrir el archivo y leer solo las nuevas líneas
+  L534: # Si el script no está en la carpeta de salida, usar el del directorio actual
+  L594: # Fallback: buscar site-packages manualmente
+  L603: # Agregar PYTHONPATH existente si hay
+  L614: # Obtener ruta del JSON de log
+  L626: # Iniciar hilo para leer JSON en tiempo real
+  L634: # Ejecutar script con Popen para poder leer salida en tiempo real
+  L647: # Guardar referencia al proceso para poder cancelarlo
+  L654: # Leer stdout y stderr en tiempo real (el script original no genera JSON)
+  L709: # Esperar un poco antes de verificar de nuevo
+  L713: # Detener los threads de lectura antes de cerrar pipes
+  L718: # Limpiar referencia al proceso
+  L726: # Cerrar pipes de forma segura (ya no hay threads leyendo)
+  L740: # ✅ Intentar leer cualquier salida restante de stderr para ver el error
+  L771: # Detectar análisis de datos completado
+  L792: # Detectar inicio de análisis de datos
+  L812: # Detectar entrenamiento del modelo final
+  L833: # Detectar análisis SHAP
+  L945: # ✅ NO resetear contador de trials cuando cambia el modelo dentro del mismo fold
+  L948: # Emitir progreso actualizado para mostrar el cambio de modelo
+  L965: # ✅ Formato de barra de progreso de Optuna: buscar "X/Y" (prioritario porque muestra trials completados)
+  L1139: # Buscar config.py en el directorio actual o en el directorio del script
+  L1155: # Leer config.py completo
+  L1183: # Para diccionarios multilínea, buscar desde el patrón hasta el cierre de llaves
+  L1193: # Solo necesitamos agregar la indentación a cada línea
+  L1212: # Para listas multilínea, buscar desde el patrón hasta el cierre de corchetes
+  L1225: # String: buscar el patrón y reemplazar el valor entre comillas
+  L1250: # Número o booleano: buscar el patrón y reemplazar el valor
+  L1259: # Buscar # que puede estar pegado o con espacio
+  L1292: # Usar analysis_df.xlsx como archivo de entrada para 01_model_builder
+  L1309: # Verificar que el reemplazo funcionó
+  L1379: # Leer las listas originales de config.py para determinar el tipo de cada característica
+  L1434: # Leer MANDATORY_FEATURES original de config.py
+  L1463: # Agregar comentario al inicio indicando que es un archivo generado
+  L1466: # Verificar si ya tiene el comentario
+  L1470: # Escribir archivo
+  L1476: # Debug: Verificar que N_TRIALS está en el archivo guardado
+  L1478: # Buscar la línea de N_TRIALS
+  L1492: # Buscar en subcarpetas comunes
+  L1520: # Ruta donde guardar el JSON (directamente en la carpeta de resultados)
+  L1540: # Crear string con rango de algunas columnas principales
+  L1549: # Guardar como lista para que pueda ser leída después
+  L1573: # Extraer información del modelo
+  L1604: # Extraer parámetros del modelo
+  L1648: # Calcular tiempo de análisis (si está disponible)
+  L1669: # Crear diccionario con los datos
+  L1681: # Guardar en JSON
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\result_processor.py
+  L134: # 💾 Leer registros actuales desde la BBDD
+  L225: # Leer ids existentes + clave + columnas a comparar (mínimas)
+  L320: # Si el archivo no trae valor (NaN/None/""), no lo usamos para decidir ni para sobrescribir
+  L371: # ✅ Crear backup UNA SOLA VEZ antes de sobrescribir
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\Sample_Combiner.py
+  L148: # Abrir si no existe

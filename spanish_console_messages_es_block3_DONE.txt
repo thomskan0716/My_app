@@ -1,0 +1,18 @@
+# ES: Bloque 3 - Mensajes de consola ES→JP completados
+# EN: Block 3 - Console messages ES→JP completed
+# JP: ブロック3 - コンソールメッセージ ES→JP 完了
+
+Root: 0sec_dataanalysis_app
+Block: 3 (lines ~10001–18402, full file sweep)
+Date: 2025-01-28
+
+== Resumen ==
+- Todos los mensajes en español mostrados por print() en 0sec.py (bloque 3 y mensajes repetidos en otros bloques) han sido traducidos al japonés.
+- Se ha comprobado consistencia: el mismo mensaje se cambió de la misma forma en todas las apariciones (replace_all donde aplicaba).
+
+== Archivos modificados ==
+- 0sec.py
+
+== Próximos pasos (opcional) ==
+- Bloque 4: si se define como líneas 15001–20000, ya no hay mensajes ES en ese rango; el archivo tiene ~18402 líneas.
+- Revisar otros .py del proyecto (workers, diálogos) si también deben mostrarse en japonés en consola.

@@ -1,0 +1,18 @@
+L13549 [print] 🛑 DEBUG: Error no lineal recibido tras cancelación: {...}. Ignorando.
+L13577 [print] 🔧 Iniciando análisis de clasificación...
+L13581 [print] 📁 Acceso desde bunseki detectado - mostrando diálogo de creación de proyecto
+L13611 [print] ✅ Usando proyecto existente: {...}
+L13625 [print] 📁 Creando nuevo proyecto: {...} en {...}
+L13749 [print] 📊 Datos filtrados obtenidos: {...} registros
+L13752 [print] ❌ Error obteniendo datos filtrados: {...}
+L13776 [print] ❌ Usuario canceló el análisis de clasificación
+L13865 [print] ✅ Parámetros seleccionados:
+L13870 [print] ❌ Usuario canceló la selección de parámetros
+L13873 [print] ℹ️ Carga de folder existente: no se requiere selección de parámetros
+L13878 [print] 🔧 Iniciando worker de clasificación...
+L13915 [print] ❌ Error en análisis de clasificación: {...}
+L13935 [print] ✅ Análisis de clasificación completado
+L13936 [print] Carpeta de salida: {...}
+L14066 [print] ✅ Archivo seleccionado y validado: {...}
+L14089 [print] ❌ Error en selección de archivo: {...}
+L14101 [print] 🛑 Cancelando análisis de clasificación...

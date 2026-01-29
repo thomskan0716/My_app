@@ -1,0 +1,357 @@
+Root: C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app
+Total matches: 106
+Unique messages: 100
+
+== Matches (by file) ==
+
+nonlinear_worker.py
+  L396 [print] 🔍 DEBUG run_stage2_and_3: Stage 03 falló, emitiendo error
+    print("🔍 DEBUG run_stage2_and_3: Stage 03 falló, emitiendo error")
+  L429 [print] 🔍 DEBUG nonlinear_worker: gráficos encontrados = {...}
+    print(f"🔍 DEBUG nonlinear_worker: gráficos encontrados = {len(graph_files)}", flush=True)
+  L431 [print] 🔍 DEBUG nonlinear_worker: primeros gráficos = {...}
+    print(f"🔍 DEBUG nonlinear_worker: primeros gráficos = {graph_files[:3]}", flush=True)
+  L444 [print] 🔍 DEBUG run_stage2_and_3: Señal finished emitida
+    print("🔍 DEBUG run_stage2_and_3: Señal finished emitida", flush=True)
+  L449 [print] 🔍 DEBUG run_stage2_and_3: EXCEPCIÓN CAPTURADA
+    print("🔍 DEBUG run_stage2_and_3: EXCEPCIÓN CAPTURADA")
+  L1202 [print] 🛑 Cancelando análisis no lineal...
+    print("🛑 Cancelando análisis no lineal...")
+  L1243 [print] 🛑 Solicitando terminación del thread del worker...
+    print("🛑 Solicitando terminación del thread del worker...")
+  L1246 [print] ✅ Cancelación completada
+    print("✅ Cancelación completada")
+  L1524 [print] 🔍 Características seleccionadas: {...}
+    print(f"🔍 Características seleccionadas: {features_list}")
+  L1584 [print] 🔍 MANDATORY_FEATURES vacía (ninguna característica obligatoria seleccionada)
+    print(f"🔍 MANDATORY_FEATURES vacía (ninguna característica obligatoria seleccionada)")
+  L1618 [print] ✅ Configuración guardada: {...}
+    print(f"✅ Configuración guardada: {config_file_path}")
+  L1629 [print] 🔍 Línea N_TRIALS en config_custom.py: {...}
+    print(f"🔍 Línea N_TRIALS en config_custom.py: {line.strip()}")
+  L1858 [print] ⚠️ Error guardando datos de análisis en JSON: {...}
+    print(f"⚠️ Error guardando datos de análisis en JSON: {e}")
+
+pareto_results_dialog.py
+  L203 [print] 🔍 DEBUG load_graphs: primeros gráficos = {...}
+    print(f"🔍 DEBUG load_graphs: primeros gráficos = {[os.path.basename(p) for p in self.graph_paths[:3]]}")
+
+result_processor.py
+  L111 [print] ⚠️ No hay datos para insertar.
+    print("⚠️ No hay datos para insertar.")
+  L152 [print] ⚠️ Todos los registros ya existían en la base de datos.
+    print("⚠️ Todos los registros ya existían en la base de datos.")
+  L362 [print] 🟦 UPSERT SKIP (idéntico) id={...} | {...}
+    print(f"🟦 UPSERT SKIP (idéntico) id={row_id} | {brief}", flush=True)
+  L384 [print] ⚠️ No se pudo crear backup automático de la BBDD (ruta no disponible).
+    print("⚠️ No se pudo crear backup automático de la BBDD (ruta no disponible).", flush=True)
+  L413 [print] 📊 Total de registros en la base de datos: {...}
+    print(f"📊 Total de registros en la base de datos: {len(results)}")
+  L419 [print] 📋 No hay registros en la base de datos
+    print("📋 No hay registros en la base de datos")
+  L428 [print] ⚠️ Todos los registros ya existían en la base de datos.
+    print("⚠️ Todos los registros ya existían en la base de datos.")
+  L442 [print] ⚠️ La base de datos está vacía.
+    print("⚠️ La base de datos está vacía.")
+  L448 [print] 📊 Contenido completo de la base de datos:
+
+    print("📊 Contenido completo de la base de datos:\n")
+  L566 [print] ✅ Procesamiento e inserción completados.
+    print("✅ Procesamiento e inserción completados.")
+  L682 [print] ✅ Procesamiento e inserción completados con valores de UI (conexión personalizada).
+    print("✅ Procesamiento e inserción completados con valores de UI (conexión personalizada).")
+  L696 [print] 📊 Total de registros en la base de datos: {...}
+    print(f"📊 Total de registros en la base de datos: {len(results)}")
+  L702 [print] 📋 No hay registros en la base de datos
+    print("📋 No hay registros en la base de datos")
+
+run_folds.py
+  L54 [print] 🚀 Ejecutando análisis con un proceso por fold
+    print("🚀 Ejecutando análisis con un proceso por fold")
+  L61 [print] ==> Lanzando Fold {...}/{...} (índice {...})
+    print(f"==> Lanzando Fold {fold + 1}/{NUM_FOLDS} (índice {fold})")
+  L79 [print] ❌ Fold {...} falló con código {...}
+    print(f"❌ Fold {fold + 1} falló con código {e.returncode}")
+  L80 [print] ⚠️  Deteniendo ejecución de folds restantes
+    print(f"⚠️  Deteniendo ejecución de folds restantes")
+  L83 [print] 
+⚠️  Interrupción manual detectada
+    print(f"\n⚠️  Interrupción manual detectada")
+
+Sample_Combiner.py
+  L112 [print] 📁 Excel parts: {...} (500,000 filas/archivo)
+    print(f"📁 Excel parts: {excel_folder} (500,000 filas/archivo)", flush=True)
+
+showresultsworker.py
+  L29 [print] 🔍 Debug - ShowResultsWorker usando base de datos: {...}
+    print(f"🔍 Debug - ShowResultsWorker usando base de datos: {os.path.abspath(self.db_path)}")
+  L36 [print] ✅ Debug - Usando información de experimento proporcionada
+    print("✅ Debug - Usando información de experimento proporcionada")
+  L58 [print] 📊 Número de carpeta extraído: {...}
+    print(f"📊 Número de carpeta extraído: {folder_num}")
+  L59 [print] 📁 Carpeta encontrada: {...}
+    print(f"📁 Carpeta encontrada: {folder_name}")
+  L60 [print] 🔧 Tipo de optimización: {...}
+    print(f"🔧 Tipo de optimización: {optimization_type}")
+  L62 [print] ⚠️ Debug - No se proporcionó información de experimento, usando valores por defecto
+    print("⚠️ Debug - No se proporcionó información de experimento, usando valores por defecto")
+  L65 [print] 📊 Usando número de carpeta por defecto: {...}
+    print(f"📊 Usando número de carpeta por defecto: {folder_num}")
+  L66 [print] 🔧 Usando tipo de optimización por defecto: {...}
+    print(f"🔧 Usando tipo de optimización por defecto: {optimization_type}")
+  L71 [print] 🔍 Debug - Verificando si ya existe un archivo idéntico en 02_実験データ...
+    print("🔍 Debug - Verificando si ya existe un archivo idéntico en 02_実験データ...")
+  L81 [print] 🔍 Debug - Archivo actual contiene {...} filas
+    print(f"🔍 Debug - Archivo actual contiene {len(current_results_df)} filas")
+  L92 [print] 🔍 Debug - Revisando carpeta: {...}
+    print(f"🔍 Debug - Revisando carpeta: {subfolder}")
+  L106 [print] ✅ Archivo idéntico encontrado en: {...}/{...}
+    print(f"✅ Archivo idéntico encontrado en: {subfolder}/{file}")
+  L111 [print] 🔍 Debug - Error leyendo {...}: {...}
+    print(f"🔍 Debug - Error leyendo {file}: {e}")
+  L118 [print] ⚠️ Ya existe un archivo idéntico en: {...}
+    print(f"⚠️ Ya existe un archivo idéntico en: {identical_folder}")
+  L119 [print] 🛑 No se procederá con la creación de carpeta
+    print("🛑 No se procederá con la creación de carpeta")
+  L138 [print] ✅ No se encontró archivo idéntico, procediendo con la creación de carpeta...
+    print("✅ No se encontró archivo idéntico, procediendo con la creación de carpeta...")
+  L141 [print] 🔍 Debug - Error leyendo archivo de resultados: {...}
+    print(f"🔍 Debug - Error leyendo archivo de resultados: {e}")
+  L142 [print] ⚠️ Continuando con la creación de carpeta...
+    print("⚠️ Continuando con la creación de carpeta...")
+  L144 [print] 🔍 Debug - Carpeta 02_実験データ no existe, procediendo con la creación...
+    print("🔍 Debug - Carpeta 02_実験データ no existe, procediendo con la creación...")
+  L149 [print] 🔍 Debug - Creando carpeta en 02_実験データ...
+    print("🔍 Debug - Creando carpeta en 02_実験データ...")
+  L162 [print] ✅ Creando nueva carpeta: {...}
+    print(f"✅ Creando nueva carpeta: {new_folder_path}")
+  L167 [print] 🔄 Iniciando proceso de backup y actualización del archivo de muestreo...
+    print("🔄 Iniciando proceso de backup y actualización del archivo de muestreo...")
+  L185 [print] 🔍 Debug - Verificando contenido de la base de datos después de importar...
+    print("🔍 Debug - Verificando contenido de la base de datos después de importar...")
+  L189 [print] 🔍 Debug - Total de registros en la base de datos: {...}
+    print(f"🔍 Debug - Total de registros en la base de datos: {total_count}")
+  L192 [print] 🔍 Debug - Últimos 5 registros insertados:
+    print("🔍 Debug - Últimos 5 registros insertados:")
+  L210 [print] 🔍 Debug - No hay registros en la base de datos
+    print("🔍 Debug - No hay registros en la base de datos")
+
+test_advanced_analysis.py
+  L22 [print] ✅ Módulos importados correctamente
+    print("✅ Módulos importados correctamente")
+  L24 [print] ❌ Error importando módulos: {...}
+    print(f"❌ Error importando módulos: {e}")
+  L32 [print] 🔧 Iniciando prueba del análisis lineal avanzado...
+    print("🔧 Iniciando prueba del análisis lineal avanzado...")
+  L41 [print] ❌ No hay conexión a la base de datos
+    print("❌ No hay conexión a la base de datos")
+  L45 [print] 🔧 Ejecutando análisis sin filtros...
+    print("🔧 Ejecutando análisis sin filtros...")
+  L49 [print] ✅ Análisis ejecutado exitosamente
+    print("✅ Análisis ejecutado exitosamente")
+  L50 [print] 📁 Directorio de salida: {...}
+    print(f"📁 Directorio de salida: {results.get('output_directory', 'N/A')}")
+  L51 [print] 📊 Forma de datos: {...}
+    print(f"📊 Forma de datos: {results.get('data_shape', 'N/A')}")
+  L66 [print] ❌ Error en el análisis: {...}
+    print(f"❌ Error en el análisis: {results.get('error', 'Error desconocido')}")
+  L76 [print] 🚀 Iniciando prueba del análisis lineal avanzado...
+    print("🚀 Iniciando prueba del análisis lineal avanzado...")
+  L80 [print] 
+✅ PRUEBA EXITOSA: El análisis lineal avanzado funciona correctamente
+    print("\n✅ PRUEBA EXITOSA: El análisis lineal avanzado funciona correctamente")
+  L82 [print] 
+❌ PRUEBA FALLIDA: Hay problemas con el análisis lineal avanzado
+    print("\n❌ PRUEBA FALLIDA: Hay problemas con el análisis lineal avanzado")
+
+test_debug_tracking.py
+  L15 [print] 🔧 Testeando tracking de datos con debugs...
+    print("🔧 Testeando tracking de datos con debugs...")
+  L42 [print] 📋 VERIFICACIÓN FINAL:
+    print("📋 VERIFICACIÓN FINAL:")
+  L46 [print] ✅ Análisis exitoso
+    print(f"✅ Análisis exitoso")
+  L47 [print] 📊 Datos procesados: {...}
+    print(f"📊 Datos procesados: {results.get('data_count', 0)}")
+  L48 [print] 📊 Rango de datos: {...}
+    print(f"📊 Rango de datos: {results.get('data_range', 'N/A')}")
+  L54 [print] 
+📊 Verificación del archivo Excel final:
+    print(f"\n📊 Verificación del archivo Excel final:")
+  L55 [print] 📊 Filas en archivo final: {...}
+    print(f"📊 Filas en archivo final: {len(df_final)}")
+  L59 [print] 📊 Valores únicos finales en 線材長: {...}
+    print(f"📊 Valores únicos finales en 線材長: {unique_final}")
+  L67 [print] ❌ PROBLEMA: El archivo final contiene {...} registros con 線材長 = 74
+    print(f"❌ PROBLEMA: El archivo final contiene {count_74_final} registros con 線材長 = 74")
+  L69 [print] ✅ CORRECTO: El archivo final contiene solo registros con 線材長 = 75
+    print(f"✅ CORRECTO: El archivo final contiene solo registros con 線材長 = 75")
+  L71 [print] ❌ Columna 線材長 no encontrada en archivo final
+    print("❌ Columna 線材長 no encontrada en archivo final")
+  L73 [print] ❌ Archivo Excel final no encontrado: {...}
+    print(f"❌ Archivo Excel final no encontrado: {excel_path}")
+  L75 [print] ❌ Error en análisis: {...}
+    print(f"❌ Error en análisis: {results.get('error', 'Error desconocido')}")
+
+test_exact_reference.py
+  L20 [print] 🧪 TESTEANDO ANÁLISIS EXACTO COMO ARCHIVO DE REFERENCIA
+    print("🧪 TESTEANDO ANÁLISIS EXACTO COMO ARCHIVO DE REFERENCIA")
+  L28 [print] 📊 Ejecutando análisis sin filtros...
+    print("📊 Ejecutando análisis sin filtros...")
+  L32 [print] ✅ ANÁLISIS EXITOSO
+    print("✅ ANÁLISIS EXITOSO")
+  L33 [print] 📁 Directorio de salida: {...}
+    print(f"📁 Directorio de salida: {results['output_directory']}")
+  L34 [print] 📊 Forma de datos: {...}
+    print(f"📊 Forma de datos: {results['data_shape']}")
+  L68 [print]   - {...}: {...} transformación
+    print(f"  - {target}: {method} transformación")
+  L71 [print]   - {...}: sin transformación ({...})
+    print(f"  - {target}: sin transformación ({reason})")
+  L78 [print] ✅ Archivo Excel creado correctamente
+    print("✅ Archivo Excel creado correctamente")
+  L80 [print] ❌ Archivo Excel no encontrado
+    print("❌ Archivo Excel no encontrado")
+  L82 [print] ⚠️ No se creó calculadora Excel
+    print("⚠️ No se creó calculadora Excel")
+  L94 [print] 
+🎉 PRUEBA EXITOSA: El análisis funciona exactamente como el archivo de referencia
+    print("\n🎉 PRUEBA EXITOSA: El análisis funciona exactamente como el archivo de referencia")
+  L97 [print] ❌ ANÁLISIS FALLIDO: {...}
+    print(f"❌ ANÁLISIS FALLIDO: {results.get('error', 'Unknown error')}")
+  L111 [print] 
+✅ TODAS LAS PRUEBAS PASARON - El análisis es idéntico al archivo de referencia
+    print("\n✅ TODAS LAS PRUEBAS PASARON - El análisis es idéntico al archivo de referencia")
+  L113 [print] 
+❌ ALGUNAS PRUEBAS FALLARON - Revisar implementación
+    print("\n❌ ALGUNAS PRUEBAS FALLARON - Revisar implementación")
+
+test_filter_logic.py
+  L13 [print] 🔧 Probando lógica de filtros corregida...
+    print("🔧 Probando lógica de filtros corregida...")
+  L79 [print] ✅ ÉXITO: {...} registros procesados, {...} modelos entrenados
+    print(f"✅ ÉXITO: {data_count} registros procesados, {models_trained} modelos entrenados")
+  L100 [print] 📁 Resultados guardados en: {...}
+    print(f"📁 Resultados guardados en: {test_folder}")
+
+test_real_db.py
+  L21 [print] 🔧 Probando análisis lineal con base de datos real...
+    print("🔧 Probando análisis lineal con base de datos real...")
+  L55 [print] 🚀 Ejecutando análisis lineal...
+    print("🚀 Ejecutando análisis lineal...")
+  L59 [print] ✅ Resultados: {...}
+    print(f"✅ Resultados: {results.get('success', False)}")
+  L62 [print] 📊 Datos procesados: {...}
+    print(f"📊 Datos procesados: {results.get('data_count', 0)}")
+  L64 [print] 📁 Carpeta de salida: {...}
+    print(f"📁 Carpeta de salida: {results.get('output_folder', 'N/A')}")
+
+== Unique messages (sorted) ==
+- 
+⚠️  Interrupción manual detectada
+- 
+✅ PRUEBA EXITOSA: El análisis lineal avanzado funciona correctamente
+- 
+✅ TODAS LAS PRUEBAS PASARON - El análisis es idéntico al archivo de referencia
+- 
+❌ ALGUNAS PRUEBAS FALLARON - Revisar implementación
+- 
+❌ PRUEBA FALLIDA: Hay problemas con el análisis lineal avanzado
+- 
+🎉 PRUEBA EXITOSA: El análisis funciona exactamente como el archivo de referencia
+- 
+📊 Verificación del archivo Excel final:
+-   - {...}: sin transformación ({...})
+-   - {...}: {...} transformación
+- ==> Lanzando Fold {...}/{...} (índice {...})
+- ⚠️  Deteniendo ejecución de folds restantes
+- ⚠️ Continuando con la creación de carpeta...
+- ⚠️ Debug - No se proporcionó información de experimento, usando valores por defecto
+- ⚠️ Error guardando datos de análisis en JSON: {...}
+- ⚠️ La base de datos está vacía.
+- ⚠️ No hay datos para insertar.
+- ⚠️ No se creó calculadora Excel
+- ⚠️ No se pudo crear backup automático de la BBDD (ruta no disponible).
+- ⚠️ Todos los registros ya existían en la base de datos.
+- ⚠️ Ya existe un archivo idéntico en: {...}
+- ✅ Análisis ejecutado exitosamente
+- ✅ Análisis exitoso
+- ✅ ANÁLISIS EXITOSO
+- ✅ Archivo Excel creado correctamente
+- ✅ Archivo idéntico encontrado en: {...}/{...}
+- ✅ Cancelación completada
+- ✅ Configuración guardada: {...}
+- ✅ CORRECTO: El archivo final contiene solo registros con 線材長 = 75
+- ✅ Creando nueva carpeta: {...}
+- ✅ Debug - Usando información de experimento proporcionada
+- ✅ Módulos importados correctamente
+- ✅ No se encontró archivo idéntico, procediendo con la creación de carpeta...
+- ✅ Procesamiento e inserción completados con valores de UI (conexión personalizada).
+- ✅ Procesamiento e inserción completados.
+- ✅ Resultados: {...}
+- ✅ ÉXITO: {...} registros procesados, {...} modelos entrenados
+- ❌ ANÁLISIS FALLIDO: {...}
+- ❌ Archivo Excel final no encontrado: {...}
+- ❌ Archivo Excel no encontrado
+- ❌ Columna 線材長 no encontrada en archivo final
+- ❌ Error en análisis: {...}
+- ❌ Error en el análisis: {...}
+- ❌ Error importando módulos: {...}
+- ❌ Fold {...} falló con código {...}
+- ❌ No hay conexión a la base de datos
+- ❌ PROBLEMA: El archivo final contiene {...} registros con 線材長 = 74
+- 📁 Carpeta de salida: {...}
+- 📁 Carpeta encontrada: {...}
+- 📁 Directorio de salida: {...}
+- 📁 Excel parts: {...} (500,000 filas/archivo)
+- 📁 Resultados guardados en: {...}
+- 📊 Contenido completo de la base de datos:
+
+- 📊 Datos procesados: {...}
+- 📊 Ejecutando análisis sin filtros...
+- 📊 Filas en archivo final: {...}
+- 📊 Forma de datos: {...}
+- 📊 Número de carpeta extraído: {...}
+- 📊 Rango de datos: {...}
+- 📊 Total de registros en la base de datos: {...}
+- 📊 Usando número de carpeta por defecto: {...}
+- 📊 Valores únicos finales en 線材長: {...}
+- 📋 No hay registros en la base de datos
+- 📋 VERIFICACIÓN FINAL:
+- 🔄 Iniciando proceso de backup y actualización del archivo de muestreo...
+- 🔍 Características seleccionadas: {...}
+- 🔍 Debug - Archivo actual contiene {...} filas
+- 🔍 Debug - Carpeta 02_実験データ no existe, procediendo con la creación...
+- 🔍 Debug - Creando carpeta en 02_実験データ...
+- 🔍 Debug - Error leyendo archivo de resultados: {...}
+- 🔍 Debug - Error leyendo {...}: {...}
+- 🔍 Debug - No hay registros en la base de datos
+- 🔍 Debug - Revisando carpeta: {...}
+- 🔍 Debug - ShowResultsWorker usando base de datos: {...}
+- 🔍 Debug - Total de registros en la base de datos: {...}
+- 🔍 Debug - Verificando contenido de la base de datos después de importar...
+- 🔍 Debug - Verificando si ya existe un archivo idéntico en 02_実験データ...
+- 🔍 Debug - Últimos 5 registros insertados:
+- 🔍 DEBUG load_graphs: primeros gráficos = {...}
+- 🔍 DEBUG nonlinear_worker: gráficos encontrados = {...}
+- 🔍 DEBUG nonlinear_worker: primeros gráficos = {...}
+- 🔍 DEBUG run_stage2_and_3: EXCEPCIÓN CAPTURADA
+- 🔍 DEBUG run_stage2_and_3: Señal finished emitida
+- 🔍 DEBUG run_stage2_and_3: Stage 03 falló, emitiendo error
+- 🔍 Línea N_TRIALS en config_custom.py: {...}
+- 🔍 MANDATORY_FEATURES vacía (ninguna característica obligatoria seleccionada)
+- 🔧 Ejecutando análisis sin filtros...
+- 🔧 Iniciando prueba del análisis lineal avanzado...
+- 🔧 Probando análisis lineal con base de datos real...
+- 🔧 Probando lógica de filtros corregida...
+- 🔧 Testeando tracking de datos con debugs...
+- 🔧 Tipo de optimización: {...}
+- 🔧 Usando tipo de optimización por defecto: {...}
+- 🚀 Ejecutando análisis con un proceso por fold
+- 🚀 Ejecutando análisis lineal...
+- 🚀 Iniciando prueba del análisis lineal avanzado...
+- 🛑 Cancelando análisis no lineal...
+- 🛑 No se procederá con la creación de carpeta
+- 🛑 Solicitando terminación del thread del worker...
+- 🟦 UPSERT SKIP (idéntico) id={...} | {...}
+- 🧪 TESTEANDO ANÁLISIS EXACTO COMO ARCHIVO DE REFERENCIA

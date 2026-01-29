@@ -1,0 +1,94 @@
+Total Spanish comments without ES/EN/JP marker: 67
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\0sec.py
+  L10466: # Reposicionar la consola en la nueva posición
+  L10552: # Considerar válido si tiene las esenciales y al menos una opcional
+  L11047: # El resto del código seguirá igual, pero ahora con project_folder definido
+  L11238: # Durante el loading modal: permitir flecha/consola por encima
+  L11264: # Ajustar el porcentaje para que esté en el rango correcto
+  L11316: # También escribir en la consola desplegable si existe
+  L11787: # R² (con color según el valor)
+  L11790: # Color según calidad: verde si R² > 0.7, amarillo si > 0.5, rojo si <= 0.5
+  L12755: # Confirmar con el usuario
+  L13250: # Tiempo transcurrido total desde el inicio
+  L13455: # Tiempo transcurrido total desde el inicio
+  L13624: # El resto del código seguirá igual, pero ahora con project_folder definido
+  L13754: # Solo preguntar parámetros si NO es carga existente
+  L13954: # Durante file dialogs: NO taparlos con la flecha/consola
+  L15052: # Los botones se habilitan/deshabilitan automáticamente por el layout
+  L15437: # Rango de valores (desde, hasta)
+  L15442: # Solo aplicar filtro de fecha si está habilitado
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\build_installer.ps1
+  L51: # 0) Generar BBDD vacías (templates) para el instalador
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\classification_config_dialog.py
+  L1136: # Características - obtener de las listas con checkboxes
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\classification_worker.py
+  L617: # Insertar modificaciones antes del último método o al final de la clase
+  L629: # Encontrar el final de este método
+  L683: # Emitir señal para que la GUI muestre el diálogo
+  L748: # La columna seleccionada será 1, las otras 0
+  L770: # Obtener todas las columnas
+  L834: # El pipeline se ejecuta desde working_dir
+  L872: # 4. Directorio donde está el script del pipeline
+  L949: # Asegurar que working_dir es un string para subprocess
+  L1013: # Esperar un poco para que termine (polling)
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\db_manager.py
+  L13: # Tabla principal (la app usa main_results para consultas/filtros/export)
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\dsaitekika.py
+  L129: # Variables de diseño por nombre (compatibilidad con nuevo formato con A13/A11/A21/A32 al inicio)
+  L145: # Reordenar para que No. sea la primera columna
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\isaitekika.py
+  L128: # Variables de diseño por nombre (compatibilidad con nuevo formato con A13/A11/A21/A32 al inicio)
+  L144: # Reordenar para que No. sea la primera columna
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\linear_analysis_module.py
+  L497: # Obtener datos de la base de datos
+  L530: # Sin filtros, obtener todos los datos
+  L532: # Obtener datos usando fetch_all
+  L537: # Obtener nombres de columnas
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\memory_monitor.py
+  L279: # Analizar solo una muestra si hay muchos objetos
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\nonlinear_config_dialog.py
+  L615: # Nota: sin guión bajo (heatmap, no heat_map)
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\nonlinear_worker.py
+  L326: # Indicar que solo se completó el stage 01
+  L333: # Emitir finished para que la GUI muestre directamente la pantalla de resumen
+  L596: # Configurar PYTHONPATH para que encuentre los módulos
+  L597: # ✅ Usar la misma lógica que para script_base_dir (donde está 0sec.py)
+  L600: # Calcular script_base_dir si no está cacheado (solo la primera vez)
+  L631: # Obtener todos los site-packages del venv actual
+  L746: # Esperar un poco para que termine (polling)
+  L1304: # Capturar la indentación original y comentario si existe
+  L1305: # El patrón debe capturar todo el diccionario, incluyendo las llaves
+  L1329: # Si falla el parsing, usar el valor tal cual pero con indentación
+  L1337: # Capturar la indentación original y comentario si existe
+  L1379: # Capturar la indentación original y comentario si existe
+  L1391: # Dividir por #, pero mantener el comentario
+  L1411: # Nota: En config.py estas son atributos de clase Config
+  L1417: # Para rutas, usar r'' para manejar correctamente las barras invertidas en Windows
+  L1418: # Pasar solo el path sin comillas ni r, la función agregará r'...' correctamente
+  L1486: # Mantener el formato original (minúsculas con guiones bajos)
+  L1487: # Pasar solo el valor sin comillas, la función agregará las comillas correctas
+  L1511: # También actualizar las listas de tipos de características para que solo contengan las seleccionadas
+  L1567: # Si hay características seleccionadas, filtrar MANDATORY_FEATURES para que solo contenga las seleccionadas
+  L1574: # Filtrar MANDATORY_FEATURES para que solo contenga características seleccionadas
+  L1702: # Obtener filters_applied desde config_values
+  L1725: # La estructura de dcv_results.pkl es un diccionario donde las claves son los nombres de los targets
+  L1726: # Cada valor es un diccionario con los resultados del DCV para ese target
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\result_processor.py
+  L286: # Para decidir si realmente se sobrescribe algo, comparamos update_cols (si existen en DB)
+  L334: # Si no estamos en modo debug, con el primer cambio basta
+  L388: # COALESCE: si llega NULL, conserva el valor existente (no sobrescribe con vacío)
+
+C:\Users\xebec0176\Desktop\0.00sec_AppDevelopment\0sec_dataanalysis_app\Sample_Combiner.py
+  L147: # Un solo excel

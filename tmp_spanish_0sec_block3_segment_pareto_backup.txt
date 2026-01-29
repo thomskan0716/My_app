@@ -1,0 +1,16 @@
+L12885 [print] ✅ Mostrando gráficos de Pareto desde: {...}
+L12894 [print] ❌ DEBUG: pareto_plots_folder no existe
+L12897 [print] ❌ DEBUG: prediction_output_file no existe
+L13006 [print] 📁 Creando backup: {...} → {...}
+L13017 [print] ⚠️ Error creando backup: {...}
+L13083 [print] ⚠️ Usando fallback para carpeta del proyecto: {...}
+L13085 [print] 📁 Carpeta del proyecto encontrada: {...}
+L13093 [print] 🔍 Buscando archivo: {...}
+L13097 [print] ✅ Archivo encontrado: {...}
+L13102 [print] ⚠️ Archivo esperado no encontrado, buscando patrón *_未実験データ.xlsx...
+L13106 [print] ✅ Archivo encontrado (patrón): {...}
+L13108 [print] ❌ No se encontró ningún archivo con patrón *_未実験データ.xlsx en: {...}
+L13117 [print] ⚠️ No se encontró el archivo de datos no experimentados en: {...}
+L13118 [print] Buscando: {...} o *_未実験データ.xlsx
+L13126 [print] ✅ Archivo copiado: {...} → {...}
+L13132 [print] ⚠️ No se encontró archivo fuente y no existe destino. Continuando...
