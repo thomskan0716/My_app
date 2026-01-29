@@ -10,7 +10,6 @@ from pydantic_settings import BaseSettings
 
 class AWSConfig(BaseSettings):
     """AWS resource configuration"""
-    
     # S3 Buckets
     S3_INPUTS_BUCKET: str = Field(..., env="S3_INPUTS_BUCKET")
     S3_OUTPUTS_BUCKET: str = Field(..., env="S3_OUTPUTS_BUCKET")
@@ -37,7 +36,7 @@ class AWSConfig(BaseSettings):
     PRESIGNED_URL_EXPIRATION: int = Field(default=3600, env="PRESIGNED_URL_EXPIRATION")  # 1 hour
     
     class Config:
-        env_file = ".env"
+        env_file = ".env.aws"
         env_file_encoding = "utf-8"
     
     @property
@@ -52,7 +51,6 @@ class AWSConfig(BaseSettings):
 
 class APIConfig(BaseSettings):
     """API server configuration"""
-    
     # Server settings
     API_HOST: str = Field(default="0.0.0.0", env="API_HOST")
     API_PORT: int = Field(default=8000, env="API_PORT")
@@ -81,7 +79,7 @@ class APIConfig(BaseSettings):
     JOB_RETENTION_DAYS: int = Field(default=30, env="JOB_RETENTION_DAYS")
     
     class Config:
-        env_file = ".env"
+        env_file = ".env.api"
         env_file_encoding = "utf-8"
     
     @property
@@ -120,7 +118,7 @@ class WorkerConfig(BaseSettings):
     MEMORY_CHECK_INTERVAL: int = Field(default=10, env="MEMORY_CHECK_INTERVAL")
     
     class Config:
-        env_file = ".env"
+        env_file = ".env.frontend"
         env_file_encoding = "utf-8"
 
 

@@ -2,6 +2,10 @@
 FastAPI EC2 API Server
 Production-grade REST API for job management.
 """
+import os
+from dotenv import load_dotenv
+load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
+
 import logging
 import uuid
 from datetime import datetime
