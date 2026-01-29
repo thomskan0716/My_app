@@ -5,6 +5,7 @@ import logging
 from datetime import datetime
 from typing import Optional, List, Dict, Any
 from contextlib import contextmanager
+from sqlalchemy import text
 
 from sqlalchemy import (
     create_engine, Column, String, Integer, DateTime, 
@@ -165,7 +166,7 @@ class DatabaseManager:
         """Test database connection"""
         try:
             with self.get_session() as session:
-                session.execute("SELECT 1")
+                session.execute(text("SELECT 1"))
             logger.info("Database connection test successful")
             return True
         except Exception as e:
