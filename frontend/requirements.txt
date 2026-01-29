@@ -1,0 +1,12 @@
+# Frontend Client Requirements
+# For the Python desktop application
+
+# API client
+requests==2.31.0
+urllib3==2.1.0
+
+# Data models
+pydantic==2.5.0
+
+# Utilities
+python-dotenv==1.0.0

@@ -1,0 +1,48 @@
+# Backend Worker Requirements
+# Production-grade dependencies for ECS Worker
+
+# AWS SDK
+boto3==1.34.10
+botocore==1.34.10
+
+# Database
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+alembic==1.13.1
+
+# Data processing
+pandas==2.1.4
+numpy==1.26.2
+openpyxl==3.1.2
+
+# Machine learning
+scikit-learn==1.3.2
+scipy==1.11.4
+lightgbm==4.1.0
+xgboost==2.0.3
+
+# Optuna for hyperparameter tuning
+optuna==3.5.0
+
+# SHAP for explainability
+shap==0.43.0
+
+# Visualization
+matplotlib==3.8.2
+seaborn==0.13.0
+
+# Model persistence
+joblib==1.3.2
+pickle5==0.0.11
+
+# Utilities
+python-dotenv==1.0.0
+python-json-logger==2.0.7
+tqdm==4.66.1
+
+# Pydantic for validation
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Progress tracking
+psutil==5.9.6
